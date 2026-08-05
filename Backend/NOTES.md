@@ -75,3 +75,7 @@ Response specific:
 - .status() : send the status code explicitly
 - .send() : to send any response (string, JSON, number)
 - .json() : to send json data
+
+## Separation of listener logic
+
+- if app.js contains our listener() then when we require app.js inside our tests, it starts the server. After that, each test would like to open the same port resulting in conflict. Hence, we separate the listener logic.

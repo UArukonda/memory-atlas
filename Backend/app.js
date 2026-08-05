@@ -6,7 +6,4 @@ const app = express();
 
 app.use(express.json());
 
-// const public = `${__dirname}/public`;
-
-// function that creates listener on said socket (host + port)
 module.exports = app;
