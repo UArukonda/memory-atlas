@@ -72,3 +72,6 @@ Response specific:
 - Status codes : health of or request/response (200, 201, 403, 404, 500)
 - Headers
 - Payload : the goodies
+- .status() : send the status code explicitly
+- .send() : to send any response (string, JSON, number)
+- .json() : to send json data
