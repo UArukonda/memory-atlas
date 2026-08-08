@@ -6,7 +6,7 @@ let mongoServer;
 
 const connectTestDB = async () => {
   mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.uri();
+  const uri = mongoServer.getUri();
   await connectDB(uri);
 };
 
@@ -25,7 +25,7 @@ const closeTestDB = async () => {
 
 beforeAll(async () => {
   await connectTestDB();
-});
+}, 30000);
 
 beforeEach(async () => {
   await clearDatabase();
