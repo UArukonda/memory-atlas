@@ -9,4 +9,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: "Internal Server Error" });
+});
+
 module.exports = app;
