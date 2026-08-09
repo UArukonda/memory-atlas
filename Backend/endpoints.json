@@ -1,0 +1,35 @@
+{
+  "GET /api": {
+    "description": "Displays all available API endpoints."
+  },
+
+  "POST /api/auth/register": {
+    "description": "Register a new user.",
+    "body": {
+      "username": "string",
+      "email": "string",
+      "password": "string"
+    },
+    "response": {
+      "201": "Registration successful. Please log in."
+    }
+  },
+
+  "POST /api/auth/login": {
+    "description": "Authenticate a user and return a JWT.",
+    "body": {
+      "email": "string",
+      "password": "string"
+    },
+    "response": {
+      "200": {
+        "token": "JWT",
+        "user": {
+          "id": "ObjectId",
+          "username": "string",
+          "email": "string"
+        }
+      }
+    }
+  }
+}
