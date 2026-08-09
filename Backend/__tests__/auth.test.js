@@ -110,3 +110,125 @@ describe("POST /api/auth/register", () => {
       });
   });
 });
+
+describe("POST /api/auth/login", () => {
+  xtest("400: responds with an error when email is missing", () => {
+    const user = {
+      password: "upender123",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .then((res) => {
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual({
+          message: "Email is required",
+        });
+      });
+  });
+
+  xtest("400: responds with an error when password is missing", () => {
+    const user = {
+      email: "uarukonda@gmail.com",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .then((res) => {
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual({
+          message: "Password is required",
+        });
+      });
+  });
+
+  xtest("404: responds with an error when no account exists with the provided email", () => {
+    const user = {
+      email: "aru@gmail.com",
+      password: "upender123",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .then((res) => {
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({
+          message: "Invalid email or password.",
+        });
+      });
+  });
+
+  xtest("401: responds with an error when the password is incorrect", () => {
+    const user = {
+      email: "uarukonda@gmail.com",
+      password: "upender23",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .then((res) => {
+        expect(res.status).toBe(401);
+        expect(res.body).toEqual({
+          message: "Invalid email or password.",
+        });
+      });
+  });
+
+  xtest("200: responds with a JWT token and user details when login is successful", () => {
+    const user = {
+      email: "uarukonda@gmail.com",
+      password: "upender123",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .expect(200)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual({
+          token: expect.any(String),
+          user: {
+            id: expect.any(String),
+            email: user.email,
+            username: expect.any(String),
+          },
+        });
+      });
+  });
+
+  xtest("200: does not return the user's password in the response", () => {
+    const user = {
+      email: "uarukonda@gmail.com",
+      password: "upender123",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .expect(200)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body.user.password).toEqual(undefined);
+      });
+  });
+
+  xtest("500: responds with an internal server error when the database query fails", () => {
+    const user = {
+      email: "uarukonda@gmail.com",
+      password: "upender123",
+    };
+
+    return request(app)
+      .post("/api/auth/login")
+      .send(user)
+      .expect(500)
+      .then((res) => {
+        expect(res.body.message).toEqual("Internal server error");
+      });
+  });
+});
