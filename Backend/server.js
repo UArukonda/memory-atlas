@@ -1,10 +1,7 @@
-const app = require("./app.js");
 const connectDB = require("./db/db.js");
-const dotenv = require("dotenv");
+const app = require("./app.js");
 const dns = require("dns");
 dns.setServers(["8.8.8.8"]);
-
-dotenv.config();
 
 // door to our server
 const PORT = 4000;
