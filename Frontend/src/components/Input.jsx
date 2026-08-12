@@ -1,4 +1,12 @@
-const Input = ({ id, label, type = "text", name, placeholder, value }) => {
+const Input = ({
+  id,
+  label,
+  type = "text",
+  name,
+  placeholder,
+  value,
+  onChange,
+}) => {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="font-medium">
@@ -10,7 +18,8 @@ const Input = ({ id, label, type = "text", name, placeholder, value }) => {
         name={name}
         placeholder={placeholder}
         value={value}
-        className="rounded-md border border-gray-300 px-3 py-2   focus:outline-blue-500 mb-2"
+        onChange={onChange}
+        className="rounded-md border border-gray-300 px-3 py-2 focus:outline-blue-500 mb-2"
       />
     </div>
   );
