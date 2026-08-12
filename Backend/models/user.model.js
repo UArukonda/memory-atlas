@@ -1,4 +1,4 @@
-const User = require("../schemas/UserSchema.js");
+const User = require("../schemas/User.js");
 
 function findUserByEmail(email) {
   return User.findOne({ email });
@@ -13,4 +13,13 @@ function createUser(userData) {
   return User.create(userData);
 }
 
-module.exports = { findUserByEmail, findUserByUsername, createUser };
+function comparePassword(user, pwd) {
+  return user.comparePassword(pwd);
+}
+
+module.exports = {
+  findUserByEmail,
+  findUserByUsername,
+  createUser,
+  comparePassword,
+};

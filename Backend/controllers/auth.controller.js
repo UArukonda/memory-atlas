@@ -3,6 +3,7 @@ const {
   findUserByEmail,
   findUserByUsername,
   createUser,
+  comparePassword,
 } = require("../models/user.model.js");
 const jwt = require("jsonwebtoken");
 
@@ -14,7 +15,7 @@ async function registerUser(req, res, next) {
 
     if (existingEmail) {
       return res.status(409).send({
-        message: "user with this email already exists, please login",
+        message: "User with this email already exists, please login",
       });
     }
 
@@ -22,16 +23,14 @@ async function registerUser(req, res, next) {
 
     if (existingUsername) {
       return res.status(409).send({
-        message: "username already taken, please try different username",
+        message: "Username already taken, please try different username",
       });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await createUser({
       username,
       email,
-      password: hashedPassword,
+      password,
     });
 
     return res.status(201).send({
@@ -40,6 +39,7 @@ async function registerUser(req, res, next) {
       message: "Registration successful. Please log in.",
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 }
@@ -56,7 +56,8 @@ async function loginUser(req, res, next) {
       });
     }
 
-    const isMatch = await bcrypt.compare(password, existingUser.password);
+    const isMatch = await comparePassword(existingUser, password);
+
     if (!isMatch) {
       return res.status(401).send({
         message: "Invalid email or password.",
@@ -81,6 +82,7 @@ async function loginUser(req, res, next) {
       },
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 }

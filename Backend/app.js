@@ -3,11 +3,13 @@ const express = require("express");
 const authRoutes = require("./routes/auth.js");
 const endpoints = require("./endpoints.json");
 require("dotenv").config();
+const cors = require("cors");
 
 // invoking express function so we can use its methods
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints });
