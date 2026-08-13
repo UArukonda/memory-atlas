@@ -73,13 +73,13 @@ async function loginUser(req, res, next) {
       { expiresIn: "1h" },
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    });
+
     return res.status(200).send({
-      token,
-      user: {
-        email: existingUser.email,
-        id: existingUser._id,
-        username: existingUser.username,
-      },
+      message: "Login successful",
     });
   } catch (err) {
     console.log(err);

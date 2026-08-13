@@ -6,7 +6,7 @@ const {
 const {
   validateRegister,
   validateLogin,
-} = require("../middleware/auth.middleware.js");
+} = require("../middleware/validationMiddleware.js");
 const router = express.Router();
 
 router.post("/register", validateRegister, registerUser);
