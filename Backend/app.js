@@ -1,6 +1,7 @@
 // import of express from dependency into our file
 const express = require("express");
 const authRoutes = require("./routes/authRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 const endpoints = require("./endpoints.json");
 require("dotenv").config();
 const cors = require("cors");
@@ -16,12 +17,15 @@ app.use(
     credentials: true,
   }),
 );
+app.use(cookieParser());
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints });
 });
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/users", userRoutes);
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: "Internal Server Error" });

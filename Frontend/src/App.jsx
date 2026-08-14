@@ -14,7 +14,7 @@ function App() {
 
       {/* <Route element={<ProtectedRoute />}> */}
       <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/" element={<Dashboard />}></Route>
         <Route path="" element=""></Route>
         <Route path="" element=""></Route>
       </Route>

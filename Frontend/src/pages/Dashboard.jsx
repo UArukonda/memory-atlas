@@ -1,4 +1,16 @@
+import { useState, useEffect } from "react";
+import { getUser } from "../services/user";
+
 const Dashboard = () => {
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await getUser();
+      setUser(response.data.username);
+    };
+    fetchUser();
+  }, []);
+
   return (
     <>
       <main>
@@ -7,18 +19,20 @@ const Dashboard = () => {
           <div className=" flex items-center gap-4">
             {/* Couple avatar */}
             <img
-              src=""
+              src={null}
               alt="Upender and Mithuna"
               className="h-14 w-14 rounded-full border-2 border-white shadow-sm "
             />
             <div>
               <h1 className="text-3xl font-semibold  text-heading">
-                Good morning, Upender
+                Good morning, {user}
               </h1>
               <p className="mt-2 text-base text-body">
                 Welcome back to your little corner of memories
               </p>
-              <p className="mt-1 text-sm text-muted">Date:dd/mm/yyyy</p>
+              <p className="mt-1 text-sm text-muted">
+                Date:{new Date().toLocaleDateString("en-GB")}
+              </p>
             </div>
           </div>
         </section>
@@ -56,7 +70,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <article className="overflow-hidden rounded-xl border boredr-borer bg-surface">
               <img
-                src=""
+                src={null}
                 alt="Our first trip"
                 className="h-48 w-full object-cover"
               />
@@ -65,7 +79,7 @@ const Dashboard = () => {
             </article>
             <article className="overflow-hidden rounded-xl border boredr-borer bg-surface">
               <img
-                src=""
+                src={null}
                 alt="Dinner together"
                 className="h-48 w-full object-cover"
               />
@@ -74,7 +88,7 @@ const Dashboard = () => {
             </article>
             <article className="overflow-hidden rounded-xl border boredr-borer bg-surface">
               <img
-                src=""
+                src={null}
                 alt="Beach day"
                 className="h-48 w-full object-cover"
               />
