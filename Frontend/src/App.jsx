@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout";
+import Profile from "./pages/Profile";
 // import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
       {/* <Route element={<ProtectedRoute />}> */}
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<Dashboard />}></Route>
-        <Route path="" element=""></Route>
+        <Route path="/profile" element={<Profile />}></Route>
         <Route path="" element=""></Route>
       </Route>
       {/* </Route> */}

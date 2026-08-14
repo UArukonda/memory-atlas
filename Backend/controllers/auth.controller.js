@@ -80,6 +80,8 @@ async function loginUser(req, res, next) {
 
     return res.status(200).send({
       message: "Login successful",
+      email: existingUser.email,
+      username: existingUser.username,
     });
   } catch (err) {
     console.log(err);

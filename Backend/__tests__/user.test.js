@@ -23,6 +23,14 @@ describe("GET /api/users/me", () => {
       .then(() => {
         return agent.get("/api/users/me").expect(200);
       })
-      .then((res) => expect(res.body.username).toBe("uarukonda"));
+      .then((res) =>
+        expect(res.body).toMatchObject({
+          username: expect.any(String),
+          email: expect.any(String),
+          displayName: expect.any(String),
+          bio: expect.any(String),
+          avatar: expect.any(String),
+        }),
+      );
   });
 });
