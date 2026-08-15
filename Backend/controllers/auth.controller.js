@@ -99,6 +99,7 @@ async function sendResetToken(req, res, next) {
   const { email } = req.body;
   try {
     const user = await findUserByEmail(email);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     const passwordResetToken = await jwt.sign(
       { email: user.email, purpose: "password reset" },
@@ -130,13 +131,29 @@ async function sendResetToken(req, res, next) {
 
 async function updatePassword(req, res, next) {
   const { token, newPassword } = req.body;
-
+  if (!token) {
+    return res.status(400).json({ message: "Reset token is required" });
+  }
+  if (!newPassword) {
+    return res.status(400).json({ message: "New password is required" });
+  }
   try {
     const user = jwt.verify(token, process.env.JWT_RESET_SECRET);
     const userData = await findUserByEmail(user.email);
     await updateUserData(userData, "password", newPassword);
     return res.status(200).send({ message: "Password reset successful" });
   } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({
+        message: "Reset token has expired",
+      });
+    }
+
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        message: "Invalid reset token",
+      });
+    }
     next(err);
   }
 }
