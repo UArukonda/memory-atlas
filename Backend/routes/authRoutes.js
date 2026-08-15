@@ -9,6 +9,7 @@ const {
 const {
   validateRegister,
   validateLogin,
+  validatePassword,
 } = require("../middleware/validationMiddleware.js");
 const protect = require("../middleware/authMiddleware.js");
 const router = express.Router();
@@ -21,6 +22,6 @@ router.post("/logout", protect, logoutUser);
 
 router.post("/forgot-password", sendResetToken);
 
-router.post("/reset-password", updatePassword);
+router.post("/reset-password", validatePassword, updatePassword);
 
 module.exports = router;

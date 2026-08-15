@@ -10,6 +10,10 @@ const getUser = async (req, res, next) => {
     const existingUser = await findUserByEmail(user.email);
 
     if (!existingUser) {
+      res.clearCookie("token", {
+        path: "/",
+        httpOnly: true,
+      });
       return res.status(404).json({ message: "User not found" });
     }
 
