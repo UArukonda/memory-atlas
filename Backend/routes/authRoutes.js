@@ -3,6 +3,8 @@ const {
   registerUser,
   loginUser,
   logoutUser,
+  sendResetToken,
+  updatePassword,
 } = require("../controllers/auth.controller.js");
 const {
   validateRegister,
@@ -16,5 +18,9 @@ router.post("/register", validateRegister, registerUser);
 router.post("/login", validateLogin, loginUser);
 
 router.post("/logout", protect, logoutUser);
+
+router.post("/forgot-password", sendResetToken);
+
+router.post("/reset-password", updatePassword);
 
 module.exports = router;

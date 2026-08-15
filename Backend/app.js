@@ -1,9 +1,9 @@
 // import of express from dependency into our file
 const express = require("express");
+require("dotenv").config();
 const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
 const endpoints = require("./endpoints.json");
-require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 

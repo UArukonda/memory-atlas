@@ -4,8 +4,10 @@ const {
   findUserByUsername,
   createUser,
   comparePassword,
+  updateUserData,
 } = require("../models/user.model.js");
 const jwt = require("jsonwebtoken");
+const transporter = require("../services/emailService.js");
 
 async function registerUser(req, res, next) {
   try {
@@ -93,4 +95,56 @@ function logoutUser(req, res, next) {
   return res.status(200).send({ message: "Logout successful" });
 }
 
-module.exports = { registerUser, loginUser, logoutUser };
+async function sendResetToken(req, res, next) {
+  const { email } = req.body;
+  try {
+    const user = await findUserByEmail(email);
+
+    const passwordResetToken = await jwt.sign(
+      { email: user.email, purpose: "password reset" },
+      process.env.JWT_RESET_SECRET,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    const resetLink = `http://localhost:5173/reset-password?token=${passwordResetToken}`;
+
+    const info = await transporter.sendMail({
+      from: "a@b.c", //services like gmail and others override from address to your smtp_user
+      to: user.email,
+      subject: "password reset - from memory atlas",
+      text: `Click the link below to reset your password ${resetLink}`, //if client dont support html then text is shown
+      // html: `<h1>this is a test email</h1>`, // if supports html then it is rendered
+    });
+
+    return res.status(200).send({
+      message: "Reset email sent",
+      token: passwordResetToken,
+    });
+  } catch (err) {
+    console.log("error while sending email:", err.message);
+    next(err);
+  }
+}
+
+async function updatePassword(req, res, next) {
+  const { token, newPassword } = req.body;
+
+  try {
+    const user = jwt.verify(token, process.env.JWT_RESET_SECRET);
+    const userData = await findUserByEmail(user.email);
+    await updateUserData(userData, "password", newPassword);
+    return res.status(200).send({ message: "Password reset successful" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  sendResetToken,
+  updatePassword,
+};
