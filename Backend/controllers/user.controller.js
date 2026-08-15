@@ -1,19 +1,41 @@
-const { findUserByEmail } = require("../models/user.model.js");
+const {
+  findUserByEmail,
+  deleteUserByEmail,
+} = require("../models/user.model.js");
 const { getProfileById } = require("../models/profile.model.js");
 
 const getUser = async (req, res, next) => {
   const user = req.user;
-  const existingUser = await findUserByEmail(user.email);
+  try {
+    const existingUser = await findUserByEmail(user.email);
 
-  const userProfile = await getProfileById(existingUser._id.toString());
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  return res.status(200).send({
-    username: existingUser.username,
-    email: existingUser.email,
-    displayName: userProfile?.displayName,
-    bio: userProfile?.bio,
-    avatar: userProfile?.avatar,
-  });
+    const userProfile = await getProfileById(existingUser._id.toString());
+
+    return res.status(200).send({
+      username: existingUser.username,
+      email: existingUser.email,
+      displayName: userProfile?.displayName,
+      bio: userProfile?.bio,
+      avatar: userProfile?.avatar,
+    });
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
 };
 
-module.exports = { getUser };
+const deleteUser = async (req, res, next) => {
+  try {
+    await deleteUserByEmail(req.user.email);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
+};
+
+module.exports = { getUser, deleteUser };
