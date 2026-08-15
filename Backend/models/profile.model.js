@@ -8,4 +8,16 @@ function createProfileDocument(id, displayName, bio, avatar) {
   return Profile.create({ userId: id, displayName, bio, avatar });
 }
 
-module.exports = { getProfileById, createProfileDocument };
+function updateProfileDocument(id, updates) {
+  return Profile.findOneAndUpdate(
+    { userId: id },
+    { $set: updates },
+    { new: true },
+  );
+}
+
+module.exports = {
+  getProfileById,
+  createProfileDocument,
+  updateProfileDocument,
+};

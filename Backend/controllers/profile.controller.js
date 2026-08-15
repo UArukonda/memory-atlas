@@ -1,4 +1,7 @@
-const { createProfileDocument } = require("../models/profile.model.js");
+const {
+  createProfileDocument,
+  updateProfileDocument,
+} = require("../models/profile.model.js");
 const { findUserByEmail } = require("../models/user.model.js");
 
 const createProfile = async (req, res, next) => {
@@ -8,11 +11,23 @@ const createProfile = async (req, res, next) => {
   try {
     const existingUser = await findUserByEmail(user.email);
     await createProfileDocument(existingUser._id, displayName, bio, avatar);
-    return res.status(201).json({ message: "Profile updated" });
+    return res.status(201).json({ message: "Profile created" });
   } catch (err) {
     console.log(err.message);
     next(err);
   }
 };
 
-module.exports = { createProfile };
+const updateProfile = async (req, res, next) => {
+  const user = req.user;
+  const updates = req.body;
+  try {
+    const existingUser = await findUserByEmail(user.email);
+    await updateProfileDocument(existingUser._id, updates);
+    return res.status(201).json({ message: "Profile updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createProfile, updateProfile };
