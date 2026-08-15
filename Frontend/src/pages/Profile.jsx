@@ -21,8 +21,8 @@ const Profile = () => {
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-gray-100">
               <img
-                src={null}
-                alt="avatar"
+                src={user?.avatar}
+                alt={user?.avatar}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -48,7 +48,7 @@ const Profile = () => {
               type="text"
               name="display-name"
               placeholder="Display Name"
-              value={displayName}
+              value={user?.displayName}
               onChange={(e) => {
                 setDisplayName(e.target.value);
               }}
@@ -82,7 +82,7 @@ const Profile = () => {
             <textarea
               name="bio"
               id="bio"
-              value={bio}
+              value={user?.bio}
               onChange={(e) => {
                 setBio(e.target.value);
               }}

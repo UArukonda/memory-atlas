@@ -3,6 +3,7 @@ const express = require("express");
 require("dotenv").config();
 const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
+const profileRoutes = require("./routes/profileRoutes.js");
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -27,7 +28,10 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);
 
+app.use("/api", profileRoutes);
+
 app.use((err, req, res, next) => {
+  console.log(err.message);
   res.status(500).send({ message: "Internal Server Error" });
 });
 

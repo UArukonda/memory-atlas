@@ -4,4 +4,8 @@ function getProfileById(id) {
   return Profile.findOne({ userId: id });
 }
 
-module.exports = { getProfileById };
+function createProfileDocument(id, displayName, bio, avatar) {
+  return Profile.create({ userId: id, displayName, bio, avatar });
+}
+
+module.exports = { getProfileById, createProfileDocument };
