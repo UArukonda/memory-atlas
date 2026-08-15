@@ -1,4 +1,8 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <nav className="flex items-center justify-between border-b border-border bg:surface px-8 py-4">
@@ -10,11 +14,38 @@ const Navbar = () => {
           <p className="cursor-pointer text-muted hover:text-primary">
             Notification
           </p>
-          <select className="rounded-lg border border-border bg-surface px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
-            <option value="profile">Profile</option>
-            <option value="settings">Settings</option>
-            <option value="logout">Logout</option>
-          </select>
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+              className="rounded-lg border border-border bg-surface px-3 py-2 text-body cursor-pointer"
+            >
+              Account
+            </button>
+            {isOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-44 rounded-lg border border-border bg-white shadow-lg">
+                <Link
+                  to="/profile"
+                  className="block cursor-pointer px-4 py-3 text-body hover:bg-gray-100 "
+                >
+                  Profile
+                </Link>
+                <Link
+                  to="/settings"
+                  className="block cursor-pointer px-4 py-3 text-body hover:bg-gray-100"
+                >
+                  Settings
+                </Link>
+                <Link
+                  to="/login"
+                  className="block px-4 py-2 text-body hover:bg-gray-100 cursor-pointer"
+                >
+                  Logout
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </>

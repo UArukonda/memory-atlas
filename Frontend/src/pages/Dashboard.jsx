@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
-import { getUser } from "../services/user";
+// import { useState, useEffect } from "react";
+// import { getUser } from "../services/user";
+import { useAuth } from "../context/useAuth";
 
 const Dashboard = () => {
-  const [user, setUser] = useState("");
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await getUser();
-      setUser(response.data.username);
-    };
-    fetchUser();
-  }, []);
+  const { user } = useAuth();
+  // const [user, setUser] = useState("");
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const response = await getUser();
+  //     setUser(response.data.username);
+  //   };
+  //   fetchUser();
+  // }, []);
 
   return (
     <>
@@ -25,7 +27,7 @@ const Dashboard = () => {
             />
             <div>
               <h1 className="text-3xl font-semibold  text-heading">
-                Good morning, {user}
+                Good morning, {user?.username}
               </h1>
               <p className="mt-2 text-base text-body">
                 Welcome back to your little corner of memories
