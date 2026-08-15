@@ -3,6 +3,8 @@ import { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleClick = () => {};
   return (
     <>
       <nav className="flex items-center justify-between border-b border-border bg:surface px-8 py-4">
@@ -40,6 +42,7 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   className="block px-4 py-2 text-body hover:bg-gray-100 cursor-pointer"
+                  onClick={handleClick}
                 >
                   Logout
                 </Link>

@@ -4,14 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { loginUser } from "../services/auth";
 import { validateLogin } from "../utils/validateSignup";
-import { useAuth } from "../context/useAuth.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const { setUsername, setEmail: setAuthEmail } = useAuth();
 
   const navigate = useNavigate();
 
@@ -24,8 +21,7 @@ const Login = () => {
 
     try {
       const response = await loginUser({ email, password });
-      setUsername(response.data.username);
-      setAuthEmail(response.data.email);
+      console.log(response.data.username);
       setEmail("");
       setPassword("");
       setError("");

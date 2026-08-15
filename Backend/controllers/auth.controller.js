@@ -32,7 +32,6 @@ async function registerUser(req, res, next) {
       email,
       password,
     });
-
     return res.status(201).send({
       id: newUser._id,
       email: newUser.email,
@@ -89,4 +88,9 @@ async function loginUser(req, res, next) {
   }
 }
 
-module.exports = { registerUser, loginUser };
+function logoutUser(req, res, next) {
+  res.clearCookie("token", { path: "/", httpOnly: true });
+  return res.status(200).send({ message: "Logout successful" });
+}
+
+module.exports = { registerUser, loginUser, logoutUser };
