@@ -27,9 +27,9 @@ beforeAll(async () => {
   await connectTestDB();
 }, 30000);
 
-beforeEach(async () => {
-  await clearDatabase();
-});
+// beforeEach(async () => {
+//   await clearDatabase();
+// });
 
 afterAll(async () => {
   await closeTestDB();
