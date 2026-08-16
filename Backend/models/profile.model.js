@@ -12,7 +12,7 @@ function updateProfileDocument(id, updates) {
   return Profile.findOneAndUpdate(
     { userId: id },
     { $set: updates },
-    { new: true },
+    { returnDocument: "after" },
   );
 }
 
