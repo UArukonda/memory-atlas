@@ -1,4 +1,4 @@
-const Profile = require("../schemas/Profile.js");
+const Profile = require("../models/Profile.js");
 
 function getProfileById(id) {
   return Profile.findOne({ userId: id });

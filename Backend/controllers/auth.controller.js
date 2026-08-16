@@ -5,9 +5,9 @@ const {
   createUser,
   comparePassword,
   updateUserData,
-} = require("../models/user.model.js");
+} = require("../repositories/user.repository.js");
 const jwt = require("jsonwebtoken");
-const transporter = require("../services/emailService.js");
+const transporter = require("../service/emailService.js");
 
 async function registerUser(req, res, next) {
   try {
