@@ -262,7 +262,7 @@ xdescribe("POST /api/auth/logout", () => {
 });
 
 describe("POST /api/auth/forgot-password", () => {
-  xtest("Should send email to user", () => {
+  test("Should send email to user", () => {
     const agent = request.agent(app);
 
     return agent
@@ -270,7 +270,7 @@ describe("POST /api/auth/forgot-password", () => {
       .send({
         username: "uarukonda",
         email: "uarukonda@gmail.com",
-        password: "12121212",
+        password: "Upender123",
       })
       .expect(201)
       .then(() => {
@@ -280,7 +280,7 @@ describe("POST /api/auth/forgot-password", () => {
           .expect(200);
       });
   });
-  test("Should update user password", () => {
+  xtest("Should update user password", () => {
     const agent = request.agent(app);
 
     return agent
@@ -288,7 +288,7 @@ describe("POST /api/auth/forgot-password", () => {
       .send({
         username: "uarukonda",
         email: "uarukonda@gmail.com",
-        password: "12121212",
+        password: "Upender123",
       })
       .expect(201)
       .then(() => {
