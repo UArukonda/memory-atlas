@@ -9,6 +9,10 @@ function findUserByUsername(username) {
   return User.findOne({ username });
 }
 
+function findUserByRelationshipCode(relationshipCode) {
+  return User.findOne({ relationshipCode });
+}
+
 function createUser(userData) {
   return User.create(userData);
 }
@@ -33,4 +37,5 @@ module.exports = {
   comparePassword,
   updateUserData,
   deleteUserByEmail,
+  findUserByRelationshipCode,
 };
