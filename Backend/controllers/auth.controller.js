@@ -5,7 +5,7 @@ const {
   createUser,
   comparePassword,
   updateUserData,
-} = require("../models/user.model.js");
+} = require("../repositories/user.repository.js");
 const jwt = require("jsonwebtoken");
 const transporter = require("../services/emailService.js");
 
@@ -112,7 +112,7 @@ async function sendResetToken(req, res, next) {
     const resetLink = `http://localhost:5173/reset-password?token=${passwordResetToken}`;
 
     const info = await transporter.sendMail({
-      from: "a@b.c", //services like gmail and others override from address to your smtp_user
+      from: `${process.env.EMAIL_FROM} a@b.c`, //services like gmail and others override from address to your smtp_user
       to: user.email,
       subject: "password reset - from memory atlas",
       text: `Click the link below to reset your password ${resetLink}`, //if client dont support html then text is shown

@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
     },
     password: { type: String, required: true },
+    relationshipCode: {
+      type: String,
+      unique: true,
+    },
   },
   { timestamps: true },
 );
@@ -19,6 +23,23 @@ const UserSchema = new mongoose.Schema(
 UserSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
+});
+
+UserSchema.pre("save", async function () {
+  if (this.relationshipCode) return;
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  let code, existingUser;
+
+  do {
+    code = "";
+
+    for (let i = 0; i < 6; i++) {
+      code += chars[Math.floor(Math.random() * chars.length)];
+    }
+    existingUser = await this.constructor.findOne({ relationshipCode: code });
+  } while (existingUser);
+
+  this.relationshipCode = code;
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {

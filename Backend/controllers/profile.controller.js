@@ -1,8 +1,8 @@
 const {
   createProfileDocument,
   updateProfileDocument,
-} = require("../models/profile.model.js");
-const { findUserByEmail } = require("../models/user.model.js");
+} = require("../repositories/profile.repository.js");
+const { findUserByEmail } = require("../repositories/user.repository.js");
 
 const createProfile = async (req, res, next) => {
   const { displayName, bio, avatar } = req.body;
