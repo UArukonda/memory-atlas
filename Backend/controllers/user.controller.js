@@ -20,6 +20,7 @@ const getUser = async (req, res, next) => {
     const userProfile = await getProfileById(existingUser._id.toString());
 
     return res.status(200).send({
+      id: existingUser._id,
       username: existingUser.username,
       email: existingUser.email,
       relationshipCode: existingUser.relationshipCode,
