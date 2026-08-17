@@ -22,9 +22,12 @@ const getUser = async (req, res, next) => {
     return res.status(200).send({
       username: existingUser.username,
       email: existingUser.email,
-      displayName: userProfile?.displayName,
-      bio: userProfile?.bio,
-      avatar: userProfile?.avatar,
+      relationshipCode: existingUser.relationshipCode,
+      profile: {
+        displayName: userProfile?.displayName,
+        bio: userProfile?.bio,
+        avatar: userProfile?.avatar,
+      },
     });
   } catch (err) {
     console.log(err.message);
