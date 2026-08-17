@@ -1,15 +1,17 @@
 const {
   findUserByRelationshipCode,
   findUserByEmail,
+  findUserById,
 } = require("../repositories/user.repository.js");
 const {
   getRelationship,
   createRelationshipDocument,
+  updateRelationshipDocument,
 } = require("../repositories/relationship.repository.js");
+const { getProfileById } = require("../repositories/profile.repository.js");
 
 async function createRelation(req, res, next) {
   const { relationshipCode } = req.body;
-
   try {
     const userB = await findUserByRelationshipCode(relationshipCode);
     if (!userB) {
@@ -44,4 +46,75 @@ async function createRelation(req, res, next) {
   }
 }
 
-module.exports = { createRelation };
+const getRelation = async (req, res, next) => {
+  const currentUser = req.user;
+
+  try {
+    const currentUserData = await findUserByEmail(currentUser.email);
+    const relationship = await getRelationship(currentUserData._id.toString());
+    if (!relationship) {
+      return res.status(404).json({ message: "You are not in a relationship" });
+    }
+
+    const { userAId, userBId } = relationship;
+
+    const partnerId = currentUserData._id.equals(userAId)
+      ? userBId.toString()
+      : userAId.toString();
+
+    const partner = await findUserById(partnerId);
+    const partnerProfile = await getProfileById(partnerId);
+
+    return res.status(200).json({
+      relationship,
+      partner: {
+        id: partner._id,
+        username: partner.username,
+        email: partner.email,
+        profile: partnerProfile,
+      },
+    });
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
+};
+
+const updateRelation = async (req, res, next) => {
+  const currentUserEmail = req.user.email;
+  const {
+    relationshipStartDate,
+    coupleNickname,
+    relationshipDescription,
+    coverPhoto,
+  } = req.body;
+  const updateData = {};
+
+  if (relationshipStartDate !== undefined)
+    updateData.relationshipStartDate = relationshipStartDate;
+
+  if (coupleNickname !== undefined) updateData.coupleNickname = coupleNickname;
+
+  if (relationshipDescription !== undefined)
+    updateData.relationshipDescription = relationshipDescription;
+
+  if (coverPhoto !== undefined) updateData.coverPhoto = coverPhoto;
+  try {
+    const currentUser = await findUserByEmail(currentUserEmail);
+    const relation = await getRelationship(currentUser._id);
+    if (!relation) {
+      return res.status(404).json({
+        message: "You are not in a relationship",
+      });
+    }
+    const isUpdated = await updateRelationshipDocument(
+      updateData,
+      relation._id,
+    );
+    return res.status(200).send(isUpdated);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createRelation, getRelation, updateRelation };

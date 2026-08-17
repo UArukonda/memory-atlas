@@ -8,4 +8,13 @@ function createRelationshipDocument(userId, partnerId) {
   return Relationship.create({ userAId: userId, userBId: partnerId });
 }
 
-module.exports = { getRelationship, createRelationshipDocument };
+function updateRelationshipDocument(relationData, id) {
+  return Relationship.findOneAndUpdate({ _id: id }, relationData, {
+    returnDocument: "after",
+  });
+}
+module.exports = {
+  getRelationship,
+  createRelationshipDocument,
+  updateRelationshipDocument,
+};

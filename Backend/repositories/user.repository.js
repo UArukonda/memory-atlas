@@ -1,5 +1,9 @@
 const User = require("../models/User.js");
 
+const findUserById = (id) => {
+  return User.findById(id);
+};
+
 function findUserByEmail(email) {
   return User.findOne({ email });
   // return Promise.reject(new Error("Database connection failed"));
@@ -31,6 +35,7 @@ function deleteUserByEmail(email) {
 }
 
 module.exports = {
+  findUserById,
   findUserByEmail,
   findUserByUsername,
   createUser,
