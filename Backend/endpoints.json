@@ -31,5 +31,138 @@
         }
       }
     }
+  },
+
+  "POST /api/auth/logout": {
+    "description": "Log out the authenticated user.",
+    "authentication": "Required",
+    "response": {
+      "200": "Logout successful."
+    }
+  },
+
+  "POST /api/auth/forgot-password": {
+    "description": "Request a password reset email.",
+    "body": {
+      "email": "string"
+    }
+  },
+
+  "POST /api/auth/reset-password": {
+    "description": "Reset the user's password using a valid reset token.",
+    "body": {
+      "token": "string",
+      "newPassword": "string"
+    }
+  },
+
+  "GET /api/users/me": {
+    "description": "Return the currently authenticated user's information.",
+    "authentication": "Required"
+  },
+
+  "DELETE /api/users/me": {
+    "description": "Delete the currently authenticated user's account.",
+    "authentication": "Required"
+  },
+
+  "POST /api/profile": {
+    "description": "Create a profile for the authenticated user.",
+    "authentication": "Required"
+  },
+
+  "PATCH /api/profile": {
+    "description": "Update the authenticated user's profile.",
+    "authentication": "Required",
+    "body": {
+      "description": "Profile fields to update."
+    }
+  },
+
+  "POST /api/relationship": {
+    "description": "Connect the authenticated user with another user using their relationship code.",
+    "authentication": "Required",
+    "body": {
+      "relationshipCode": "string"
+    },
+    "response": {
+      "201": "You’re now connected on Memory Atlas ❤️"
+    }
+  },
+
+  "GET /api/relationship": {
+    "description": "Return the authenticated user's relationship and their partner's information.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "relationship": "Relationship object",
+        "partner": "Partner user and profile information"
+      }
+    }
+  },
+
+  "PATCH /api/relationship": {
+    "description": "Update relationship details for the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "relationshipStartDate": "Date",
+      "coupleNickname": "string",
+      "relationshipDescription": "string",
+      "coverPhoto": "string"
+    }
+  },
+
+  "POST /api/memory": {
+    "description": "Create a memory for the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "title": "string",
+      "place": "string",
+      "photo": "string",
+      "video": "string",
+      "description": "string",
+      "date": "Date"
+    }
+  },
+
+  "GET /api/memory": {
+    "description": "Return all memories belonging to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "memories": "Array of memory objects"
+      }
+    }
+  },
+
+  "GET /api/memory/:id": {
+    "description": "Return a single memory by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "memory": "Memory object"
+      }
+    }
+  },
+
+  "PATCH /api/memory/:id": {
+    "description": "Update a memory by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "title": "string",
+      "place": "string",
+      "photo": "string",
+      "video": "string",
+      "description": "string",
+      "date": "Date"
+    }
+  },
+
+  "DELETE /api/memory/:id": {
+    "description": "Delete a memory by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": "Memory deleted successfully."
+    }
   }
 }
