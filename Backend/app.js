@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
 const profileRoutes = require("./routes/profileRoutes.js");
 const relationshipRoutes = require("./routes/relationshipRoutes.js");
+const memoryRoutes = require("./routes/memoryRoutes.js");
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -32,6 +33,8 @@ app.use("/api/users", userRoutes);
 app.use("/api", profileRoutes);
 
 app.use("/api", relationshipRoutes);
+
+app.use("/api", memoryRoutes);
 
 app.use((err, req, res, next) => {
   console.log(err.message);

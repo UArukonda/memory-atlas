@@ -1,0 +1,29 @@
+const mongoose = require("mongoose");
+
+const memorySchema = mongoose.Schema(
+  {
+    relationshipId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Relationship",
+      required: "true",
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    title: {
+      type: String,
+    },
+    place: {
+      type: String,
+    },
+    photo: { type: String },
+    video: { type: String },
+    description: { type: String },
+    date: { type: Date },
+  },
+  { timestamps: true },
+);
+
+module.exports = mongoose.model("Memory", memorySchema);
