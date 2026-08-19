@@ -31,7 +31,6 @@ const getUser = async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.log(err.message);
     next(err);
   }
 };
@@ -41,7 +40,6 @@ const deleteUser = async (req, res, next) => {
     await deleteUserByEmail(req.user.email);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
-    console.log(err.message);
     next(err);
   }
 };

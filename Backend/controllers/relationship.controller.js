@@ -18,7 +18,6 @@ async function createRelation(req, res, next) {
       return res.status(400).json({ message: "Invalid relationship code" });
     }
     const userA = await findUserByEmail(req.user.email);
-    // console.log(userA, userB);
     if (userA._id.equals(userB._id)) {
       return res
         .status(400)
@@ -41,7 +40,6 @@ async function createRelation(req, res, next) {
       .status(201)
       .json({ message: "You’re now connected on Memory Atlas ❤️" });
   } catch (err) {
-    console.log(err.message);
     next(err);
   }
 }
@@ -75,7 +73,6 @@ const getRelation = async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.log(err.message);
     next(err);
   }
 };

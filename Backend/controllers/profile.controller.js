@@ -13,7 +13,6 @@ const createProfile = async (req, res, next) => {
     await createProfileDocument(existingUser._id, displayName, bio, avatar);
     return res.status(201).json({ message: "Profile created" });
   } catch (err) {
-    console.log(err.message);
     next(err);
   }
 };

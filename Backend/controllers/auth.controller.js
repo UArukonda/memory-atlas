@@ -40,7 +40,6 @@ async function registerUser(req, res, next) {
       message: "Registration successful. Please log in.",
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -86,7 +85,6 @@ async function loginUser(req, res, next) {
       username: existingUser.username,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -125,7 +123,6 @@ async function sendResetToken(req, res, next) {
       token: passwordResetToken,
     });
   } catch (err) {
-    console.log("error while sending email:", err.message);
     next(err);
   }
 }
