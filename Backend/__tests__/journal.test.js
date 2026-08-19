@@ -2,8 +2,8 @@ require("./setup.js");
 const request = require("supertest");
 const app = require("../app.js");
 
-describe("POST /api/memory", () => {
-  test("Should create and return memory successfully", async () => {
+describe("POST /api/journal", () => {
+  test("Should create and return journal successfully", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
 
@@ -45,26 +45,30 @@ describe("POST /api/memory", () => {
 
     await agentA
       .post("/api/relationship")
-      .send({ relationshipCode: userBData.body.relationshipCode });
+      .send({
+        relationshipCode: userBData.body.relationshipCode,
+      })
+      .expect(201);
 
-    const res = await agentA.post("/api/memory").send({
-      title: "Our First Trip",
-      place: "Goa",
-      description: "Our first trip together",
-      date: "2025-06-15",
-      photo: "https://example.com/goa.jpg",
+    const res = await agentA.post("/api/journal").send({
+      title: "The Day We Met",
+      description: "I still remember the first day we met.",
+      date: "2024-06-15",
     });
 
     expect(res.statusCode).toBe(201);
-    expect(res.body.memory.title).toBe("Our First Trip");
-    expect(res.body.memory.place).toBe("Goa");
-    expect(res.body.memory.description).toBe("Our first trip together");
-    expect(res.body.memory.photo).toBe("https://example.com/goa.jpg");
-    expect(res.body.memory.relationshipId).toBeDefined();
-    expect(res.body.memory.createdBy).toBeDefined();
+
+    expect(res.body.journal).toBeDefined();
+    expect(res.body.journal.title).toBe("The Day We Met");
+    expect(res.body.journal.description).toBe(
+      "I still remember the first day we met.",
+    );
+
+    expect(res.body.journal.relationshipId).toBeDefined();
+    expect(res.body.journal.createdBy).toBeDefined();
   });
 
-  test("Should reject memory creation when user has no relationship", async () => {
+  test("Should reject journal creation when user has no relationship", async () => {
     const agentA = request.agent(app);
 
     await agentA
@@ -84,38 +88,35 @@ describe("POST /api/memory", () => {
       })
       .expect(200);
 
-    const res = await agentA.post("/api/memory").send({
-      title: "Our First Trip",
-      place: "Goa",
-      description: "Our first trip together",
-      date: "2025-06-15",
-      photo: "https://example.com/goa.jpg",
+    const res = await agentA.post("/api/journal").send({
+      title: "The Day We Met",
+      description: "I still remember the first day we met.",
+      date: "2024-06-15",
     });
 
     expect(res.statusCode).toBe(404);
+
     expect(res.body.message).toBe("You are not in a relationship");
   });
 
-  test("Should reject memory creation when user is not authenticated", async () => {
-    const res = await request(app).post("/api/memory").send({
-      title: "Our First Trip",
-      place: "Goa",
-      description: "Our first trip together",
-      date: "2025-06-15",
-      photo: "https://example.com/goa.jpg",
+  test("Should reject journal creation when user is not authenticated", async () => {
+    const res = await request(app).post("/api/journal").send({
+      title: "The Day We Met",
+      description: "I still remember the first day we met.",
+      date: "2024-06-15",
     });
 
     expect(res.statusCode).toBe(401);
+
     expect(res.body.message).toBe("Please login");
   });
 });
 
-describe("GET /api/memory", () => {
-  test("Should return all memories for the authenticated user's relationship", async () => {
+describe("GET /api/journal", () => {
+  test("Should return all journals for the authenticated user's relationship", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
 
-    // Register A
     await agentA
       .post("/api/auth/register")
       .send({
@@ -125,7 +126,6 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // Login A
     await agentA
       .post("/api/auth/login")
       .send({
@@ -134,7 +134,6 @@ describe("GET /api/memory", () => {
       })
       .expect(200);
 
-    // Register B
     await agentB
       .post("/api/auth/register")
       .send({
@@ -144,7 +143,6 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // Login B
     await agentB
       .post("/api/auth/login")
       .send({
@@ -153,10 +151,8 @@ describe("GET /api/memory", () => {
       })
       .expect(200);
 
-    // Get B's relationship code
     const userBData = await agentB.get("/api/users/me");
 
-    // A connects to B
     await agentA
       .post("/api/relationship")
       .send({
@@ -164,50 +160,39 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // A creates memory 1
     await agentA
-      .post("/api/memory")
+      .post("/api/journal")
+      .send({
+        title: "The Day We Met",
+        description: "I still remember the first day we met.",
+        date: "2024-06-15",
+      })
+      .expect(201);
+
+    await agentA
+      .post("/api/journal")
       .send({
         title: "Our First Trip",
-        place: "Goa",
-        description: "Our first trip together",
+        description: "Our first trip together was unforgettable.",
         date: "2025-06-15",
-        photo: "https://example.com/goa.jpg",
       })
       .expect(201);
 
-    // A creates memory 2
-    await agentA
-      .post("/api/memory")
-      .send({
-        title: "Our Anniversary",
-        place: "Hyderabad",
-        description: "Our first anniversary",
-        date: "2026-06-15",
-        photo: "https://example.com/anniversary.jpg",
-      })
-      .expect(201);
-
-    // Get all memories
-    const response = await agentA.get("/api/memory");
+    const response = await agentA.get("/api/journal");
 
     expect(response.statusCode).toBe(200);
 
-    expect(response.body.memories).toBeDefined();
-    expect(response.body.memories).toHaveLength(2);
+    expect(response.body.journals).toBeDefined();
+    expect(response.body.journals).toHaveLength(2);
 
-    expect(response.body.memories[0].title).toBe("Our First Trip");
-    expect(response.body.memories[0].place).toBe("Goa");
-
-    expect(response.body.memories[1].title).toBe("Our Anniversary");
-    expect(response.body.memories[1].place).toBe("Hyderabad");
+    expect(response.body.journals[0].title).toBe("The Day We Met");
+    expect(response.body.journals[1].title).toBe("Our First Trip");
   });
 
-  test("Should return an empty array when the user has no memories", async () => {
+  test("Should return an empty array when the user has no journals", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
 
-    // Register A
     await agentA
       .post("/api/auth/register")
       .send({
@@ -217,7 +202,6 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // Login A
     await agentA
       .post("/api/auth/login")
       .send({
@@ -226,7 +210,6 @@ describe("GET /api/memory", () => {
       })
       .expect(200);
 
-    // Register B
     await agentB
       .post("/api/auth/register")
       .send({
@@ -236,7 +219,6 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // Login B
     await agentB
       .post("/api/auth/login")
       .send({
@@ -245,10 +227,8 @@ describe("GET /api/memory", () => {
       })
       .expect(200);
 
-    // Get B's relationship code
     const userBData = await agentB.get("/api/users/me");
 
-    // A connects to B
     await agentA
       .post("/api/relationship")
       .send({
@@ -256,25 +236,23 @@ describe("GET /api/memory", () => {
       })
       .expect(201);
 
-    // No memories created
-
-    const response = await agentA.get("/api/memory");
+    const response = await agentA.get("/api/journal");
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.memories).toBeDefined();
-    expect(response.body.memories).toEqual([]);
+    expect(response.body.journals).toBeDefined();
+    expect(response.body.journals).toEqual([]);
   });
 
   test("Should reject request when user is not authenticated", async () => {
-    const response = await request(app).get("/api/memory");
+    const response = await request(app).get("/api/journal");
 
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toBe("Please login");
   });
 });
 
-describe("GET /api/memory/:id", () => {
-  test("Should return a memory by id", async () => {
+describe("GET /api/journal/:id", () => {
+  test("Should return a journal by id", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
 
@@ -321,118 +299,26 @@ describe("GET /api/memory/:id", () => {
       })
       .expect(201);
 
-    const memoryResponse = await agentA
-      .post("/api/memory")
+    const journalResponse = await agentA
+      .post("/api/journal")
       .send({
-        title: "Our First Trip",
-        place: "Goa",
-        description: "Our first trip together",
-        date: "2025-06-15",
-        photo: "https://example.com/goa.jpg",
+        title: "The Day We Met",
+        description: "I still remember the first day we met.",
+        date: "2024-06-15",
       })
       .expect(201);
 
-    const memoryId = memoryResponse.body.memory._id;
+    const journalId = journalResponse.body.journal._id;
 
-    const response = await agentA.get(`/api/memory/${memoryId}`);
+    const response = await agentA.get(`/api/journal/${journalId}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.memory).toBeDefined();
-    expect(response.body.memory._id).toBe(memoryId);
-    expect(response.body.memory.title).toBe("Our First Trip");
-    expect(response.body.memory.place).toBe("Goa");
+    expect(response.body.journal).toBeDefined();
+    expect(response.body.journal._id).toBe(journalId);
+    expect(response.body.journal.title).toBe("The Day We Met");
   });
 
-  test("Should reject access to memory that does not belong to user's relationship", async () => {
-    const agentA = request.agent(app);
-    const agentB = request.agent(app);
-    const agentC = request.agent(app);
-
-    await agentA
-      .post("/api/auth/register")
-      .send({
-        username: "userA",
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentB
-      .post("/api/auth/register")
-      .send({
-        username: "userB",
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentC
-      .post("/api/auth/register")
-      .send({
-        username: "userC",
-        email: "userc@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentA
-      .post("/api/auth/login")
-      .send({
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    await agentB
-      .post("/api/auth/login")
-      .send({
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    await agentC
-      .post("/api/auth/login")
-      .send({
-        email: "userc@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    const userBData = await agentB.get("/api/users/me");
-
-    await agentA
-      .post("/api/relationship")
-      .send({
-        relationshipCode: userBData.body.relationshipCode,
-      })
-      .expect(201);
-
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({
-        title: "A and B Memory",
-        place: "Goa",
-        description: "Private memory",
-        date: "2025-06-15",
-      })
-      .expect(201);
-
-    const memoryId = memoryResponse.body.memory._id;
-
-    const response = await agentC.get(`/api/memory/${memoryId}`);
-
-    expect(response.statusCode).toBe(404);
-  });
-
-  test("Should reject unauthenticated request", async () => {
-    const response = await request(app).get("/api/memory/invalid-id");
-
-    expect(response.statusCode).toBe(401);
-    expect(response.body.message).toBe("Please login");
-  });
-
-  test("Should reject access to memory belonging to a different relationship", async () => {
+  test("Should reject access to journal that does not belong to user's relationship", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
     const agentC = request.agent(app);
@@ -503,22 +389,134 @@ describe("GET /api/memory/:id", () => {
       .send({ relationshipCode: userDData.body.relationshipCode })
       .expect(201);
 
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({ title: "A and B Memory", place: "Goa" })
+    const journalResponse = await agentA
+      .post("/api/journal")
+      .send({
+        title: "A and B Journal",
+        description: "Private entry",
+        date: "2024-06-15",
+      })
       .expect(201);
 
-    const memoryId = memoryResponse.body.memory._id;
+    const journalId = journalResponse.body.journal._id;
 
-    const response = await agentC.get(`/api/memory/${memoryId}`);
+    const response = await agentC.get(`/api/journal/${journalId}`);
 
     expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this");
+  });
+
+  test("Should reject unauthenticated request", async () => {
+    const response = await request(app).get("/api/journal/invalid-id");
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe("Please login");
+  });
+
+  test("Should handle a malformed journal id", async () => {
+    const agentA = request.agent(app);
+    const agentB = request.agent(app);
+
+    await agentA
+      .post("/api/auth/register")
+      .send({
+        username: "userA",
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentB
+      .post("/api/auth/register")
+      .send({
+        username: "userB",
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentA
+      .post("/api/auth/login")
+      .send({
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    await agentB
+      .post("/api/auth/login")
+      .send({
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    const userBData = await agentB.get("/api/users/me");
+
+    await agentA
+      .post("/api/relationship")
+      .send({ relationshipCode: userBData.body.relationshipCode })
+      .expect(201);
+
+    const response = await agentA.get("/api/journal/not-a-real-objectid");
+
+    expect(response.statusCode).toBe(500);
+  });
+
+  test("Should return 404 for a journal id that doesn't exist", async () => {
+    const agentA = request.agent(app);
+    const agentB = request.agent(app);
+
+    await agentA
+      .post("/api/auth/register")
+      .send({
+        username: "userA",
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentB
+      .post("/api/auth/register")
+      .send({
+        username: "userB",
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentA
+      .post("/api/auth/login")
+      .send({
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    await agentB
+      .post("/api/auth/login")
+      .send({
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    const userBData = await agentB.get("/api/users/me");
+
+    await agentA
+      .post("/api/relationship")
+      .send({ relationshipCode: userBData.body.relationshipCode })
+      .expect(201);
+
+    const nonExistentId = "64a1f0c2e1b2c3d4e5f6a7b8";
+
+    const response = await agentA.get(`/api/journal/${nonExistentId}`);
+
+    expect(response.statusCode).toBe(404);
   });
 });
 
-describe("PATCH /api/memory/:id", () => {
-  test("Should update a memory successfully", async () => {
+describe("PATCH /api/journal/:id", () => {
+  test("Should update a journal successfully", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
 
@@ -565,33 +563,33 @@ describe("PATCH /api/memory/:id", () => {
       })
       .expect(201);
 
-    const memoryResponse = await agentA
-      .post("/api/memory")
+    const journalResponse = await agentA
+      .post("/api/journal")
       .send({
-        title: "Our First Trip",
-        place: "Goa",
-        description: "Our first trip together",
-        date: "2025-06-15",
+        title: "The Day We Met",
+        description: "I still remember the first day we met.",
+        date: "2024-06-15",
       })
       .expect(201);
 
-    const memoryId = memoryResponse.body.memory._id;
+    const journalId = journalResponse.body.journal._id;
 
-    const response = await agentA.patch(`/api/memory/${memoryId}`).send({
-      title: "Our Amazing First Trip",
-      place: "North Goa",
+    const response = await agentA.patch(`/api/journal/${journalId}`).send({
+      title: "The Unforgettable Day We Met",
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.memory.title).toBe("Our Amazing First Trip");
-    expect(response.body.memory.place).toBe("North Goa");
-    expect(response.body.memory.description).toBe("Our first trip together");
+    expect(response.body.journal.title).toBe("The Unforgettable Day We Met");
+    expect(response.body.journal.description).toBe(
+      "I still remember the first day we met.",
+    );
   });
 
-  test("Should reject updating memory that does not belong to user's relationship", async () => {
+  test("Should reject updating journal that does not belong to user's relationship", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
     const agentC = request.agent(app);
+    const agentD = request.agent(app);
 
     await agentA
       .post("/api/auth/register")
@@ -620,66 +618,141 @@ describe("PATCH /api/memory/:id", () => {
       })
       .expect(201);
 
+    await agentD
+      .post("/api/auth/register")
+      .send({
+        username: "userD",
+        email: "userd@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
     await agentA
       .post("/api/auth/login")
-      .send({
-        email: "usera@test.com",
-        password: "Password123",
-      })
+      .send({ email: "usera@test.com", password: "Password123" })
       .expect(200);
-
     await agentB
       .post("/api/auth/login")
-      .send({
-        email: "userb@test.com",
-        password: "Password123",
-      })
+      .send({ email: "userb@test.com", password: "Password123" })
       .expect(200);
-
     await agentC
       .post("/api/auth/login")
-      .send({
-        email: "userc@test.com",
-        password: "Password123",
-      })
+      .send({ email: "userc@test.com", password: "Password123" })
+      .expect(200);
+    await agentD
+      .post("/api/auth/login")
+      .send({ email: "userd@test.com", password: "Password123" })
       .expect(200);
 
     const userBData = await agentB.get("/api/users/me");
-
     await agentA
       .post("/api/relationship")
+      .send({ relationshipCode: userBData.body.relationshipCode })
+      .expect(201);
+
+    const userDData = await agentD.get("/api/users/me");
+    await agentC
+      .post("/api/relationship")
+      .send({ relationshipCode: userDData.body.relationshipCode })
+      .expect(201);
+
+    const journalResponse = await agentA
+      .post("/api/journal")
       .send({
-        relationshipCode: userBData.body.relationshipCode,
+        title: "Private Journal",
+        description: "Private entry",
+        date: "2024-06-15",
       })
       .expect(201);
 
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({
-        title: "Private Memory",
-        place: "Goa",
-      })
-      .expect(201);
+    const journalId = journalResponse.body.journal._id;
 
-    const memoryId = memoryResponse.body.memory._id;
-
-    const response = await agentC.patch(`/api/memory/${memoryId}`).send({
-      title: "Hacked Memory",
+    const response = await agentC.patch(`/api/journal/${journalId}`).send({
+      title: "Hacked Journal",
     });
 
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(403);
   });
 
   test("Should reject unauthenticated update", async () => {
-    const response = await request(app).patch("/api/memory/invalid-id").send({
+    const response = await request(app).patch("/api/journal/invalid-id").send({
       title: "Updated",
     });
 
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toBe("Please login");
   });
+});
 
-  test("Should reject updating memory belonging to a different relationship", async () => {
+describe("DELETE /api/journal/:id", () => {
+  test("Should delete a journal successfully", async () => {
+    const agentA = request.agent(app);
+    const agentB = request.agent(app);
+
+    await agentA
+      .post("/api/auth/register")
+      .send({
+        username: "userA",
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentB
+      .post("/api/auth/register")
+      .send({
+        username: "userB",
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(201);
+
+    await agentA
+      .post("/api/auth/login")
+      .send({
+        email: "usera@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    await agentB
+      .post("/api/auth/login")
+      .send({
+        email: "userb@test.com",
+        password: "Password123",
+      })
+      .expect(200);
+
+    const userBData = await agentB.get("/api/users/me");
+
+    await agentA
+      .post("/api/relationship")
+      .send({
+        relationshipCode: userBData.body.relationshipCode,
+      })
+      .expect(201);
+
+    const journalResponse = await agentA
+      .post("/api/journal")
+      .send({
+        title: "The Day We Met",
+        description: "I still remember the first day we met.",
+        date: "2024-06-15",
+      })
+      .expect(201);
+
+    const journalId = journalResponse.body.journal._id;
+
+    const response = await agentA.delete(`/api/journal/${journalId}`);
+
+    expect(response.statusCode).toBe(200);
+
+    const getResponse = await agentA.get(`/api/journal/${journalId}`);
+
+    expect(getResponse.statusCode).toBe(404);
+  });
+
+  test("Should reject deleting journal that does not belong to user's relationship", async () => {
     const agentA = request.agent(app);
     const agentB = request.agent(app);
     const agentC = request.agent(app);
@@ -750,265 +823,30 @@ describe("PATCH /api/memory/:id", () => {
       .send({ relationshipCode: userDData.body.relationshipCode })
       .expect(201);
 
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({ title: "Private Memory", place: "Goa" })
+    const journalResponse = await agentA
+      .post("/api/journal")
+      .send({
+        title: "Private Journal",
+        description: "Private entry",
+        date: "2024-06-15",
+      })
       .expect(201);
 
-    const memoryId = memoryResponse.body.memory._id;
+    const journalId = journalResponse.body.journal._id;
 
-    const response = await agentC
-      .patch(`/api/memory/${memoryId}`)
-      .send({ title: "Hacked Memory" });
+    const response = await agentC.delete(`/api/journal/${journalId}`);
 
     expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this");
-  });
-});
 
-describe("DELETE /api/memory/:id", () => {
-  test("Should delete a memory successfully", async () => {
-    const agentA = request.agent(app);
-    const agentB = request.agent(app);
-
-    await agentA
-      .post("/api/auth/register")
-      .send({
-        username: "userA",
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentB
-      .post("/api/auth/register")
-      .send({
-        username: "userB",
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentA
-      .post("/api/auth/login")
-      .send({
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    await agentB
-      .post("/api/auth/login")
-      .send({
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    const userBData = await agentB.get("/api/users/me");
-
-    await agentA
-      .post("/api/relationship")
-      .send({
-        relationshipCode: userBData.body.relationshipCode,
-      })
-      .expect(201);
-
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({
-        title: "Our First Trip",
-        place: "Goa",
-      })
-      .expect(201);
-
-    const memoryId = memoryResponse.body.memory._id;
-
-    const response = await agentA.delete(`/api/memory/${memoryId}`);
-
-    expect(response.statusCode).toBe(200);
-
-    const getResponse = await agentA.get(`/api/memory/${memoryId}`);
-
-    expect(getResponse.statusCode).toBe(404);
-  });
-
-  test("Should reject deleting memory that does not belong to user's relationship", async () => {
-    const agentA = request.agent(app);
-    const agentB = request.agent(app);
-    const agentC = request.agent(app);
-
-    await agentA
-      .post("/api/auth/register")
-      .send({
-        username: "userA",
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentB
-      .post("/api/auth/register")
-      .send({
-        username: "userB",
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentC
-      .post("/api/auth/register")
-      .send({
-        username: "userC",
-        email: "userc@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentA
-      .post("/api/auth/login")
-      .send({
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    await agentB
-      .post("/api/auth/login")
-      .send({
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    await agentC
-      .post("/api/auth/login")
-      .send({
-        email: "userc@test.com",
-        password: "Password123",
-      })
-      .expect(200);
-
-    const userBData = await agentB.get("/api/users/me");
-
-    await agentA
-      .post("/api/relationship")
-      .send({
-        relationshipCode: userBData.body.relationshipCode,
-      })
-      .expect(201);
-
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({
-        title: "Private Memory",
-        place: "Goa",
-      })
-      .expect(201);
-
-    const memoryId = memoryResponse.body.memory._id;
-
-    const response = await agentC.delete(`/api/memory/${memoryId}`);
-
-    expect(response.statusCode).toBe(404);
-
-    // Verify the memory still exists
-    const ownerResponse = await agentA.get(`/api/memory/${memoryId}`);
+    const ownerResponse = await agentA.get(`/api/journal/${journalId}`);
 
     expect(ownerResponse.statusCode).toBe(200);
   });
 
   test("Should reject unauthenticated delete", async () => {
-    const response = await request(app).delete("/api/memory/invalid-id");
+    const response = await request(app).delete("/api/journal/invalid-id");
 
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toBe("Please login");
-  });
-
-  test("Should reject deleting memory belonging to a different relationship", async () => {
-    const agentA = request.agent(app);
-    const agentB = request.agent(app);
-    const agentC = request.agent(app);
-    const agentD = request.agent(app);
-
-    await agentA
-      .post("/api/auth/register")
-      .send({
-        username: "userA",
-        email: "usera@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentB
-      .post("/api/auth/register")
-      .send({
-        username: "userB",
-        email: "userb@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentC
-      .post("/api/auth/register")
-      .send({
-        username: "userC",
-        email: "userc@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentD
-      .post("/api/auth/register")
-      .send({
-        username: "userD",
-        email: "userd@test.com",
-        password: "Password123",
-      })
-      .expect(201);
-
-    await agentA
-      .post("/api/auth/login")
-      .send({ email: "usera@test.com", password: "Password123" })
-      .expect(200);
-    await agentB
-      .post("/api/auth/login")
-      .send({ email: "userb@test.com", password: "Password123" })
-      .expect(200);
-    await agentC
-      .post("/api/auth/login")
-      .send({ email: "userc@test.com", password: "Password123" })
-      .expect(200);
-    await agentD
-      .post("/api/auth/login")
-      .send({ email: "userd@test.com", password: "Password123" })
-      .expect(200);
-
-    const userBData = await agentB.get("/api/users/me");
-    await agentA
-      .post("/api/relationship")
-      .send({ relationshipCode: userBData.body.relationshipCode })
-      .expect(201);
-
-    const userDData = await agentD.get("/api/users/me");
-    await agentC
-      .post("/api/relationship")
-      .send({ relationshipCode: userDData.body.relationshipCode })
-      .expect(201);
-
-    const memoryResponse = await agentA
-      .post("/api/memory")
-      .send({ title: "Private Memory", place: "Goa" })
-      .expect(201);
-
-    const memoryId = memoryResponse.body.memory._id;
-
-    const response = await agentC.delete(`/api/memory/${memoryId}`);
-
-    expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this");
-
-    const ownerResponse = await agentA.get(`/api/memory/${memoryId}`);
-    expect(ownerResponse.statusCode).toBe(200);
   });
 });

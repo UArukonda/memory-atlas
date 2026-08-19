@@ -10,13 +10,9 @@ const {
 
 const createMemory = async (req, res, next) => {
   try {
-    const relationship = await getRelationship(req.user.id);
-    if (!relationship) {
-      return res.status(404).json({ message: "You are not in a relationship" });
-    }
     const isCreated = await createMemoryDocument({
       ...req.body,
-      relationshipId: relationship._id,
+      relationshipId: req.relationship._id,
       createdBy: req.user.id,
     });
 
@@ -28,11 +24,7 @@ const createMemory = async (req, res, next) => {
 
 const fetchMemories = async (req, res, next) => {
   try {
-    const relationship = await getRelationship(req.user.id);
-    if (!relationship) {
-      return res.status(404).json({ message: "You are not in a relationship" });
-    }
-    const memories = await getMemoryCollection(relationship._id);
+    const memories = await getMemoryCollection(req.relationship._id);
     return res.status(200).send({ memories });
   } catch (err) {
     next(err);
@@ -40,49 +32,18 @@ const fetchMemories = async (req, res, next) => {
 };
 
 const fetchMemoryById = async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const relationship = await getRelationship(req.user.id);
-    if (!relationship) {
-      return res.status(404).json({ message: "You are not in a relationship" });
-    }
-    const memory = await getMemoryDocumentById(id);
-
-    if (!memory) {
-      return res.status(404).json({ message: "Memory not found" });
-    }
-
-    if (!relationship._id.equals(memory.relationshipId)) {
-      return res.status(403).json({
-        message: "You do not have access to this memory",
-      });
-    }
-
-    return res.status(200).send({ memory });
+    return res.status(200).send({ memory: req.resource });
   } catch (err) {
     next(err);
   }
 };
 
 const updateMemory = async (req, res, next) => {
-  const { id } = req.params;
   const { title, place, description, date, photo, video } = req.body;
 
   try {
-    const relationship = await getRelationship(req.user.id);
-    if (!relationship) {
-      return res.status(404).json({ message: "You are not in a relationship" });
-    }
-    const memory = await getMemoryDocumentById(id);
-    if (!memory) {
-      return res.status(404).json({ message: "Memory not found" });
-    }
-
-    if (!relationship._id.equals(memory.relationshipId)) {
-      return res.status(403).json({
-        message: "You do not have access to this memory",
-      });
-    }
+    const memory = req.resource;
 
     if (title !== undefined) memory.title = title;
     if (place !== undefined) memory.place = place;
@@ -102,25 +63,8 @@ const updateMemory = async (req, res, next) => {
 };
 
 const deleteMemory = async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const relationship = await getRelationship(req.user.id);
-    if (!relationship) {
-      return res.status(404).json({ message: "You are not in a relationship" });
-    }
-    const memory = await getMemoryDocumentById(id);
-
-    if (!memory) {
-      return res.status(404).json({ message: "Memory not found" });
-    }
-
-    if (!relationship._id.equals(memory.relationshipId)) {
-      return res.status(403).json({
-        message: "You do not have access to this memory",
-      });
-    }
-
-    const isDeleted = await deleteMemoryDocument(memory._id);
+    const isDeleted = await deleteMemoryDocument(req.resource._id);
 
     return res.status(200).json({ message: "Memory deleted successfully" });
   } catch (err) {

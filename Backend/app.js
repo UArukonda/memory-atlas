@@ -6,6 +6,8 @@ const userRoutes = require("./routes/userRoutes.js");
 const profileRoutes = require("./routes/profileRoutes.js");
 const relationshipRoutes = require("./routes/relationshipRoutes.js");
 const memoryRoutes = require("./routes/memoryRoutes.js");
+const journalRoutes = require("./routes/journalRoutes.js");
+const errorHandler = require("./middleware/errorHandler.js");
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -36,9 +38,8 @@ app.use("/api", relationshipRoutes);
 
 app.use("/api", memoryRoutes);
 
-app.use((err, req, res, next) => {
-  console.log(err.message);
-  res.status(500).send({ message: "Internal Server Error" });
-});
+app.use("/api", journalRoutes);
+
+app.use(errorHandler);
 
 module.exports = app;

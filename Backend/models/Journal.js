@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const memorySchema = new mongoose.Schema(
+const journalSchema = new mongoose.Schema(
   {
     relationshipId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,15 +15,10 @@ const memorySchema = new mongoose.Schema(
     title: {
       type: String,
     },
-    place: {
-      type: String,
-    },
-    photo: { type: String },
-    video: { type: String },
     description: { type: String },
     date: { type: Date },
   },
   { timestamps: true },
 );
 
-module.exports = mongoose.model("Memory", memorySchema);
+module.exports = mongoose.model("Journal", journalSchema);
