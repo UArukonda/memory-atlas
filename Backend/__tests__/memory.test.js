@@ -513,7 +513,7 @@ describe("GET /api/memory/:id", () => {
     const response = await agentC.get(`/api/memory/${memoryId}`);
 
     expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this memory");
+    expect(response.body.message).toBe("You do not have access to this");
   });
 });
 
@@ -762,7 +762,7 @@ describe("PATCH /api/memory/:id", () => {
       .send({ title: "Hacked Memory" });
 
     expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this memory");
+    expect(response.body.message).toBe("You do not have access to this");
   });
 });
 
@@ -1006,7 +1006,7 @@ describe("DELETE /api/memory/:id", () => {
     const response = await agentC.delete(`/api/memory/${memoryId}`);
 
     expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("You do not have access to this memory");
+    expect(response.body.message).toBe("You do not have access to this");
 
     const ownerResponse = await agentA.get(`/api/memory/${memoryId}`);
     expect(ownerResponse.statusCode).toBe(200);

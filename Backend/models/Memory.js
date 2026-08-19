@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const memorySchema = mongoose.Schema(
+const memorySchema = new mongoose.Schema(
   {
     relationshipId: {
       type: mongoose.Schema.Types.ObjectId,
