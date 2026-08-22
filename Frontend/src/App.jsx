@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout";
 import Profile from "./pages/Profile";
-// import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -13,13 +13,13 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
 
-      {/* <Route element={<ProtectedRoute />}> */}
-      <Route element={<DashboardLayout />}>
-        <Route path="/" element={<Dashboard />}></Route>
-        <Route path="/profile" element={<Profile />}></Route>
-        <Route path="" element=""></Route>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="/" element={<Dashboard />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="" element=""></Route>
+        </Route>
       </Route>
-      {/* </Route> */}
     </Routes>
   );
 }

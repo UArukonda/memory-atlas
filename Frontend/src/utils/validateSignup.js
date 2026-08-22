@@ -3,7 +3,8 @@ export function validateSignup({ username, email, password, confirmPassword }) {
     return "Username is required.";
   }
 
-  validateLogin({ email, password });
+  const message = validateLogin({ email, password });
+  if (message) return message;
 
   if (!confirmPassword) {
     return "Please confirm your password.";

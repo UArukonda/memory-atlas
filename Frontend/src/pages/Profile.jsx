@@ -1,13 +1,35 @@
 import Input from "../components/Input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
+import { createProfile, updateProfile } from "../services/profile";
 
 const Profile = () => {
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { user } = useAuth();
+  const { user, reFetchUser } = useAuth();
+
+  const handleSave = async () => {
+    const hasProfile = Object.keys(user?.profile || {}).length > 0;
+
+    if (hasProfile) await updateProfile({ displayName, bio });
+    else await createProfile({ displayName, bio });
+
+    await reFetchUser();
+    setIsEditing(false);
+  };
+
+  const handleCancel = async () => {
+    await reFetchUser();
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    setDisplayName(user?.profile?.displayName || "");
+    setBio(user?.profile?.bio || "");
+  }, [user]);
+
   return (
     <>
       <div className="mx-auto max-w-3xl">
@@ -21,8 +43,8 @@ const Profile = () => {
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-gray-100">
               <img
-                src={user?.avatar}
-                alt={user?.avatar}
+                src={user?.profile?.avatar}
+                alt={user?.profile?.avatar}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -34,6 +56,7 @@ const Profile = () => {
 
               <button
                 type="button"
+                disabled={!isEditing}
                 className="mt-3 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
               >
                 Upload photo
@@ -48,10 +71,11 @@ const Profile = () => {
               type="text"
               name="display-name"
               placeholder="Display Name"
-              value={user?.displayName}
+              value={displayName}
               onChange={(e) => {
                 setDisplayName(e.target.value);
               }}
+              disabled={!isEditing}
             />
             <Input
               id="username"
@@ -82,11 +106,12 @@ const Profile = () => {
             <textarea
               name="bio"
               id="bio"
-              value={user?.bio}
+              value={bio}
               onChange={(e) => {
                 setBio(e.target.value);
               }}
-              className="resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              disabled={!isEditing}
+              className="resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-muted disabled:cursor-not-allowed"
             />
           </div>
           <div className="mt-8 flex justify-end gap-3">
@@ -94,7 +119,7 @@ const Profile = () => {
               <>
                 <button
                   type="button"
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleCancel}
                   className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
                 >
                   Cancel
@@ -102,6 +127,7 @@ const Profile = () => {
 
                 <button
                   type="button"
+                  onClick={handleSave}
                   className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
                 >
                   Save Changes

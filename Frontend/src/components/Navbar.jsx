@@ -1,13 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/useAuth.js";
+import { logoutUser } from "../services/auth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
 
-  const handleClick = () => {};
+  const handleClick = async () => {
+    await logoutUser();
+    setUser(null);
+    navigate("/login");
+  };
   return (
     <>
-      <nav className="flex items-center justify-between border-b border-border bg:surface px-8 py-4">
+      <nav className="flex items-center justify-between border-b border-border bg-surface px-8 py-4">
         <div className="">
           <h1 className="text-xl font-bold text-heading">Memory Atlas</h1>
         </div>
