@@ -15,8 +15,8 @@ const journalSchema = new mongoose.Schema(
     title: {
       type: String,
     },
-    description: { type: String },
-    date: { type: Date },
+    description: { type: String, required: true },
+    date: { type: Date, default: Date.now },
   },
   { timestamps: true },
 );

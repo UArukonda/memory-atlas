@@ -1,7 +1,4 @@
 const {
-  getRelationship,
-} = require("../repositories/relationship.repository.js");
-const {
   createJournalDocument,
   getJournalCollection,
   deleteJournalDocument,
