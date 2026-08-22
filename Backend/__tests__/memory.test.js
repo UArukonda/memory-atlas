@@ -505,7 +505,11 @@ describe("GET /api/memory/:id", () => {
 
     const memoryResponse = await agentA
       .post("/api/memory")
-      .send({ title: "A and B Memory", place: "Goa" })
+      .send({
+        title: "A and B Memory",
+        description: "test description",
+        place: "Goa",
+      })
       .expect(201);
 
     const memoryId = memoryResponse.body.memory._id;
@@ -657,6 +661,7 @@ describe("PATCH /api/memory/:id", () => {
       .post("/api/memory")
       .send({
         title: "Private Memory",
+        description: "test description",
         place: "Goa",
       })
       .expect(201);
@@ -752,7 +757,11 @@ describe("PATCH /api/memory/:id", () => {
 
     const memoryResponse = await agentA
       .post("/api/memory")
-      .send({ title: "Private Memory", place: "Goa" })
+      .send({
+        title: "Private Memory",
+        description: "test description",
+        place: "Goa",
+      })
       .expect(201);
 
     const memoryId = memoryResponse.body.memory._id;
@@ -818,6 +827,7 @@ describe("DELETE /api/memory/:id", () => {
       .post("/api/memory")
       .send({
         title: "Our First Trip",
+        description: "test description",
         place: "Goa",
       })
       .expect(201);
@@ -902,6 +912,7 @@ describe("DELETE /api/memory/:id", () => {
       .post("/api/memory")
       .send({
         title: "Private Memory",
+        description: "test description",
         place: "Goa",
       })
       .expect(201);
@@ -998,7 +1009,11 @@ describe("DELETE /api/memory/:id", () => {
 
     const memoryResponse = await agentA
       .post("/api/memory")
-      .send({ title: "Private Memory", place: "Goa" })
+      .send({
+        title: "Private Memory",
+        description: "test description",
+        place: "Goa",
+      })
       .expect(201);
 
     const memoryId = memoryResponse.body.memory._id;
