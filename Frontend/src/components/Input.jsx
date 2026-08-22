@@ -21,7 +21,7 @@ const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="rounded-md border border-gray-300 px-3 py-2 focus:outline-blue-500 mb-2"
+        className="resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-muted disabled:cursor-not-allowed"
         readOnly={readOnly}
         disabled={disabled}
       />
