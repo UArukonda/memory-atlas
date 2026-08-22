@@ -4,11 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { loginUser } from "../services/auth";
 import { validateLogin } from "../utils/validateSignup";
+import { useAuth } from "../context/useAuth.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { reFetchUser } = useAuth();
 
   const navigate = useNavigate();
 
@@ -17,18 +19,19 @@ const Login = () => {
     const err = validateLogin({ email, password });
     if (err) {
       setError(err);
+      return;
     }
 
     try {
-      const response = await loginUser({ email, password });
-      console.log(response.data.username);
+      await loginUser({ email, password });
       setEmail("");
       setPassword("");
       setError("");
+      await reFetchUser();
+      navigate("/");
     } catch (err) {
-      setError(err.response);
+      setError(err.response?.data?.message);
     }
-    navigate("/");
   };
 
   return (
