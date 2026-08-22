@@ -459,7 +459,7 @@ describe("GET /api/journal/:id", () => {
 
     const response = await agentA.get("/api/journal/not-a-real-objectid");
 
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toBe(404);
   });
 
   test("Should return 404 for a journal id that doesn't exist", async () => {
