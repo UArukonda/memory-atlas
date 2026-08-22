@@ -18,6 +18,7 @@ const Signup = () => {
     const err = validateSignup({ username, email, password, confirmPassword });
     if (err) {
       setError(err);
+      return;
     }
 
     try {
@@ -29,7 +30,7 @@ const Signup = () => {
       setConfirmPassword("");
       setError("");
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err.response?.data?.message);
     }
   }
   return (
