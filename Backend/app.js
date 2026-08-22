@@ -7,6 +7,7 @@ const profileRoutes = require("./routes/profileRoutes.js");
 const relationshipRoutes = require("./routes/relationshipRoutes.js");
 const memoryRoutes = require("./routes/memoryRoutes.js");
 const journalRoutes = require("./routes/journalRoutes.js");
+const letterRoutes = require("./routes/letterRoutes.js");
 const errorHandler = require("./middleware/errorHandler.js");
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
@@ -39,6 +40,8 @@ app.use("/api", relationshipRoutes);
 app.use("/api", memoryRoutes);
 
 app.use("/api", journalRoutes);
+
+app.use("/api", letterRoutes);
 
 app.use(errorHandler);
 
