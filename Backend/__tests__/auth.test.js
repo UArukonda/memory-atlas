@@ -1,14 +1,24 @@
+jest.mock("../repositories/user.repository.js", () => {
+  const actual = jest.requireActual("../repositories/user.repository.js");
+  return {
+    ...actual,
+    findUserByEmail: jest.fn(actual.findUserByEmail),
+  };
+});
+
+const { findUserByEmail } = require("../repositories/user.repository.js");
+
 require("./setup.js");
 const request = require("supertest");
 const app = require("../app.js");
 
 describe("POST /api/auth/register", () => {
-  xtest("should create a new user", async () => {
+  test("should create a new user", async () => {
     // Arrange
     const user = {
       username: "uppi",
       email: "uarukonda@gmail.com",
-      password: "upender123",
+      password: "Upender123",
     };
 
     // Act
@@ -24,47 +34,61 @@ describe("POST /api/auth/register", () => {
       email: user.email,
     });
   });
-  xtest("should reject duplicate email", async () => {
-    // Arrange
+  test("should reject duplicate email", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        username: "uppi",
+        email: "uarukonda@gmail.com",
+        password: "Upender123",
+      })
+      .expect(201);
+
     const user = {
-      username: "uppi",
+      username: "someoneElse",
       email: "uarukonda@gmail.com",
-      password: "upender123",
+      password: "Upender123",
     };
 
-    // Act
     const res = await request(app)
       .post("/api/auth/register")
       .send(user)
       .expect(409);
 
-    // Assert
     expect(res.body).toEqual({
-      message: "user with this email already exists, please login",
+      message: "User with this email already exists, please login",
     });
   });
-  xtest("should reject duplicate username", async () => {
+  test("should reject duplicate username", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        username: "uppi",
+        email: "uarukonda@gmail.com",
+        password: "Upender123",
+      })
+      .expect(201);
+
     const user = {
       username: "uppi",
       email: "uaru@gmail.com",
-      password: "upender123",
+      password: "Upender123",
     };
 
-    // Act
     return request(app)
       .post("/api/auth/register")
       .send(user)
       .expect(409)
       .then((res) => {
         expect(res.body).toEqual({
-          message: "username already taken, please try different username",
+          message: "Username already taken, please try different username",
         });
       });
   });
-  xtest("should require username", () => {
+  test("should require username", () => {
     const user = {
       email: "uppi@gmail.com",
-      password: "upender123",
+      password: "Upender123",
     };
 
     return request(app)
@@ -77,10 +101,10 @@ describe("POST /api/auth/register", () => {
         });
       });
   });
-  xtest("should require email", () => {
+  test("should require email", () => {
     const user = {
       username: "uppi",
-      password: "upender123",
+      password: "Upender123",
     };
 
     return request(app)
@@ -93,7 +117,7 @@ describe("POST /api/auth/register", () => {
         });
       });
   });
-  xtest("should require password", () => {
+  test("should require password", () => {
     const user = {
       username: "uppi",
       email: "uppi@gmail.com",
@@ -112,9 +136,9 @@ describe("POST /api/auth/register", () => {
 });
 
 describe("POST /api/auth/login", () => {
-  xtest("400: responds with an error when email is missing", () => {
+  test("400: responds with an error when email is missing", () => {
     const user = {
-      password: "upender123",
+      password: "Upender123",
     };
 
     return request(app)
@@ -128,7 +152,7 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  xtest("400: responds with an error when password is missing", () => {
+  test("400: responds with an error when password is missing", () => {
     const user = {
       email: "uarukonda@gmail.com",
     };
@@ -144,10 +168,10 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  xtest("404: responds with an error when no account exists with the provided email", () => {
+  test("404: responds with an error when no account exists with the provided email", () => {
     const user = {
       email: "aru@gmail.com",
-      password: "upender123",
+      password: "Upender123",
     };
 
     return request(app)
@@ -161,10 +185,19 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  xtest("401: responds with an error when the password is incorrect", () => {
+  test("401: responds with an error when the password is incorrect", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        username: "uppi",
+        email: "uarukonda@gmail.com",
+        password: "Upender123",
+      })
+      .expect(201);
+
     const user = {
       email: "uarukonda@gmail.com",
-      password: "upender23",
+      password: "Upender23",
     };
 
     return request(app)
@@ -178,62 +211,62 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  xtest("200: responds with a JWT token and user details when login is successful", () => {
-    const user = {
-      email: "uarukonda@gmail.com",
-      password: "upender123",
-    };
+  test("200: responds with a JWT token and user details when login is successful", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        username: "uppi",
+        email: "uarukonda@gmail.com",
+        password: "Upender123",
+      })
+      .expect(201);
 
-    return request(app)
+    const res = await request(app)
       .post("/api/auth/login")
-      .send(user)
-      .expect(200)
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual({
-          token: expect.any(String),
-          user: {
-            id: expect.any(String),
-            email: user.email,
-            username: expect.any(String),
-          },
-        });
-      });
+      .send({ email: "uarukonda@gmail.com", password: "Upender123" })
+      .expect(200);
+
+    expect(res.headers["set-cookie"][0]).toMatch(/token=/);
+    expect(res.body).toEqual({
+      message: "Login successful",
+      email: "uarukonda@gmail.com",
+      username: "uppi",
+    });
   });
 
-  xtest("200: does not return the user's password in the response", () => {
-    const user = {
-      email: "uarukonda@gmail.com",
-      password: "upender123",
-    };
+  test("200: does not return the user's password in the response", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({
+        username: "uppi",
+        email: "uarukonda@gmail.com",
+        password: "Upender123",
+      })
+      .expect(201);
 
-    return request(app)
+    const res = await request(app)
       .post("/api/auth/login")
-      .send(user)
-      .expect(200)
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body.user.password).toEqual(undefined);
-      });
+      .send({ email: "uarukonda@gmail.com", password: "Upender123" })
+      .expect(200);
+
+    expect(res.body.password).toEqual(undefined);
   });
 
-  xtest("500: responds with an internal server error when the database query fails", () => {
-    const user = {
-      email: "uarukonda@gmail.com",
-      password: "upender123",
-    };
+  test("500: responds with an internal server error when the database query fails", async () => {
+    findUserByEmail.mockRejectedValueOnce(
+      new Error("Database connection failed"),
+    );
 
-    return request(app)
+    const res = await request(app)
       .post("/api/auth/login")
-      .send(user)
-      .expect(500)
-      .then((res) => {
-        expect(res.body.message).toEqual("Internal server error");
-      });
+      .send({ email: "uarukonda@gmail.com", password: "Upender123" })
+      .expect(500);
+
+    expect(res.body.message).toEqual("Internal Server Error");
   });
 });
 
-xdescribe("POST /api/auth/logout", () => {
+describe("POST /api/auth/logout", () => {
   test("Should return 200 on successful logout", () => {
     const agent = request.agent(app);
 
@@ -242,13 +275,13 @@ xdescribe("POST /api/auth/logout", () => {
       .send({
         username: "uarukonda",
         email: "uarukonda@gmail.com",
-        password: "12121212",
+        password: "Upender123",
       })
       .expect(201)
       .then(() => {
         return agent
           .post("/api/auth/login")
-          .send({ email: "uarukonda@gmail.com", password: "12121212" })
+          .send({ email: "uarukonda@gmail.com", password: "Upender123" })
           .expect(200);
       })
       .then(() => {
@@ -280,7 +313,7 @@ describe("POST /api/auth/forgot-password", () => {
           .expect(200);
       });
   });
-  xtest("Should update user password", () => {
+  test("Should update user password", () => {
     const agent = request.agent(app);
 
     return agent
@@ -301,7 +334,7 @@ describe("POST /api/auth/forgot-password", () => {
         const token = response.body.token;
         return request(app)
           .post("/api/auth/reset-password")
-          .send({ token, newPassword: "12341234" })
+          .send({ token, newPassword: "Arukonda123" })
           .expect(200);
       });
   });
