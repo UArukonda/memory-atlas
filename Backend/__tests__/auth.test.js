@@ -6,7 +6,12 @@ jest.mock("../repositories/user.repository.js", () => {
   };
 });
 
+jest.mock("../services/emailService.js", () => ({
+  sendMail: jest.fn().mockResolvedValue({}),
+}));
+
 const { findUserByEmail } = require("../repositories/user.repository.js");
+const transporter = require("../services/emailService.js");
 
 require("./setup.js");
 const request = require("supertest");
@@ -330,8 +335,10 @@ describe("POST /api/auth/forgot-password", () => {
           .send({ email: "uarukonda@gmail.com" })
           .expect(200);
       })
-      .then((response) => {
-        const token = response.body.token;
+      .then(() => {
+        const calls = transporter.sendMail.mock.calls;
+        const emailArgs = calls[calls.length - 1][0];
+        const token = emailArgs.text.match(/token=([^&\s]+)/)[1];
         return request(app)
           .post("/api/auth/reset-password")
           .send({ token, newPassword: "Arukonda123" })

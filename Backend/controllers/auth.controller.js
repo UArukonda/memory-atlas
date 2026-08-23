@@ -120,7 +120,6 @@ async function sendResetToken(req, res, next) {
 
     return res.status(200).send({
       message: "Reset email sent",
-      token: passwordResetToken,
     });
   } catch (err) {
     next(err);
