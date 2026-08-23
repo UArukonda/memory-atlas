@@ -35,69 +35,50 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <div className="flex w-3/5 flex-col items-center justify-center bg-primary/5 p-12 ">
-        <div className="mb-10 h-72 w-full max-w-2xl rounded-2xl bg-gray-200"></div>
-
-        <h1 className="mb-3 text-4xl font-bold text-heading">Welcome Back</h1>
-
-        <p className="mb-2 text-xl text-body">Continue your journey.</p>
-
-        <p className="mb-10 max-w-lg text-center text-muted">
-          Revisit your favorite places, relive unforgettable moments, and keep
-          building your personal Memory Atlas.
-        </p>
-
-        <div className="flex w-full max-w-xl gap-4">
-          <div className="h-24 flex-1 rounded-xl bg-gray-200"></div>
-          <div className="h-24 flex-1 rounded-xl bg-gray-200"></div>
-          <div className="h-24 flex-1 rounded-xl bg-gray-200"></div>
+    <div className="flex w-full items-center min-h-screen  px-12 justify-center bg-primary/20">
+      <form
+        action=""
+        className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-3">
+          <p className="text-lg font-medium text-primary">Memory Atlas</p>
+          <h1 className="mt-2 text-xl font-bold text-heading">Login</h1>
         </div>
-      </div>
-      <div className="flex w-2/5 items-center  px-12 justify-center">
-        <form
-          action=""
-          className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-3">
-            <h1 className="mt-2 text-xl font-bold text-heading">Login</h1>
-          </div>
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            name="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-          <Input
-            id="password"
-            label="Password"
-            type="password"
-            name="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          {error && <p className="text-sm text-danger">{error}</p>}
-          <Button type="submit">Login</Button>
-          <p className="mt-3 text-center text-sm text-muted">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="font-medium  text-primary hover:underline"
-            >
-              Sign Up
-            </Link>
-          </p>
-        </form>
-      </div>
+        <Input
+          id="email"
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <Input
+          id="password"
+          label="Password"
+          type="password"
+          name="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        {error && <p className="text-sm text-danger">{error}</p>}
+        <Button type="submit">Login</Button>
+        <p className="mt-3 text-center text-sm text-muted">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="font-medium  text-primary hover:underline"
+          >
+            Sign Up
+          </Link>
+        </p>
+      </form>
     </div>
   );
 };

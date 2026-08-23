@@ -120,7 +120,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
                 >
                   Cancel
                 </button>
@@ -144,7 +144,7 @@ const Profile = () => {
             )}
           </div>
         </div>
-        <div className="mt-8 rounded-xl border border-red-200 bg-surface p-6">
+        <div className="mt-8 rounded-xl border border-danger/30 bg-surface p-6">
           <h2 className="text-lg font-semibold text-danger">Danger Zone</h2>
 
           <p className="mt-1 text-sm text-muted">
@@ -155,7 +155,7 @@ const Profile = () => {
           <button
             type="button"
             onClick={() => setShowDeleteModal(true)}
-            className="mt-4 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-red-50"
+            className="mt-4 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
           >
             Delete Account
           </button>
