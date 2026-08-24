@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout";
 import Profile from "./pages/Profile";
+import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -17,9 +18,9 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<Dashboard />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="" element=""></Route>
         </Route>
       </Route>
+      <Route path="/reset-password" element={<ResetPassword />}></Route>
     </Routes>
   );
 }

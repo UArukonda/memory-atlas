@@ -2,7 +2,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { loginUser } from "../services/auth";
+import { loginUser, sendResetLink } from "../services/auth";
 import { validateLogin } from "../utils/validateSignup";
 import { useAuth } from "../context/useAuth.js";
 
@@ -10,6 +10,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [isResetLinkSent, setIsResetLinkSent] = useState(false);
   const { reFetchUser } = useAuth();
 
   const navigate = useNavigate();
@@ -31,6 +33,17 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message);
+    }
+  };
+
+  const handleReset = async () => {
+    try {
+      await sendResetLink(email);
+      setEmail("");
+      // setIsForgotPasswordOpen(!isForgotPasswordOpen);
+      setIsResetLinkSent(!isResetLinkSent);
+    } catch (err) {
+      console.log(err.response.data.message);
     }
   };
 
@@ -67,6 +80,15 @@ const Login = () => {
             setPassword(e.target.value);
           }}
         />
+        <p className="text-right text-sm">
+          <button
+            type="button"
+            onClick={() => setIsForgotPasswordOpen(true)}
+            className="font-medium text-primary hover:underline"
+          >
+            Forgot password?
+          </button>
+        </p>
         {error && <p className="text-sm text-danger">{error}</p>}
         <Button type="submit">Login</Button>
         <p className="mt-3 text-center text-sm text-muted">
@@ -79,6 +101,76 @@ const Login = () => {
           </Link>
         </p>
       </form>
+      {isForgotPasswordOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
+            {isResetLinkSent ? (
+              <>
+                <h2 className="text-xl font-semibold text-heading">
+                  Check your email
+                </h2>
+                <p className="mt-2 text-sm text-muted">
+                  If an account exists for that email, we've sent a link to
+                  reset your password.
+                </p>
+                <div className="mt-6 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotPasswordOpen(false);
+                      setIsResetLinkSent(false);
+                    }}
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                  >
+                    Close
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-semibold text-heading">
+                  Reset your password
+                </h2>
+                <p className="mt-2 text-sm text-muted">
+                  Enter your email and we'll send you a link to reset your
+                  password.
+                </p>
+                <div className="mt-4">
+                  <Input
+                    id="reset-email"
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    name="reset-email"
+                    placeholder="email"
+                  />
+                </div>
+                <div className="mt-6 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotPasswordOpen(false);
+                    }}
+                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                  >
+                    Send reset link
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
