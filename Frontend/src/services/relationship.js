@@ -7,3 +7,7 @@ export const connectRelationship = (relationshipCode) => {
 export const getRelationship = () => {
   return api.get("/relationship");
 };
+
+export const updateRelationship = (relationshipData) => {
+  return api.patch("/relationship", relationshipData);
+};

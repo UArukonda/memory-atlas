@@ -2,13 +2,16 @@ import Input from "../components/Input";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 import { createProfile, updateProfile } from "../services/profile";
+import { deleteUser } from "../services/user";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { user, reFetchUser } = useAuth();
+  const { user, setUser, reFetchUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleSave = async () => {
     const hasProfile = Object.keys(user?.profile || {}).length > 0;
@@ -23,6 +26,16 @@ const Profile = () => {
   const handleCancel = async () => {
     await reFetchUser();
     setIsEditing(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUser();
+      setUser(null);
+      navigate("/login");
+    } catch (err) {
+      console.log(err?.response?.data?.message);
+    }
   };
 
   useEffect(() => {
@@ -184,6 +197,7 @@ const Profile = () => {
                 <button
                   type="button"
                   className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                  onClick={handleDeleteAccount}
                 >
                   Delete Account
                 </button>

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-
+import { useAuth } from "../context/useAuth";
 import { useRelationshipModal } from "../context/useRelationshipModal";
 
 const Sidebar = () => {
-  const { isOpen, setIsOpen } = useRelationshipModal();
+  const { setIsOpen } = useRelationshipModal();
+  const { user } = useAuth();
 
   const handleConnect = () => {
     setIsOpen(true);
@@ -16,8 +17,17 @@ const Sidebar = () => {
             className="mb-2 flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-3 font-semibold text-primary hover:bg-primary/20"
             onClick={handleConnect}
           >
-            <span>❤️</span>
-            Connect
+            {!user.relationship ? (
+              <>
+                <span>❤️</span>
+                Connect
+              </>
+            ) : (
+              <>
+                <span>❤️</span>
+                <p>{user.partner.username}</p>
+              </>
+            )}
           </button>
           <Link
             to="/"

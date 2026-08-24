@@ -2,10 +2,10 @@ import { useRelationshipModal } from "../context/useRelationshipModal";
 import { useState } from "react";
 import Input from "./Input";
 import { useAuth } from "../context/useAuth";
-import { connectRelationship, getRelationship } from "../services/relationship";
+import { connectRelationship } from "../services/relationship";
 
 const RelationshipModal = () => {
-  const { isOpen, setIsOpen, setRelation } = useRelationshipModal();
+  const { isOpen, setIsOpen } = useRelationshipModal();
   const [activeTab, setActiveTab] = useState("enter");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
@@ -17,8 +17,6 @@ const RelationshipModal = () => {
     try {
       await connectRelationship(code);
       await reFetchUser();
-      const response = await getRelationship();
-      if (response.data.relationship) setRelation(true);
       setIsOpen(false);
     } catch (err) {
       setError(err.response.data.message || "Something went wrong");
