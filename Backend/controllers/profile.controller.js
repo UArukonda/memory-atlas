@@ -19,7 +19,8 @@ const createProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   const user = req.user;
-  const updates = req.body;
+
+  const updates = { ...req.body, avatar: `/uploads/${req.file.filename}` };
   try {
     const existingUser = await findUserByEmail(user.email);
     await updateProfileDocument(existingUser._id, updates);

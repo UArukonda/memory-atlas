@@ -1,7 +1,11 @@
 import Input from "../components/Input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/useAuth";
-import { createProfile, updateProfile } from "../services/profile";
+import {
+  createProfile,
+  updateProfile,
+  uploadAvatar,
+} from "../services/profile";
 import { deleteUser } from "../services/user";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +15,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user, setUser, reFetchUser } = useAuth();
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const handleSave = async () => {
@@ -38,6 +43,12 @@ const Profile = () => {
     }
   };
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    await uploadAvatar(file);
+    await reFetchUser();
+  };
+
   useEffect(() => {
     setDisplayName(user?.profile?.displayName || "");
     setBio(user?.profile?.bio || "");
@@ -56,7 +67,7 @@ const Profile = () => {
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-gray-100">
               <img
-                src={user?.profile?.avatar}
+                src={`http://localhost:4000${user?.profile?.avatar}`}
                 alt={user?.profile?.avatar}
                 className="h-full w-full object-cover"
               />
@@ -66,10 +77,17 @@ const Profile = () => {
               <p className="mt-1 text-sm text-muted">
                 Choose a photo to represent you.
               </p>
-
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+              />
               <button
                 type="button"
                 disabled={!isEditing}
+                onClick={() => fileInputRef.current.click()}
                 className="mt-3 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
               >
                 Upload photo

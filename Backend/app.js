@@ -26,6 +26,8 @@ app.use(
 );
 app.use(cookieParser());
 
+app.use("/uploads", express.static(process.env.UPLOAD_DIR));
+
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints });
 });
