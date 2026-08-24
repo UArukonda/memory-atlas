@@ -3,6 +3,7 @@ const {
   findUserByEmail,
   findUserById,
 } = require("../repositories/user.repository.js");
+const { getPartnerData } = require("../utils/getPartnerData.js");
 const {
   getRelationship,
   createRelationshipDocument,
@@ -54,22 +55,15 @@ const getRelation = async (req, res, next) => {
       return res.status(404).json({ message: "You are not in a relationship" });
     }
 
-    const { userAId, userBId } = relationship;
-
-    const partnerId = currentUserData._id.equals(userAId)
-      ? userBId.toString()
-      : userAId.toString();
-
-    const partner = await findUserById(partnerId);
-    const partnerProfile = await getProfileById(partnerId);
+    const partnerData = await getPartnerData(relationship, currentUserData._id);
 
     return res.status(200).json({
       relationship,
       partner: {
-        id: partner._id,
-        username: partner.username,
-        email: partner.email,
-        profile: partnerProfile,
+        id: partnerData.partner._id,
+        username: partnerData.partner.username,
+        email: partnerData.partner.email,
+        profile: partnerData.partnerProfile,
       },
     });
   } catch (err) {

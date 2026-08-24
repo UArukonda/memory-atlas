@@ -3,6 +3,10 @@ const {
   deleteUserByEmail,
 } = require("../repositories/user.repository.js");
 const { getProfileById } = require("../repositories/profile.repository.js");
+const { getPartnerData } = require("../utils/getPartnerData.js");
+const {
+  getRelationship,
+} = require("../repositories/relationship.repository.js");
 
 const getUser = async (req, res, next) => {
   const user = req.user;
@@ -18,6 +22,10 @@ const getUser = async (req, res, next) => {
     }
 
     const userProfile = await getProfileById(existingUser._id.toString());
+    const relationship = await getRelationship(existingUser._id);
+    const partnerData = relationship
+      ? await getPartnerData(relationship, existingUser._id)
+      : null;
 
     return res.status(200).send({
       id: existingUser._id,
@@ -29,6 +37,15 @@ const getUser = async (req, res, next) => {
         bio: userProfile?.bio,
         avatar: userProfile?.avatar,
       },
+      relationship,
+      partner: partnerData
+        ? {
+            id: partnerData.partner._id,
+            username: partnerData.partner.username,
+            email: partnerData.partner.email,
+            profile: partnerData.partnerProfile,
+          }
+        : null,
     });
   } catch (err) {
     next(err);
@@ -38,6 +55,7 @@ const getUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     await deleteUserByEmail(req.user.email);
+    res.clearCookie("token", { path: "/", httpOnly: true });
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     next(err);

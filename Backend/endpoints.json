@@ -11,82 +11,111 @@
       "password": "string"
     },
     "response": {
-      "201": "Registration successful. Please log in."
+      "201": {
+        "id": "ObjectId",
+        "email": "string",
+        "message": "Registration successful. Please log in."
+      }
     }
   },
 
   "POST /api/auth/login": {
-    "description": "Authenticate a user and return a JWT.",
+    "description": "Authenticate a user. Sets the JWT as an HttpOnly cookie.",
     "body": {
       "email": "string",
       "password": "string"
     },
     "response": {
       "200": {
-        "token": "JWT",
-        "user": {
-          "id": "ObjectId",
-          "username": "string",
-          "email": "string"
-        }
+        "message": "Login successful",
+        "email": "string",
+        "username": "string"
       }
     }
   },
 
   "POST /api/auth/logout": {
-    "description": "Log out the authenticated user.",
+    "description": "Log out the authenticated user. Clears the JWT cookie.",
     "authentication": "Required",
     "response": {
-      "200": "Logout successful."
+      "200": { "message": "Logout successful" }
     }
   },
 
   "POST /api/auth/forgot-password": {
-    "description": "Request a password reset email.",
-    "body": {
-      "email": "string"
+    "description": "Email a password reset link to the user.",
+    "body": { "email": "string" },
+    "response": {
+      "200": { "message": "Reset email sent" }
     }
   },
 
   "POST /api/auth/reset-password": {
     "description": "Reset the user's password using a valid reset token.",
-    "body": {
-      "token": "string",
-      "newPassword": "string"
+    "body": { "token": "string", "newPassword": "string" },
+    "response": {
+      "200": { "message": "Password reset successful" }
     }
   },
 
   "GET /api/users/me": {
     "description": "Return the currently authenticated user's information.",
-    "authentication": "Required"
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "id": "ObjectId",
+        "username": "string",
+        "email": "string",
+        "relationshipCode": "string",
+        "profile": {
+          "displayName": "string",
+          "bio": "string",
+          "avatar": "string"
+        }
+      }
+    }
   },
 
   "DELETE /api/users/me": {
     "description": "Delete the currently authenticated user's account.",
-    "authentication": "Required"
+    "authentication": "Required",
+    "response": {
+      "200": { "message": "User deleted successfully" }
+    }
   },
 
   "POST /api/profile": {
     "description": "Create a profile for the authenticated user.",
-    "authentication": "Required"
+    "authentication": "Required",
+    "body": {
+      "displayName": "string",
+      "bio": "string",
+      "avatar": "string"
+    },
+    "response": {
+      "201": { "message": "Profile created" }
+    }
   },
 
   "PATCH /api/profile": {
     "description": "Update the authenticated user's profile.",
     "authentication": "Required",
     "body": {
-      "description": "Profile fields to update."
+      "displayName": "string",
+      "bio": "string",
+      "avatar": "string"
+    },
+    "response": {
+      "201": { "message": "Profile updated" }
     }
   },
 
   "POST /api/relationship": {
     "description": "Connect the authenticated user with another user using their relationship code.",
     "authentication": "Required",
-    "body": {
-      "relationshipCode": "string"
-    },
+    "body": { "relationshipCode": "string" },
     "response": {
-      "201": "You’re now connected on Memory Atlas ❤️"
+      "201": { "message": "You're now connected on Memory Atlas ❤️" }
     }
   },
 
@@ -95,8 +124,27 @@
     "authentication": "Required",
     "response": {
       "200": {
-        "relationship": "Relationship object",
-        "partner": "Partner user and profile information"
+        "relationship": {
+          "_id": "ObjectId",
+          "userAId": "ObjectId",
+          "userBId": "ObjectId",
+          "relationshipStartDate": "Date",
+          "coupleNickname": "string",
+          "relationshipDescription": "string",
+          "coverPhoto": "string",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        },
+        "partner": {
+          "id": "ObjectId",
+          "username": "string",
+          "email": "string",
+          "profile": {
+            "displayName": "string",
+            "bio": "string",
+            "avatar": "string"
+          }
+        }
       }
     }
   },
@@ -109,6 +157,19 @@
       "coupleNickname": "string",
       "relationshipDescription": "string",
       "coverPhoto": "string"
+    },
+    "response": {
+      "200": {
+        "_id": "ObjectId",
+        "userAId": "ObjectId",
+        "userBId": "ObjectId",
+        "relationshipStartDate": "Date",
+        "coupleNickname": "string",
+        "relationshipDescription": "string",
+        "coverPhoto": "string",
+        "createdAt": "Date",
+        "updatedAt": "Date"
+      }
     }
   },
 
@@ -122,6 +183,23 @@
       "video": "string",
       "description": "string",
       "date": "Date"
+    },
+    "response": {
+      "201": {
+        "memory": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "place": "string",
+          "photo": "string",
+          "video": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
     }
   },
 
@@ -130,7 +208,21 @@
     "authentication": "Required",
     "response": {
       "200": {
-        "memories": "Array of memory objects"
+        "memories": [
+          {
+            "_id": "ObjectId",
+            "relationshipId": "ObjectId",
+            "createdBy": "ObjectId",
+            "title": "string",
+            "place": "string",
+            "photo": "string",
+            "video": "string",
+            "description": "string",
+            "date": "Date",
+            "createdAt": "Date",
+            "updatedAt": "Date"
+          }
+        ]
       }
     }
   },
@@ -140,7 +232,19 @@
     "authentication": "Required",
     "response": {
       "200": {
-        "memory": "Memory object"
+        "memory": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "place": "string",
+          "photo": "string",
+          "video": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
       }
     }
   },
@@ -155,6 +259,24 @@
       "video": "string",
       "description": "string",
       "date": "Date"
+    },
+    "response": {
+      "200": {
+        "message": "Memory updated successfully",
+        "memory": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "place": "string",
+          "photo": "string",
+          "video": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
     }
   },
 
@@ -162,7 +284,300 @@
     "description": "Delete a memory by id, if it belongs to the authenticated user's relationship.",
     "authentication": "Required",
     "response": {
-      "200": "Memory deleted successfully."
+      "200": { "message": "Memory deleted successfully" }
+    }
+  },
+
+  "POST /api/journal": {
+    "description": "Create a journal entry for the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": { "title": "string", "description": "string", "date": "Date" },
+    "response": {
+      "201": {
+        "journal": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "GET /api/journal": {
+    "description": "Return all journal entries belonging to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "journals": [
+          {
+            "_id": "ObjectId",
+            "relationshipId": "ObjectId",
+            "createdBy": "ObjectId",
+            "title": "string",
+            "description": "string",
+            "date": "Date",
+            "createdAt": "Date",
+            "updatedAt": "Date"
+          }
+        ]
+      }
+    }
+  },
+
+  "GET /api/journal/:id": {
+    "description": "Return a single journal entry by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "journal": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "PATCH /api/journal/:id": {
+    "description": "Update a journal entry by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": { "title": "string", "description": "string", "date": "Date" },
+    "response": {
+      "200": {
+        "message": "Journal updated successfully",
+        "journal": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "title": "string",
+          "description": "string",
+          "date": "Date",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "DELETE /api/journal/:id": {
+    "description": "Delete a journal entry by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": { "message": "Journal deleted successfully" }
+    }
+  },
+
+  "POST /api/letter": {
+    "description": "Create a love letter for the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "to": "string",
+      "from": "string",
+      "title": "string",
+      "message": "string",
+      "date": "Date"
+    },
+    "response": {
+      "201": {
+        "letter": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "to": "string",
+          "from": "string",
+          "title": "string",
+          "message": "string",
+          "date": "Date"
+        }
+      }
+    }
+  },
+
+  "GET /api/letter": {
+    "description": "Return all letters belonging to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "letters": [
+          {
+            "_id": "ObjectId",
+            "relationshipId": "ObjectId",
+            "createdBy": "ObjectId",
+            "to": "string",
+            "from": "string",
+            "title": "string",
+            "message": "string",
+            "date": "Date"
+          }
+        ]
+      }
+    }
+  },
+
+  "GET /api/letter/:id": {
+    "description": "Return a single letter by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "letter": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "to": "string",
+          "from": "string",
+          "title": "string",
+          "message": "string",
+          "date": "Date"
+        }
+      }
+    }
+  },
+
+  "PATCH /api/letter/:id": {
+    "description": "Update a letter by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "to": "string",
+      "from": "string",
+      "title": "string",
+      "message": "string",
+      "date": "Date"
+    },
+    "response": {
+      "200": {
+        "message": "Letter updated successfully",
+        "letter": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "createdBy": "ObjectId",
+          "to": "string",
+          "from": "string",
+          "title": "string",
+          "message": "string",
+          "date": "Date"
+        }
+      }
+    }
+  },
+
+  "DELETE /api/letter/:id": {
+    "description": "Delete a letter by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": { "message": "Letter deleted successfully" }
+    }
+  },
+
+  "POST /api/photo": {
+    "description": "Add a photo for the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "url": "string",
+      "type": "\"photo\" | \"video\"",
+      "caption": "string",
+      "memoryId": "ObjectId"
+    },
+    "response": {
+      "201": {
+        "photo": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "memoryId": "ObjectId",
+          "uploadedBy": "ObjectId",
+          "url": "string",
+          "type": "\"photo\" | \"video\"",
+          "caption": "string",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "GET /api/photo": {
+    "description": "Return all photos belonging to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "photos": [
+          {
+            "_id": "ObjectId",
+            "relationshipId": "ObjectId",
+            "memoryId": "ObjectId",
+            "uploadedBy": "ObjectId",
+            "url": "string",
+            "type": "\"photo\" | \"video\"",
+            "caption": "string",
+            "createdAt": "Date",
+            "updatedAt": "Date"
+          }
+        ]
+      }
+    }
+  },
+
+  "GET /api/photo/:id": {
+    "description": "Return a single photo by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": {
+        "photo": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "memoryId": "ObjectId",
+          "uploadedBy": "ObjectId",
+          "url": "string",
+          "type": "\"photo\" | \"video\"",
+          "caption": "string",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "PATCH /api/photo/:id": {
+    "description": "Update a photo by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "body": {
+      "url": "string",
+      "type": "\"photo\" | \"video\"",
+      "caption": "string",
+      "memoryId": "ObjectId"
+    },
+    "response": {
+      "200": {
+        "message": "Photo updated successfully",
+        "photo": {
+          "_id": "ObjectId",
+          "relationshipId": "ObjectId",
+          "memoryId": "ObjectId",
+          "uploadedBy": "ObjectId",
+          "url": "string",
+          "type": "\"photo\" | \"video\"",
+          "caption": "string",
+          "createdAt": "Date",
+          "updatedAt": "Date"
+        }
+      }
+    }
+  },
+
+  "DELETE /api/photo/:id": {
+    "description": "Delete a photo by id, if it belongs to the authenticated user's relationship.",
+    "authentication": "Required",
+    "response": {
+      "200": { "message": "Photo deleted successfully" }
     }
   }
 }
