@@ -20,10 +20,10 @@ const Navbar = () => {
           <h1 className="text-xl font-bold text-heading">Memory Atlas</h1>
         </div>
         <div className="flex items-center gap-6">
-          <p className="cursor-pointer text-muted hover:text-primary">Search</p>
+          {/* <p className="cursor-pointer text-muted hover:text-primary">Search</p>
           <p className="cursor-pointer text-muted hover:text-primary">
             Notification
-          </p>
+          </p> */}
           <div className="relative">
             <button
               onClick={() => {
@@ -44,12 +44,12 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-                <Link
+                {/* <Link
                   to="/settings"
                   className="block cursor-pointer px-4 py-3 text-body hover:bg-primary/5"
                 >
                   Settings
-                </Link>
+                </Link> */}
                 <Link
                   to="/login"
                   className="block px-4 py-2 text-body hover:bg-primary/5 cursor-pointer"

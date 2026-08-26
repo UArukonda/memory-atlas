@@ -35,23 +35,35 @@ const Sidebar = () => {
           >
             Dashboard
           </Link>
-          <Link
+          {/* <Link
             to="/map"
             className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
           >
             Map
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             to="/timeline"
             className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
           >
             Timeline
-          </Link>
+          </Link> */}
           <Link
             to="/memories"
             className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
           >
             Memories
+          </Link>
+          <Link
+            to="/journal"
+            className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
+          >
+            Journal
+          </Link>
+          <Link
+            to="/letters"
+            className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
+          >
+            Letters
           </Link>
         </nav>
       </aside>
