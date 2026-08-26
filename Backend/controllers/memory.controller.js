@@ -9,9 +9,11 @@ const {
 } = require("../repositories/memory.repository.js");
 
 const createMemory = async (req, res, next) => {
+  const photos = req.files.map((file) => `/uploads/${file.filename}`);
   try {
     const isCreated = await createMemoryDocument({
       ...req.body,
+      photos,
       relationshipId: req.relationship._id,
       createdBy: req.user.id,
     });
@@ -40,7 +42,8 @@ const fetchMemoryById = async (req, res, next) => {
 };
 
 const updateMemory = async (req, res, next) => {
-  const { title, place, description, date, photo, video } = req.body;
+  const { title, place, description, date } = req.body;
+  const photos = req.files.map((file) => `/uploads/${file.filename}`);
 
   try {
     const memory = req.resource;
@@ -49,8 +52,7 @@ const updateMemory = async (req, res, next) => {
     if (place !== undefined) memory.place = place;
     if (description !== undefined) memory.description = description;
     if (date !== undefined) memory.date = date;
-    if (photo !== undefined) memory.photo = photo;
-    if (video !== undefined) memory.video = video;
+    if (photos !== undefined) memory.photos.push(...photos);
 
     await memory.save();
     return res.status(200).json({

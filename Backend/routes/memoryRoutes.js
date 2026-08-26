@@ -12,13 +12,14 @@ const {
 const {
   getMemoryDocumentById,
 } = require("../repositories/memory.repository.js");
+const upload = require("../middleware/upload.js");
 
 const router = express.Router();
 
 router.use(protect);
 router.use(requireRelationship);
 
-router.post("/memory", createMemory);
+router.post("/memory", upload.array("photo", 5), createMemory);
 
 router.get("/memory", fetchMemories);
 
@@ -31,6 +32,7 @@ router.get(
 router.patch(
   "/memory/:id",
   requireOwnership(getMemoryDocumentById),
+  upload.array("photo", 5),
   updateMemory,
 );
 

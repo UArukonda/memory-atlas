@@ -18,7 +18,7 @@ const memorySchema = new mongoose.Schema(
     place: {
       type: String,
     },
-    photo: { type: String },
+    photos: { type: [String], default: [] },
     video: { type: String },
     description: { type: String, required: true },
     date: { type: Date, default: Date.now },
