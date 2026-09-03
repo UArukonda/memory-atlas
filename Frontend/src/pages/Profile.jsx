@@ -1,12 +1,14 @@
 import Input from "../components/Input";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/useAuth";
+
 import {
   createProfile,
   updateProfile,
   uploadAvatar,
 } from "../services/profile";
 import { deleteUser } from "../services/user";
+import { endRelationship } from "../services/relationship";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
@@ -14,6 +16,8 @@ const Profile = () => {
   const [bio, setBio] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [confirmStep, setConfirmStep] = useState(0);
+  const [confirmInput, setConfirmInput] = useState("");
   const { user, setUser, reFetchUser } = useAuth();
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -38,6 +42,17 @@ const Profile = () => {
       await deleteUser();
       setUser(null);
       navigate("/login");
+    } catch (err) {
+      console.log(err?.response?.data?.message);
+    }
+  };
+
+  const handleEndRelationship = async () => {
+    try {
+      await endRelationship();
+      await reFetchUser();
+      setConfirmStep(0);
+      setConfirmInput("");
     } catch (err) {
       console.log(err?.response?.data?.message);
     }
@@ -190,6 +205,15 @@ const Profile = () => {
           >
             Delete Account
           </button>
+          {user?.relationship && (
+            <button
+              type="button"
+              onClick={() => setConfirmStep(1)}
+              className="mt-4 ml-3 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+            >
+              End Relationship
+            </button>
+          )}
         </div>
         {showDeleteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
@@ -218,6 +242,78 @@ const Profile = () => {
                   onClick={handleDeleteAccount}
                 >
                   Delete Account
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {confirmStep === 1 && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
+              <h2 className="text-xl font-semibold text-heading">
+                End relationship with {user?.partner?.username}?
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Your shared memories, journals, and letters won't be deleted -
+                they'll be archived. You'll still be able to view them, but
+                neither of you will be able to add to them or edit them anymore.
+              </p>
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setConfirmStep(0)}
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmStep(2)}
+                  className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {confirmStep === 2 && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
+              <h2 className="text-xl font-semibold text-heading">
+                This can't be undone
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Type{" "}
+                <span className="font-semibold text-heading">
+                  {user?.partner?.username}
+                </span>{" "}
+                to confirm.
+              </p>
+              <input
+                type="text"
+                value={confirmInput}
+                onChange={(e) => setConfirmInput(e.target.value)}
+                className="mt-3 w-full rounded-md border border-border px-3 py-2 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirmStep(0);
+                    setConfirmInput("");
+                  }}
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={confirmInput !== user?.partner?.username}
+                  onClick={handleEndRelationship}
+                  className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  End Relationship
                 </button>
               </div>
             </div>

@@ -11,3 +11,7 @@ export const getRelationship = () => {
 export const updateRelationship = (relationshipData) => {
   return api.patch("/relationship", relationshipData);
 };
+
+export const endRelationship = () => {
+  return api.delete("/relationship");
+};
