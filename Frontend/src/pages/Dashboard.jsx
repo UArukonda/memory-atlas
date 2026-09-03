@@ -2,15 +2,19 @@ import { useAuth } from "../context/useAuth";
 import { useState, useEffect } from "react";
 import { updateRelationship } from "../services/relationship";
 import Input from "../components/Input";
+import { useRelationshipModal } from "../context/useRelationshipModal.js";
+import { getMemories } from "../services/memories";
 
 const Dashboard = () => {
   const { user, reFetchUser } = useAuth();
   const [daysTogether, setDaysTogether] = useState(null);
+  const [memories, setMemories] = useState([]);
   const [startDateInput, setStartDateInput] = useState("");
   const [coupleNicknameInput, setCoupleNicknameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [coverPhotoInput, setCoverPhotoInput] = useState("");
   const [isEditRelationshipOpen, setIsEditRelationshipOpen] = useState(false);
+  const { setIsOpen } = useRelationshipModal();
 
   const handleSaveRelationshipDetails = async () => {
     try {
@@ -36,7 +40,15 @@ const Dashboard = () => {
         ),
       );
     }
-  }, [user.relationship.relationshipStartDate]);
+  }, [user.relationship?.relationshipStartDate]);
+
+  useEffect(() => {
+    getMemories()
+      .then((response) => setMemories(response.data.memories))
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   return (
     <>
@@ -47,8 +59,8 @@ const Dashboard = () => {
               id="img"
               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary"
             >
-              {user?.username?.[0].toUpperCase()}+
-              {user?.partner?.username?.[0].toUpperCase()}
+              {user?.username?.[0]?.toUpperCase()}
+              {user?.partner && `+${user.partner.username[0].toUpperCase()}`}
             </div>
             <div>
               <h1 className="text-2xl font-semibold text-heading">
@@ -88,7 +100,10 @@ const Dashboard = () => {
                 Share your code or enter theirs to start building your story
                 together.
               </p>
-              <button className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+              >
                 Connect Now
               </button>
             </div>
@@ -97,48 +112,57 @@ const Dashboard = () => {
 
         {user?.relationship && (
           <section className="mb-8">
-            <div className="rounded-xl border border-border bg-surface p-5">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl">❤️</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsEditRelationshipOpen(!isEditRelationshipOpen);
-                  }}
-                  className="rounded-md p-1 text-muted transition hover:bg-primary/5 hover:text-primary"
-                  aria-label="Edit relationship details"
-                >
-                  ✏️
-                </button>
-              </div>
-              {daysTogether !== null ? (
-                <>
-                  <p className="mt-3 text-2xl font-semibold text-heading">
-                    {daysTogether}
-                  </p>
-                  <p className="mt-1 text-sm text-muted">Days Together</p>
-                </>
-              ) : (
-                <div className="mt-3">
-                  <p className="text-sm text-muted">
-                    When did your story begin?
-                  </p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <input
-                      type="date"
-                      value={startDateInput}
-                      onChange={(e) => setStartDateInput(e.target.value)}
-                      className="w-full rounded-md border border-border px-3 py-2 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    />
-                    <button
-                      onClick={handleSaveRelationshipDetails}
-                      className="shrink-0 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
-                    >
-                      Save
-                    </button>
-                  </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-xl border border-border bg-surface p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl">❤️</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditRelationshipOpen(!isEditRelationshipOpen);
+                    }}
+                    className="rounded-md p-1 text-muted transition hover:bg-primary/5 hover:text-primary"
+                    aria-label="Edit relationship details"
+                  >
+                    ✏️
+                  </button>
                 </div>
-              )}
+                {daysTogether !== null ? (
+                  <>
+                    <p className="mt-3 text-2xl font-semibold text-heading">
+                      {daysTogether}
+                    </p>
+                    <p className="mt-1 text-sm text-muted">Days Together</p>
+                  </>
+                ) : (
+                  <div className="mt-3">
+                    <p className="text-sm text-muted">
+                      When did your story begin?
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="date"
+                        value={startDateInput}
+                        onChange={(e) => setStartDateInput(e.target.value)}
+                        className="w-full rounded-md border border-border px-3 py-2 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      />
+                      <button
+                        onClick={handleSaveRelationshipDetails}
+                        className="shrink-0 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="rounded-xl border border-border bg-surface p-5">
+                <span className="text-2xl">📸</span>
+                <p className="mt-3 text-2xl font-semibold text-heading">
+                  {memories.length}
+                </p>
+                <p className="mt-1 text-sm text-muted">Memories</p>
+              </div>
             </div>
             {isEditRelationshipOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">

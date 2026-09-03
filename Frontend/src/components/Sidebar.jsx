@@ -25,7 +25,7 @@ const Sidebar = () => {
             ) : (
               <>
                 <span>❤️</span>
-                <p>{user.partner.username}</p>
+                <p>{user.partner?.username}</p>
               </>
             )}
           </button>
@@ -54,10 +54,10 @@ const Sidebar = () => {
             Memories
           </Link>
           <Link
-            to="/journal"
+            to="/journals"
             className="rounded-lg px-4 py-3 text-body hover:bg-primary/10 hover:text-primary"
           >
-            Journal
+            Journals
           </Link>
           <Link
             to="/letters"
