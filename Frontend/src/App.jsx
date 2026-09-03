@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import MemoryDetails from "./pages/MemoryDetails";
 import Letters from "./pages/Letters";
 import Journals from "./pages/Journals";
+import JournalDetails from "./pages/JournalDetails";
 import Memories from "./pages/Memories";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -24,7 +25,8 @@ function App() {
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/memories" element={<Memories />}></Route>
           <Route path="/memories/:id" element={<MemoryDetails />}></Route>
-          <Route path="/journal" element={<Journals />}></Route>
+          <Route path="/journals" element={<Journals />}></Route>
+          <Route path="/journals/:id" element={<JournalDetails />}></Route>
           <Route path="/letters" element={<Letters />}></Route>
         </Route>
       </Route>
