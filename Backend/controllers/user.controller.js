@@ -54,6 +54,12 @@ const getUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
+    const existingUser = await findUserByEmail(req.user.email);
+    const relationship = await getRelationship(existingUser._id);
+    if (relationship) {
+      relationship.status = "ended";
+      await relationship.save();
+    }
     await deleteUserByEmail(req.user.email);
     res.clearCookie("token", { path: "/", httpOnly: true });
     res.status(200).json({ message: "User deleted successfully" });

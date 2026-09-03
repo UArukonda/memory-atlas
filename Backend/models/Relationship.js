@@ -24,6 +24,7 @@ const RelationshipSchema = new mongoose.Schema(
     coverPhoto: {
       type: String,
     },
+    status: { type: String, enum: ["active", "ended"], default: "active" },
   },
   { timestamps: true },
 );

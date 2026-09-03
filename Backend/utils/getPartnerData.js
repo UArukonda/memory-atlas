@@ -7,6 +7,7 @@ async function getPartnerData(relationship, currentUserId) {
     ? userBId.toString()
     : userAId.toString();
   const partner = await findUserById(partnerId);
+  if (!partner) return null;
   const partnerProfile = await getProfileById(partnerId);
   return { partner, partnerProfile };
 }

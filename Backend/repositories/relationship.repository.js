@@ -1,7 +1,10 @@
 const Relationship = require("../models/Relationship.js");
 
 function getRelationship(id) {
-  return Relationship.findOne({ $or: [{ userAId: id }, { userBId: id }] });
+  return Relationship.findOne({
+    $or: [{ userAId: id }, { userBId: id }],
+    status: "active",
+  });
 }
 
 function createRelationshipDocument(userId, partnerId) {

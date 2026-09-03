@@ -4,6 +4,7 @@ const {
   createRelation,
   getRelation,
   updateRelation,
+  deleteRelation,
 } = require("../controllers/relationship.controller.js");
 
 const router = express.Router();
@@ -14,5 +15,7 @@ router.post("/relationship", createRelation);
 router.get("/relationship", getRelation);
 
 router.patch("/relationship", updateRelation);
+
+router.delete("/relationship", deleteRelation);
 
 module.exports = router;

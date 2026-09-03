@@ -108,4 +108,24 @@ const updateRelation = async (req, res, next) => {
   }
 };
 
-module.exports = { createRelation, getRelation, updateRelation };
+const deleteRelation = async (req, res, next) => {
+  try {
+    const currentUserData = await findUserByEmail(req.user.email);
+    const relationship = await getRelationship(currentUserData._id.toString());
+    if (!relationship) {
+      return res.status(404).json({ message: "You are not in a relationship" });
+    }
+    relationship.status = "ended";
+    await relationship.save();
+    return res.status(200).send({ message: "Relationship ended successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  createRelation,
+  getRelation,
+  updateRelation,
+  deleteRelation,
+};
