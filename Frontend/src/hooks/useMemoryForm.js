@@ -12,7 +12,7 @@ function formReducer(state, action) {
     case "SET_FIELD":
       return { ...state, [action.field]: action.value };
     case "RESET":
-      return initialState;
+      return action.payload || initialState;
     default:
       return state;
   }

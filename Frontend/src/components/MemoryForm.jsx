@@ -1,4 +1,5 @@
 import Input from "./Input";
+import { useState } from "react";
 
 const MemoryForm = ({
   title,
@@ -9,6 +10,17 @@ const MemoryForm = ({
   photoInputRef,
   onFileChange,
 }) => {
+  const [formError, setFormError] = useState("");
+
+  const handleSaveClick = () => {
+    if (!formState.description) {
+      setFormError("Description is required.");
+      return;
+    }
+    setFormError("");
+    onSave();
+  };
+
   return (
     <>
       <div className="bg-black/40 fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -62,6 +74,7 @@ const MemoryForm = ({
               <textarea
                 name="description"
                 id="description"
+                required
                 value={formState.description}
                 onChange={(e) => {
                   dispatch({
@@ -73,6 +86,7 @@ const MemoryForm = ({
                 className="resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-muted disabled:cursor-not-allowed"
               />
             </div>
+            {formError && <p className="text-sm text-danger">{formError}</p>}
             <div className="col-span-2">
               <Input
                 label="Date"
@@ -100,7 +114,7 @@ const MemoryForm = ({
             </button>{" "}
             <button
               type="button"
-              onClick={onSave}
+              onClick={handleSaveClick}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
             >
               Save

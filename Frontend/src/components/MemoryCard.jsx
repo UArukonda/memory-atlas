@@ -9,12 +9,16 @@ const MemoryCard = ({ memory }) => {
         <p className="mt-2 text-sm text-body line-clamp-2">
           {memory.description}
         </p>
-        {memory.photos?.length > 0 && (
+        {memory.photos?.length > 0 ? (
           <img
             src={`http://localhost:4000${memory.photos[0]}`}
             alt={memory.title}
-            className="mt-2 h-32 w-full rounded-md object-cover"
+            className="mt-2 h-32 w-full rounded-md object-cover "
           />
+        ) : (
+          <div className="mt-2 flex h-32 w-full items-center justify-center rounded-md bg-primary/5 text-sm text-muted">
+            📷 No photo yet
+          </div>
         )}
         <p className="mt-3 text-xs text-muted">
           {new Date(memory.date).toLocaleDateString("en-GB", {

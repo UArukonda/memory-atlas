@@ -43,27 +43,33 @@ const Memories = () => {
 
   return (
     <>
-      <div className="mb-8 ">
+      <div className="mb-8">
         <h1 className="text-2xl font-semibold text-heading">Memories</h1>
         <p className="mt-1 text-sm text-muted">
           Everything you've shared together
         </p>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
-        {memories.map((memory) => (
-          <Link key={memory._id} to={`/memories/${memory._id}`}>
-            <MemoryCard memory={memory} />
-          </Link>
-        ))}
-        <button
-          type="button"
-          onClick={() => setIsAddMemoryOpen(true)}
-          className="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-3xl text-white shadow-lg transition hover:bg-primary-hover"
-          aria-label="Add memory"
-        >
-          +
-        </button>
-      </div>
+      {memories.length === 0 ? (
+        <p className="text-sm text-muted">
+          No memories yet, add your first one.
+        </p>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {memories.map((memory) => (
+            <Link key={memory._id} to={`/memories/${memory._id}`}>
+              <MemoryCard memory={memory} />
+            </Link>
+          ))}
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={() => setIsAddMemoryOpen(true)}
+        className="fixed bottom-8 right-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-3xl text-white shadow-lg transition hover:bg-primary-hover"
+        aria-label="Add memory"
+      >
+        +
+      </button>
       {isAddMemoryOpen && (
         <MemoryForm
           title="Add"

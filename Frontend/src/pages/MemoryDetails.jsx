@@ -30,6 +30,12 @@ const MemoryDetails = () => {
       .catch((err) => console.log(err));
   };
 
+  useEffect(() => {
+    if (memory) {
+      dispatch({ type: "RESET", payload: memory });
+    }
+  }, [memory, dispatch]);
+
   const handleEdit = async () => {
     updateMemory(id, { ...formState, photos: photoInput })
       .then(() => {
@@ -38,7 +44,6 @@ const MemoryDetails = () => {
       .then((response) => {
         setMemory(response.data.memory);
         setIsEditing(false);
-        dispatch({ type: "RESET" });
         setPhotoInput([]);
       })
       .catch((err) => {
@@ -65,8 +70,8 @@ const MemoryDetails = () => {
   if (error) return <p>{error}</p>;
   return (
     <>
-      <div className="mx-auto max-w-3xl max-w-screen">
-        <div className="mb-8 flex justify-between">
+      <div className="mx-auto max-w-4xl rounded-xl border border-border bg-surface p-8">
+        <div className="mb-6 flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-heading">
               {memory?.title}
@@ -83,11 +88,8 @@ const MemoryDetails = () => {
                 })}
               </p>
             )}
-            <p className="mt-4 text-sm leading-6 text-body">
-              {memory?.description}
-            </p>
           </div>
-          <div className="flex h-fit gap-4">
+          <div className="flex h-fit shrink-0 gap-4">
             <button
               type="button"
               onClick={() => setIsEditing(!isEditing)}
@@ -107,19 +109,25 @@ const MemoryDetails = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3 ">
-          {memory?.photos?.map((photo) => (
-            <img
-              key={photo}
-              src={`http://localhost:4000${photo}`}
-              onClick={() => {
-                setSelectedPhoto(photo);
-              }}
-              alt={memory.title}
-              className="h-40 w-full rounded-md object-cover hover:-translate-y-0.5 hover:shadow-sm"
-            />
-          ))}
-        </div>
+        <p className="text-base leading-7 text-body">{memory?.description}</p>
+
+        {memory?.photos?.length > 0 ? (
+          <div className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2">
+            {memory.photos.map((photo) => (
+              <img
+                key={photo}
+                src={`http://localhost:4000${photo}`}
+                onClick={() => setSelectedPhoto(photo)}
+                alt={memory.title}
+                className="aspect-square w-full cursor-pointer rounded-md object-cover object-top transition hover:opacity-90"
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-8 text-sm text-muted">
+            No photos yet — edit this memory to add some.
+          </p>
+        )}
       </div>
       {selectedPhoto && (
         <div
