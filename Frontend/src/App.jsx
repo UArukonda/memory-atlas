@@ -7,6 +7,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import Profile from "./pages/Profile";
 import MemoryDetails from "./pages/MemoryDetails";
 import Letters from "./pages/Letters";
+import LetterDetails from "./pages/LetterDetails";
 import Journals from "./pages/Journals";
 import JournalDetails from "./pages/JournalDetails";
 import Memories from "./pages/Memories";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/journals" element={<Journals />}></Route>
           <Route path="/journals/:id" element={<JournalDetails />}></Route>
           <Route path="/letters" element={<Letters />}></Route>
+          <Route path="/letters/:id" element={<LetterDetails />}></Route>
         </Route>
       </Route>
       <Route path="/reset-password" element={<ResetPassword />}></Route>

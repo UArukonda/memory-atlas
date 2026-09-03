@@ -54,7 +54,7 @@ const Memories = () => {
           No memories yet, add your first one.
         </p>
       ) : (
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-1 gap-4 px-2 md:grid-cols-3 md:px-0">
           {memories.map((memory) => (
             <Link key={memory._id} to={`/memories/${memory._id}`}>
               <MemoryCard memory={memory} />

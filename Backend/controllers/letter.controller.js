@@ -34,25 +34,25 @@ const fetchLetterById = async (req, res, next) => {
   }
 };
 
-const updateLetter = async (req, res, next) => {
-  const { to, from, title, message, date } = req.body;
-  try {
-    const letter = req.resource;
+// const updateLetter = async (req, res, next) => {
+//   const { to, from, title, message, date } = req.body;
+//   try {
+//     const letter = req.resource;
 
-    if (to !== undefined) letter.to = to;
-    if (from !== undefined) letter.from = from;
-    if (title !== undefined) letter.title = title;
-    if (message !== undefined) letter.message = message;
-    if (date !== undefined) letter.date = date;
+//     if (to !== undefined) letter.to = to;
+//     if (from !== undefined) letter.from = from;
+//     if (title !== undefined) letter.title = title;
+//     if (message !== undefined) letter.message = message;
+//     if (date !== undefined) letter.date = date;
 
-    await letter.save();
-    return res
-      .status(200)
-      .send({ message: "Letter updated successfully", letter });
-  } catch (err) {
-    next(err);
-  }
-};
+//     await letter.save();
+//     return res
+//       .status(200)
+//       .send({ message: "Letter updated successfully", letter });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 const deleteLetter = async (req, res, next) => {
   try {
@@ -67,6 +67,6 @@ module.exports = {
   createLetter,
   fetchLetters,
   fetchLetterById,
-  updateLetter,
+  // updateLetter,
   deleteLetter,
 };

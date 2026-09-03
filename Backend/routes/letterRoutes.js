@@ -27,11 +27,11 @@ router.get(
   fetchLetterById,
 );
 
-router.patch(
-  "/letter/:id",
-  requireOwnership(getLetterDocumentById),
-  updateLetter,
-);
+// router.patch(
+//   "/letter/:id",
+//   requireOwnership(getLetterDocumentById),
+//   updateLetter,
+// );
 
 router.delete(
   "/letter/:id",
