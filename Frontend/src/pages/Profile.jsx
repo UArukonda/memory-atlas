@@ -82,7 +82,7 @@ const Profile = () => {
           <div className="mb-8 flex items-center gap-5">
             <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-gray-100">
               <img
-                src={`http://localhost:4000${user?.profile?.avatar}`}
+                src={`${user?.profile?.avatar}`}
                 alt={user?.profile?.avatar}
                 className="h-full w-full object-cover"
               />

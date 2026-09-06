@@ -7,6 +7,7 @@ import {
 } from "../services/journal";
 import JournalForm from "../components/JournalForm";
 import { useJournalForm } from "../hooks/useJournalForm";
+import { BookOpen, CalendarDays, Pencil, Trash2 } from "lucide-react";
 
 const JournalDetails = () => {
   const { id } = useParams();
@@ -59,90 +60,81 @@ const JournalDetails = () => {
 
   return (
     <>
-      {/* <div className="mx-auto max-w-3xl">
-        <div className="mb-8 flex justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-heading">
-              {journal?.title}
-            </h1>
-            {journal?.date && (
-              <p className="mt-1 text-xs text-muted">
-                {new Date(journal.date).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-            )}
-            <p className="mt-4 text-sm leading-6 text-body">
-              {journal?.description}
-            </p>
-          </div>
-          <div className="flex h-fit gap-4">
-            <button
-              type="button"
-              onClick={() => setIsEditing(!isEditing)}
-              className="flex px-2 py-1 items-center justify-center rounded-md bg-primary text-sm text-white shadow-lg transition hover:bg-primary-hover cursor-pointer"
-              aria-label="Edit journal entry"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-              className="flex px-2 py-1 items-center justify-center rounded-md bg-primary text-sm text-white shadow-lg transition hover:bg-primary-hover cursor-pointer"
-              aria-label="Delete journal entry"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </div> */}
-      <div className="mx-auto max-w-4xl rounded-xl border border-border bg-surface p-8">
-        <div className="mb-6 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-heading">
-              {journal?.title}
-            </h1>
-            {journal?.date && (
-              <p className="mt-1 text-xs text-muted">
-                {new Date(journal.date).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-            )}
-          </div>
-          <div className="flex h-fit shrink-0 gap-4">
-            <button
-              type="button"
-              onClick={() => setIsEditing(!isEditing)}
-              className="flex px-2 py-1 items-center justify-center rounded-md bg-primary text-sm text-white shadow-lg transition hover:bg-primary-hover cursor-pointer"
-              aria-label="Edit journal entry"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-              className="flex px-2 py-1 items-center justify-center rounded-md bg-primary text-sm text-white shadow-lg transition hover:bg-primary-hover cursor-pointer"
-              aria-label="Delete journal entry"
-            >
-              Delete
-            </button>
+      <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div className="border-b border-border bg-primary/5 px-6 py-6 sm:px-8">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <BookOpen size={22} />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-wide text-primary">
+                  Journal
+                </p>
+
+                <h1 className="mt-1 text-xl font-semibold text-heading">
+                  {journal?.title}
+                </h1>
+
+                {journal?.date && (
+                  <div className="mt-2 flex items-center gap-1.5 text-sm text-muted">
+                    <CalendarDays size={15} />
+                    <span>
+                      {new Date(journal.date).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsEditing(!isEditing)}
+                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-body transition hover:bg-primary/5 hover:text-primary"
+                aria-label="Edit journal entry"
+              >
+                <Pencil size={15} />
+                <span className="hidden sm:inline">Edit</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsDeleteOpen(!isDeleteOpen)}
+                className="flex items-center gap-1.5 rounded-lg border border-danger/30 px-3 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+                aria-label="Delete journal entry"
+              >
+                <Trash2 size={15} />
+                <span className="hidden sm:inline">Delete</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <p className="text-base leading-7 text-body">{journal?.description}</p>
+        <div className="px-6 py-7 sm:px-8 sm:py-8">
+          <p className="whitespace-pre-line text-base leading-8 text-body">
+            {journal?.description}
+          </p>
+        </div>
       </div>
 
       {isDeleteOpen && (
-        <div className="bg-black/40 fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="bg-surface w-full max-w-md rounded-xl p-6 shadow-xl">
-            <h2 className="font-semibold text-heading text-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
+            <h2 className="text-xl font-semibold text-heading">
               Delete Journal Entry
             </h2>
+
+            <p className="mt-2 text-sm leading-6 text-muted">
+              This journal entry will be permanently deleted. This action cannot
+              be undone.
+            </p>
+
             <div className="mt-6 flex justify-end gap-3">
               <button
                 type="button"
@@ -151,10 +143,11 @@ const JournalDetails = () => {
               >
                 Cancel
               </button>
+
               <button
                 type="button"
                 onClick={handleDelete}
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:bg-danger/90"
               >
                 Delete
               </button>
