@@ -9,7 +9,9 @@ const {
 } = require("../repositories/memory.repository.js");
 
 const createMemory = async (req, res, next) => {
-  const photos = req.files.map((file) => `/uploads/${file.filename}`);
+  const photos = req.files.map(
+    (file) => `${process.env.R2_PUBLIC_URL}/${file.key}`,
+  );
   try {
     const isCreated = await createMemoryDocument({
       ...req.body,
@@ -43,7 +45,9 @@ const fetchMemoryById = async (req, res, next) => {
 
 const updateMemory = async (req, res, next) => {
   const { title, place, description, date } = req.body;
-  const photos = req.files.map((file) => `/uploads/${file.filename}`);
+  const photos = req.files.map(
+    (file) => `${process.env.R2_PUBLIC_URL}/${file.key}`,
+  );
 
   try {
     const memory = req.resource;
