@@ -4,7 +4,7 @@ const initialState = {
   title: "",
   description: "",
   place: "",
-  date: "",
+  date: new Date().toISOString().slice(0, 10),
 };
 
 function formReducer(state, action) {
@@ -12,7 +12,13 @@ function formReducer(state, action) {
     case "SET_FIELD":
       return { ...state, [action.field]: action.value };
     case "RESET":
-      return action.payload || initialState;
+      if (action.payload) {
+        return {
+          ...action.payload,
+          date: action.payload.date ? action.payload.date.slice(0, 10) : "",
+        };
+      }
+      return initialState;
     default:
       return state;
   }
