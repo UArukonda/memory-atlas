@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   getJournalById,
@@ -60,6 +60,13 @@ const JournalDetails = () => {
 
   return (
     <>
+      <Link
+        to="/journals"
+        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-primary-hover"
+      >
+        <span className="text-lg">←</span>
+        Back to Journals
+      </Link>
       <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
         <div className="border-b border-border bg-primary/5 px-6 py-6 sm:px-8">
           <div className="flex items-start justify-between gap-4">

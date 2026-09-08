@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 import { getLetterById, deleteLetter } from "../services/letters";
@@ -10,16 +10,21 @@ const LetterDetails = () => {
   const [letter, setLetter] = useState(null);
   const [error, setError] = useState("");
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     getLetterById(id)
-      .then((response) => setLetter(response.data.letter))
+      .then((response) => {
+        setLetter(response.data.letter);
+        setIsLoading(false);
+      })
       .catch((err) => {
         console.log(err);
         setError(
           `${err.response?.status} Failed to fetch letter. Please try again.`,
         );
+        setIsLoading(false);
       });
   }, [id]);
 
@@ -31,10 +36,25 @@ const LetterDetails = () => {
 
   const isSent = letter?.createdBy === user?.id;
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+      </div>
+    );
+  }
+
   if (error) return <p>{error}</p>;
 
   return (
     <>
+      <Link
+        to="/letters"
+        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-primary-hover"
+      >
+        <span className="text-lg">←</span>
+        Back to Letters
+      </Link>
       <div className="mx-auto max-w-3xl">
         <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           <div className="border-b border-border bg-primary/5 px-6 py-6 sm:px-8">
