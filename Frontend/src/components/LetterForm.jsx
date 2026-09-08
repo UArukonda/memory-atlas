@@ -1,25 +1,57 @@
 import Input from "./Input";
 import { useState } from "react";
+import { Mail, X, Send } from "lucide-react";
 
 const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
   const [formError, setFormError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (!formState.message) {
       setFormError("Message is required.");
       return;
     }
+
     setFormError("");
-    onSave();
+    setIsSaving(true);
+    try {
+      await onSave();
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
-    <div className="bg-black/40 fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div className="bg-surface flex h-[600px] w-full max-w-xl flex-col rounded-xl p-6 shadow-xl">
-        <h2 className="font-semibold text-heading text-xl">{title} Letter</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
+      <div className="flex h-[600px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl">
+        <div className="flex items-center justify-between border-b border-border bg-primary/5 px-6 py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Mail size={20} />
+            </div>
 
-        <div className="mt-4 flex flex-col gap-3 border-b border-border pb-4">
-          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-primary">
+                Love Letter
+              </p>
+              <h2 className="text-xl font-semibold text-heading">
+                {title} Letter
+              </h2>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => formOpen(false)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition hover:bg-surface hover:text-heading"
+            aria-label="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-4 border-b border-border px-6 py-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="To"
               id="to"
@@ -34,6 +66,7 @@ const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
               }}
               placeholder="To"
             />
+
             <Input
               label="From"
               id="from"
@@ -49,7 +82,8 @@ const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
               placeholder="From"
             />
           </div>
-          <div className="grid grid-cols-[1fr,auto] gap-3">
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto]">
             <Input
               label="Subject"
               id="title"
@@ -64,6 +98,7 @@ const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
               }}
               placeholder="Title"
             />
+
             <Input
               label="Date"
               id="date"
@@ -77,13 +112,16 @@ const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
                 });
               }}
               name="date"
-              className="w-36"
+              className="w-full sm:w-36"
             />
           </div>
         </div>
 
-        <div className="mt-4 flex flex-1 flex-col gap-2">
-          <label htmlFor="message">Message</label>
+        <div className="flex flex-1 flex-col gap-2 px-6 py-5">
+          <label htmlFor="message" className="text-sm font-medium text-heading">
+            Message
+          </label>
+
           <textarea
             name="message"
             id="message"
@@ -96,26 +134,30 @@ const LetterForm = ({ title, formOpen, formState, dispatch, onSave }) => {
                 value: e.target.value,
               });
             }}
-            className="flex-1 resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            placeholder="Write something from the heart..."
+            className="flex-1 resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm leading-7 text-body outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
 
-        {formError && <p className="mt-2 text-sm text-danger">{formError}</p>}
+        {formError && <p className="px-6 text-sm text-danger">{formError}</p>}
 
-        <div className="mt-4 flex justify-end gap-3">
+        <div className="flex justify-end gap-3 border-t border-border px-6 py-4">
           <button
             type="button"
             onClick={() => formOpen(false)}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+            className="rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-body transition hover:bg-primary/5"
           >
             Cancel
           </button>
+
           <button
             type="button"
             onClick={handleSaveClick}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+            disabled={isSaving}
+            className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Save
+            <Send size={17} />
+            {isSaving ? "Sending..." : "Send Letter"}
           </button>
         </div>
       </div>

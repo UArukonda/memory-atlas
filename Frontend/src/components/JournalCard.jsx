@@ -1,17 +1,31 @@
+import { BookOpen, CalendarDays } from "lucide-react";
+
 const JournalCard = ({ journal }) => {
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 transition hover:-translate-y-0.5 hover:shadow-sm">
-      <h3 className="font-medium text-heading">{journal.title}</h3>
-      <p className="mt-2 text-sm text-body line-clamp-3">
-        {journal.description}
-      </p>
-      <p className="mt-3 text-xs text-muted">
-        {new Date(journal.date).toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      </p>
+    <div className="group flex items-start gap-4 rounded-2xl border border-border bg-surface px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-primary/10">
+        <BookOpen size={20} />
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <h3 className="truncate font-semibold text-heading">{journal.title}</h3>
+
+        <p className="mt-1 line-clamp-3 text-sm leading-6 text-body">
+          {journal.description}
+        </p>
+
+        <div className="mt-3 flex items-center gap-2 text-xs text-muted">
+          <CalendarDays size={15} />
+
+          <span>
+            {new Date(journal.date).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </span>
+        </div>
+      </div>
     </div>
   );
 };
