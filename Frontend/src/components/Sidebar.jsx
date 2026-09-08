@@ -25,11 +25,6 @@ const Sidebar = ({ isOpen, onClose }) => {
           onClick={handleConnect}
           className="mb-6 flex w-full items-center gap-3 rounded-2xl border border-border bg-surface p-4 text-left transition-all duration-200 hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
         >
-          {/* <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-            {user?.username?.[0]?.toUpperCase()}
-            {user?.partner && `+${user.partner.username[0].toUpperCase()}`}
-          </span> */}
-
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-heading">
               {user?.partner

@@ -11,9 +11,10 @@ const Input = ({
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="font-medium">
+      <label htmlFor={id} className="text-sm font-medium text-heading">
         {label}
       </label>
+
       <input
         type={type}
         id={id}
@@ -21,7 +22,7 @@ const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-muted disabled:cursor-not-allowed"
+        className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-body outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-border/30 disabled:text-muted"
         readOnly={readOnly}
         disabled={disabled}
       />

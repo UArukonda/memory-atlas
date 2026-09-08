@@ -10,6 +10,7 @@ const Journals = () => {
   const [isAddJournalOpen, setIsAddJournalOpen] = useState(false);
   const [formState, dispatch] = useJournalForm();
   const [journals, setJournals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchJournals = useCallback(async () => {
     try {
@@ -17,6 +18,8 @@ const Journals = () => {
       setJournals(response.data.journals);
     } catch (err) {
       console.log(err?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -34,6 +37,14 @@ const Journals = () => {
       console.log(err?.response?.status);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [coverPhotoInput, setCoverPhotoInput] = useState("");
   const [isEditRelationshipOpen, setIsEditRelationshipOpen] = useState(false);
   const { setIsOpen } = useRelationshipModal();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setStartDateInput(
@@ -69,11 +70,20 @@ const Dashboard = () => {
         setMemories(memoriesResponse.data.memories);
         setJournals(journalsResponse.data.journals);
         setLetters(lettersResponse.data.letters);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+      </div>
+    );
+  }
 
   return (
     <>
