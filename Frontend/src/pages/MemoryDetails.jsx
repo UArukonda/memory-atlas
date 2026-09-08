@@ -68,128 +68,6 @@ const MemoryDetails = () => {
       });
   }, [id]);
 
-  // if (error) return <p>{error}</p>;
-  // return (
-  //   <>
-  //     <Link
-  //       to="/memories"
-  //       className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-  //     >
-  //       ← Back to Memories
-  //     </Link>
-  //     <div className="mx-auto max-w-4xl rounded-xl border border-border bg-surface p-8">
-  //       <div className="mb-6 flex items-start justify-between">
-  //         <div>
-  //           <h1 className="text-2xl font-semibold text-heading">
-  //             {memory?.title}
-  //           </h1>
-  //           {memory?.place && (
-  //             <p className="mt-1 text-sm text-muted">📍 {memory.place}</p>
-  //           )}
-  //           {memory?.date && (
-  //             <p className="mt-1 text-xs text-muted">
-  //               {new Date(memory.date).toLocaleDateString("en-GB", {
-  //                 day: "numeric",
-  //                 month: "long",
-  //                 year: "numeric",
-  //               })}
-  //             </p>
-  //           )}
-  //         </div>
-  //         <div className="flex h-fit shrink-0 gap-4">
-  //           <button
-  //             type="button"
-  //             onClick={() => setIsEditing(!isEditing)}
-  //             className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/20 cursor-pointer"
-  //             aria-label="Edit memory"
-  //           >
-  //             <Pencil size={18} />
-  //             Edit
-  //           </button>
-  //           <button
-  //             type="button"
-  //             onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-  //             className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-danger/20 cursor-pointer"
-  //             aria-label="Delete memory"
-  //           >
-  //             <Trash2 size={18} />
-  //             Delete
-  //           </button>
-  //         </div>
-  //       </div>
-
-  //       <p className="text-base leading-7 text-body">{memory?.description}</p>
-
-  //       {memory?.photos?.length > 0 ? (
-  //         <div className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2">
-  //           {memory.photos.map((photo) => (
-  //             <img
-  //               key={photo}
-  //               src={`${photo}`}
-  //               onClick={() => setSelectedPhoto(photo)}
-  //               alt={memory.title}
-  //               className="aspect-square w-full cursor-pointer rounded-md object-cover object-top transition hover:opacity-90"
-  //             />
-  //           ))}
-  //         </div>
-  //       ) : (
-  //         <p className="mt-8 text-sm text-muted">
-  //           No photos yet — edit this memory to add some.
-  //         </p>
-  //       )}
-  //     </div>
-  //     {selectedPhoto && (
-  //       <div
-  //         onClick={() => setSelectedPhoto(null)}
-  //         className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
-  //       >
-  //         <img
-  //           src={`${selectedPhoto}`}
-  //           alt={memory.title}
-  //           className="max-h-[90vh] max-w-full rounded-lg object-contain"
-  //         />
-  //       </div>
-  //     )}
-  //     {isDeleteOpen && (
-  //       <div className="bg-black/40 fixed inset-0 z-50 flex items-center justify-center px-4">
-  //         <div className="bg-surface w-full max-w-md rounded-xl p-6 shadow-xl">
-  //           <h2 className="font-semibold text-heading text-xl">
-  //             Delete Memory
-  //           </h2>
-  //           <div className="mt-6 flex justify-end gap-3">
-  //             <button
-  //               type="button"
-  //               onClick={() => setIsDeleteOpen(false)}
-  //               className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
-  //             >
-  //               Cancel
-  //             </button>{" "}
-  //             <button
-  //               type="button"
-  //               onClick={handleDelete}
-  //               className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
-  //             >
-  //               Delete
-  //             </button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     )}
-
-  //     {isEditing && (
-  //       <MemoryForm
-  //         title="Edit"
-  //         formOpen={setIsEditing}
-  //         formState={formState}
-  //         dispatch={dispatch}
-  //         onSave={handleEdit}
-  //         photoInputRef={photoInputRef}
-  //         onFileChange={handleFileChange}
-  //       />
-  //     )}
-  //   </>
-  // );
-
   if (error) return <p className="p-6 text-danger">{error}</p>;
 
   return (
@@ -295,7 +173,7 @@ const MemoryDetails = () => {
                   </span>
                 </h2>
               </div>
-
+              console.log(memory.photos)
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 {memory.photos.map((photo) => (
                   <button
@@ -305,7 +183,7 @@ const MemoryDetails = () => {
                     className="group relative overflow-hidden rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     <img
-                      src={photo}
+                      src={photo.url}
                       alt={memory.title}
                       className="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
                     />
