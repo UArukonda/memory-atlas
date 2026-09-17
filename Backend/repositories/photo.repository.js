@@ -12,9 +12,9 @@ function getPhotosByMemoryId(memoryId) {
   return Photo.find({ memoryId }).sort({ createdAt: 1 });
 }
 
-// function getPhotosByMemoryIds(memoryIds) {
-//   return Photo.find({ memoryId: { $in: memoryIds } }).sort({ createdAt: 1 });
-// }
+function getPhotosByMemoryIds(memoryIds) {
+  return Photo.find({ memoryId: { $in: memoryIds } }).sort({ createdAt: 1 });
+}
 
 function getPhotoDocumentById(id) {
   return Photo.findById(id);
@@ -30,5 +30,5 @@ module.exports = {
   getPhotoDocumentById,
   deletePhotoDocument,
   getPhotosByMemoryId,
-  // getPhotosByMemoryIds,
+  getPhotosByMemoryIds,
 };

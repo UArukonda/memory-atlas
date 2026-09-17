@@ -1,7 +1,4 @@
 const {
-  getRelationship,
-} = require("../repositories/relationship.repository.js");
-const {
   createMemoryDocument,
   getMemoryCollection,
   deleteMemoryDocument,
@@ -9,6 +6,7 @@ const {
 const {
   createPhotoDocument,
   getPhotosByMemoryId,
+  getPhotosByMemoryIds,
 } = require("../repositories/photo.repository.js");
 
 const createMemory = async (req, res, next) => {
@@ -43,7 +41,7 @@ const fetchMemories = async (req, res, next) => {
   try {
     const memories = await getMemoryCollection(req.relationship._id);
     const memoryIds = memories.map((memory) => memory._id);
-    const photos = await getPhotosByMemoryId(memoryIds);
+    const photos = await getPhotosByMemoryIds(memoryIds);
     const updatedMemories = memories.map((memory) => {
       const memoryObj = memory.toObject();
       memoryObj.photos = photos.filter((photo) =>
@@ -58,9 +56,9 @@ const fetchMemories = async (req, res, next) => {
 };
 
 const fetchMemoryById = async (req, res, next) => {
-  const memory = req.resource;
   try {
-    // const photos = await getPhotosByMemoryId();
+    const memory = req.resource.toObject();
+    memory.photos = await getPhotosByMemoryId(req.resource._id);
     return res.status(200).send({ memory });
   } catch (err) {
     next(err);
@@ -91,9 +89,11 @@ const updateMemory = async (req, res, next) => {
     );
 
     await memory.save();
+    const memoryObj = memory.toObject();
+    memoryObj.photos = await getPhotosByMemoryId(memory._id);
     return res.status(200).json({
       message: "Memory updated successfully",
-      memory,
+      memory: memoryObj,
     });
   } catch (err) {
     next(err);
