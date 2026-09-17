@@ -127,6 +127,11 @@ const JournalDetails = () => {
           <p className="whitespace-pre-line text-base leading-8 text-body">
             {journal?.description}
           </p>
+          {journal?.createdBy?.username && (
+            <p className="mt-6 text-right text-xs text-muted">
+              Written by {journal.createdBy.username}
+            </p>
+          )}
         </div>
       </div>
 

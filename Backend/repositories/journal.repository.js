@@ -5,11 +5,11 @@ function createJournalDocument(journalData) {
 }
 
 function getJournalCollection(id) {
-  return Journal.find({ relationshipId: id });
+  return Journal.find({ relationshipId: id }).populate("createdBy", "username");
 }
 
 function getJournalDocumentById(id) {
-  return Journal.findById(id);
+  return Journal.findById(id).populate("createdBy", "username");
 }
 
 function deleteJournalDocument(id) {

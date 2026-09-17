@@ -1,4 +1,4 @@
-import { BookOpen, CalendarDays } from "lucide-react";
+import { BookOpen, CalendarDays, User } from "lucide-react";
 
 const JournalCard = ({ journal }) => {
   return (
@@ -14,16 +14,24 @@ const JournalCard = ({ journal }) => {
           {journal.description}
         </p>
 
-        <div className="mt-3 flex items-center gap-2 text-xs text-muted">
-          <CalendarDays size={15} />
-
-          <span>
-            {new Date(journal.date).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
+        <div className="mt-3 flex items-center gap-4 text-xs text-muted">
+          <span className="flex items-center gap-2">
+            <CalendarDays size={15} />
+            <span>
+              {new Date(journal.date).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
           </span>
+
+          {journal.createdBy?.username && (
+            <span className="flex items-center gap-2">
+              <User size={15} />
+              <span>{journal.createdBy.username}</span>
+            </span>
+          )}
         </div>
       </div>
     </div>
