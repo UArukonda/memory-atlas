@@ -30,7 +30,7 @@ const Login = () => {
       setPassword("");
       setError("");
       await reFetchUser();
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message);
     }
@@ -40,7 +40,6 @@ const Login = () => {
     try {
       await sendResetLink(email);
       setEmail("");
-      // setIsForgotPasswordOpen(!isForgotPasswordOpen);
       setIsResetLinkSent(!isResetLinkSent);
     } catch (err) {
       console.log(err.response.data.message);

@@ -11,18 +11,23 @@ import LetterDetails from "./pages/LetterDetails";
 import Journals from "./pages/Journals";
 import JournalDetails from "./pages/JournalDetails";
 import Memories from "./pages/Memories";
+import Landing from "./pages/Landing";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
+      <Route element={<GuestRoute />}>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
+      <Route path="/" element={<Landing />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
-          <Route path="/" element={<Dashboard />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/memories" element={<Memories />}></Route>
           <Route path="/memories/:id" element={<MemoryDetails />}></Route>

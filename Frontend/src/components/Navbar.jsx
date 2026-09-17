@@ -12,36 +12,30 @@ const Navbar = ({ onMenuClick }) => {
   const handleClick = async () => {
     await logoutUser();
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
-    <nav className="flex items-center justify-between border-b border-border bg-surface px-4 py-4 md:px-8">
-      <div className="flex min-w-0 items-center gap-3">
-        <button
-          onClick={onMenuClick}
-          className="rounded-lg p-1.5 text-heading transition hover:bg-primary/5 hover:text-primary md:hidden"
-          aria-label="Open menu"
-        >
-          <Menu size={22} />
-        </button>
+    <nav className="flex h-[72px] shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 lg:px-8">
+      <button
+        onClick={onMenuClick}
+        className="rounded-xl p-2 text-heading transition hover:bg-primary/5 hover:text-primary md:hidden"
+        aria-label="Open menu"
+      >
+        <Menu size={22} />
+      </button>
 
-        <h1 className="truncate text-xl font-bold text-heading">
-          Memory Atlas
-        </h1>
-      </div>
-
-      <div className="relative shrink-0">
+      <div className="relative ml-auto">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-body transition hover:border-primary/20 hover:bg-primary/5"
+          className="flex items-center gap-2.5 rounded-xl border border-border bg-surface px-2.5 py-2 transition hover:border-primary/20 hover:bg-primary/5"
           aria-label="Open user menu"
         >
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
             {user?.username?.[0]?.toUpperCase()}
           </span>
 
-          <span className="hidden text-sm font-medium sm:inline">
+          <span className="hidden max-w-32 truncate text-sm font-medium text-heading sm:inline">
             {user?.username}
           </span>
 
@@ -54,10 +48,10 @@ const Navbar = ({ onMenuClick }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-border bg-surface p-1.5 shadow-lg">
+          <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-border bg-surface p-1.5 shadow-xl">
             <Link
               to="/profile"
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-body transition hover:bg-primary/5 hover:text-primary"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-body transition hover:bg-primary/5 hover:text-primary"
               onClick={() => setIsOpen(false)}
             >
               <User size={17} />
@@ -66,7 +60,7 @@ const Navbar = ({ onMenuClick }) => {
 
             <button
               onClick={handleClick}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-body transition hover:bg-primary/5 hover:text-primary"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-body transition hover:bg-primary/5 hover:text-primary"
             >
               <LogOut size={17} />
               <span>Logout</span>
