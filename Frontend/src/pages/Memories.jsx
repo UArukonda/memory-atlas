@@ -5,7 +5,8 @@ import { useMemoryForm } from "../hooks/useMemoryForm";
 import { usePhotoInput } from "../hooks/usePhotoInput";
 import MemoryCard from "../components/MemoryCard";
 import MemoryForm from "../components/MemoryForm";
-import { Plus } from "lucide-react";
+import { Plus, Search, ArrowUpDown } from "lucide-react";
+import Spinner from "../components/Spinner";
 
 const Memories = () => {
   const [isAddMemoryOpen, setIsAddMemoryOpen] = useState(false);
@@ -14,6 +15,8 @@ const Memories = () => {
     usePhotoInput();
   const [formState, dispatch] = useMemoryForm();
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   const fetchMemories = useCallback(async () => {
     try {
@@ -44,23 +47,60 @@ const Memories = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      </div>
+  const matchesSearch = (memory) =>
+    [memory.title, memory.place, memory.description]
+      .filter(Boolean)
+      .some((field) => field.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const visibleMemories = memories
+    .filter(matchesSearch)
+    .sort((a, b) =>
+      sortOrder === "newest"
+        ? new Date(b.date) - new Date(a.date)
+        : new Date(a.date) - new Date(b.date),
     );
+
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
     <>
-      {console.log(memories)}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-heading">Memories</h1>
         <p className="mt-1 text-sm text-muted">
           Everything you've shared together
         </p>
       </div>
+
+      {memories.length > 0 && (
+        <div className="mb-6 flex items-center gap-3">
+          <div className="relative flex-1">
+            <Search
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search memories"
+              className="w-full rounded-lg border border-border py-2 pl-9 pr-3 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))
+            }
+            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm text-body transition hover:bg-primary/5"
+          >
+            <ArrowUpDown size={15} />
+            {sortOrder === "newest" ? "Newest first" : "Oldest first"}
+          </button>
+        </div>
+      )}
 
       {memories.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
@@ -78,9 +118,15 @@ const Memories = () => {
             Add your first memory
           </button>
         </div>
+      ) : visibleMemories.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
+          <p className="text-sm font-medium text-heading">
+            No memories match your search
+          </p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {memories.map((memory) => (
+          {visibleMemories.map((memory) => (
             <Link
               key={memory._id}
               to={`/memories/${memory._id}`}
