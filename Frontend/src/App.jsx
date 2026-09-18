@@ -12,6 +12,7 @@ import Journals from "./pages/Journals";
 import JournalDetails from "./pages/JournalDetails";
 import Memories from "./pages/Memories";
 import Landing from "./pages/Landing";
+import Gallery from "./pages/Gallery";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
@@ -35,6 +36,7 @@ function App() {
           <Route path="/journals/:id" element={<JournalDetails />}></Route>
           <Route path="/letters" element={<Letters />}></Route>
           <Route path="/letters/:id" element={<LetterDetails />}></Route>
+          <Route path="/gallery" element={<Gallery />}></Route>
         </Route>
       </Route>
       <Route path="/reset-password" element={<ResetPassword />}></Route>

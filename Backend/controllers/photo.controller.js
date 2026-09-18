@@ -8,13 +8,19 @@ const s3Client = require("../utils/r2Client.js");
 
 const createPhoto = async (req, res, next) => {
   try {
-    const isCreated = await createPhotoDocument({
-      ...req.body,
-      relationshipId: req.relationship._id,
-      uploadedBy: req.user.id,
-    });
-
-    return res.status(201).send({ photo: isCreated });
+    const photos = req.files.map(
+      (file) => `${process.env.R2_PUBLIC_URL}/${file.key}`,
+    );
+    const createdPhotos = await Promise.all(
+      photos.map((url) =>
+        createPhotoDocument({
+          relationshipId: req.relationship._id,
+          uploadedBy: req.user.id,
+          url,
+        }),
+      ),
+    );
+    return res.status(201).send({ photos: createdPhotos });
   } catch (err) {
     next(err);
   }

@@ -3,6 +3,7 @@ const protect = require("../middleware/authMiddleware.js");
 const requireRelationship = require("../middleware/requireRelationship.js");
 const requireOwnership = require("../middleware/requireOwnership.js");
 const { getPhotoDocumentById } = require("../repositories/photo.repository.js");
+const upload = require("../middleware/upload.js");
 const {
   createPhoto,
   fetchPhotos,
@@ -15,7 +16,7 @@ const router = express.Router();
 router.use(protect);
 router.use(requireRelationship);
 
-router.post("/photo", createPhoto);
+router.post("/photo", upload.array("photo", 5), createPhoto);
 
 router.get("/photo", fetchPhotos);
 

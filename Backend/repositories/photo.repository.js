@@ -5,7 +5,7 @@ function createPhotoDocument(photoData) {
 }
 
 function getPhotoCollection(relationshipId) {
-  return Photo.find({ relationshipId });
+  return Photo.find({ relationshipId }).sort({ createdAt: 1 });
 }
 
 function getPhotosByMemoryId(memoryId) {
