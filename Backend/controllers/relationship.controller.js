@@ -73,23 +73,20 @@ const getRelation = async (req, res, next) => {
 
 const updateRelation = async (req, res, next) => {
   const currentUserEmail = req.user.email;
-  const {
-    relationshipStartDate,
-    coupleNickname,
-    relationshipDescription,
-    coverPhoto,
-  } = req.body;
+  const { relationshipStartDate, coupleNickname, relationshipDescription } =
+    req.body;
   const updateData = {};
 
   if (relationshipStartDate !== undefined)
     updateData.relationshipStartDate = relationshipStartDate;
-
   if (coupleNickname !== undefined) updateData.coupleNickname = coupleNickname;
-
   if (relationshipDescription !== undefined)
     updateData.relationshipDescription = relationshipDescription;
+  if (req.files?.coverPhoto?.[0])
+    updateData.coverPhoto = `${process.env.R2_PUBLIC_URL}/${req.files.coverPhoto[0].key}`;
+  if (req.files?.couplePhoto?.[0])
+    updateData.couplePhoto = `${process.env.R2_PUBLIC_URL}/${req.files.couplePhoto[0].key}`;
 
-  if (coverPhoto !== undefined) updateData.coverPhoto = coverPhoto;
   try {
     const currentUser = await findUserByEmail(currentUserEmail);
     const relation = await getRelationship(currentUser._id);

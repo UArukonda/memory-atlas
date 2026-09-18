@@ -9,7 +9,25 @@ export const getRelationship = () => {
 };
 
 export const updateRelationship = (relationshipData) => {
-  return api.patch("/relationship", relationshipData);
+  const formData = new FormData();
+  formData.append(
+    "relationshipStartDate",
+    relationshipData.relationshipStartDate,
+  );
+  formData.append("coupleNickname", relationshipData.coupleNickname);
+  formData.append(
+    "relationshipDescription",
+    relationshipData.relationshipDescription,
+  );
+  if (relationshipData.coverPhoto) {
+    formData.append("coverPhoto", relationshipData.coverPhoto);
+  }
+  if (relationshipData.couplePhoto) {
+    formData.append("couplePhoto", relationshipData.couplePhoto);
+  }
+  return api.patch("/relationship", formData, {
+    headers: { "Content-Type": undefined },
+  });
 };
 
 export const endRelationship = () => {

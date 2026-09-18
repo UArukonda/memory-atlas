@@ -5,6 +5,7 @@ import {
   CalendarDays,
   Heart,
   Home,
+  LayoutGrid,
   Images,
   BookOpen,
   Mail,
@@ -43,9 +44,20 @@ const Sidebar = ({ isOpen, onClose }) => {
           className="mb-8 w-full rounded-2xl border border-border bg-background p-4 text-left transition-all duration-200 hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm disabled:cursor-default disabled:hover:border-border disabled:hover:bg-background disabled:hover:shadow-none"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-medium text-primary">
-              {user?.username?.[0]?.toUpperCase()}
-              {user?.partner && `+${user.partner.username[0].toUpperCase()}`}
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-lg font-medium text-primary">
+              {user?.relationship?.couplePhoto ? (
+                <img
+                  src={user.relationship.couplePhoto}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <>
+                  {user?.username?.[0]?.toUpperCase()}
+                  {user?.partner &&
+                    `+${user.partner.username[0].toUpperCase()}`}
+                </>
+              )}
             </div>
 
             <div className="min-w-0 flex-1">
@@ -133,6 +145,21 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             <Mail size={19} strokeWidth={1.9} />
             <span>Letters</span>
+          </NavLink>
+
+          <NavLink
+            to="/gallery"
+            onClick={onClose}
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
+                isActive
+                  ? "bg-primary/10 font-medium text-primary"
+                  : "text-body hover:bg-primary/10 hover:text-primary"
+              }`
+            }
+          >
+            <LayoutGrid size={19} strokeWidth={1.8} />
+            <span>Gallery</span>
           </NavLink>
         </nav>
       </div>

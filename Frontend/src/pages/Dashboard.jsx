@@ -1,11 +1,12 @@
 import { useAuth } from "../context/useAuth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { updateRelationship } from "../services/relationship";
 import Input from "../components/Input";
 import { useRelationshipModal } from "../context/useRelationshipModal.js";
 import { getMemories } from "../services/memories";
 import { getJournals } from "../services/journal.js";
 import { getLetters } from "../services/letters.js";
+import Spinner from "../components/Spinner.jsx";
 import {
   CalendarDays,
   Heart,
@@ -25,8 +26,11 @@ const Dashboard = () => {
   const [coupleNicknameInput, setCoupleNicknameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [coverPhotoInput, setCoverPhotoInput] = useState("");
+  const [couplePhotoInput, setCouplePhotoInput] = useState("");
   const [isEditRelationshipOpen, setIsEditRelationshipOpen] = useState(false);
   const { setIsOpen } = useRelationshipModal();
+  const coverPhotoInputRef = useRef(null);
+  const couplePhotoInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,7 +39,8 @@ const Dashboard = () => {
     );
     setCoupleNicknameInput(user?.relationship?.coupleNickname || "");
     setDescriptionInput(user?.relationship?.relationshipDescription || "");
-    setCoverPhotoInput(user?.relationship?.coverPhoto || "");
+    setCoverPhotoInput("");
+    setCouplePhotoInput("");
   }, [user]);
 
   const handleSaveRelationshipDetails = async () => {
@@ -45,6 +50,7 @@ const Dashboard = () => {
         coupleNickname: coupleNicknameInput,
         relationshipDescription: descriptionInput,
         coverPhoto: coverPhotoInput,
+        couplePhoto: couplePhotoInput,
       });
       reFetchUser();
       setIsEditRelationshipOpen(!isEditRelationshipOpen);
@@ -78,58 +84,77 @@ const Dashboard = () => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
     <>
       <main>
-        <section className="mb-8">
-          <div className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-6 transition-shadow hover:shadow-sm">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
-              {user?.username?.[0]?.toUpperCase()}
-              {user?.partner && `+${user.partner.username[0].toUpperCase()}`}
-            </div>
+        <div className="relative mb-8 min-h-[320px] overflow-hidden rounded-2xl border border-border">
+          {user?.relationship?.coverPhoto && (
+            <img
+              src={user.relationship.coverPhoto}
+              alt="Cover"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
 
-            <div>
-              <h1 className="text-2xl font-semibold text-heading">
-                Good Morning, {user?.username}
-              </h1>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/5" />
 
-              <p className="mt-1 text-sm text-body">
-                Welcome back to your little corner of memories
-              </p>
+          <div className="relative flex min-h-[320px] items-end p-6 sm:p-8 lg:p-10">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/90 text-lg font-semibold text-primary shadow-sm backdrop-blur-sm">
+                {user?.relationship?.couplePhoto ? (
+                  <img
+                    src={user.relationship.couplePhoto}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <>
+                    {user?.username?.[0]?.toUpperCase()}
+                    {user?.partner &&
+                      `+${user.partner.username[0].toUpperCase()}`}
+                  </>
+                )}
+              </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
-                {user?.partner && (
-                  <span className="flex items-center gap-1.5 text-primary">
-                    <Heart size={15} fill="currentColor" />
+              <div>
+                <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  Good Morning, {user?.username}
+                </h1>
+
+                <p className="mt-2 text-sm text-white/85 sm:text-base">
+                  Welcome back to your little corner of memories
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                  {user?.partner && (
+                    <span className="flex items-center gap-1.5 text-white">
+                      <Heart size={15} fill="currentColor" />
+                      <span>
+                        Your story with{" "}
+                        {user?.partner?.username?.[0]?.toUpperCase() +
+                          user?.partner?.username?.slice(1)}
+                      </span>
+                    </span>
+                  )}
+
+                  <span className="flex items-center gap-1.5 text-white/80">
+                    <CalendarDays size={15} />
                     <span>
-                      Your story with{" "}
-                      {user?.partner?.username?.[0]?.toUpperCase() +
-                        user?.partner?.username?.slice(1)}
+                      {new Date().toLocaleDateString("en-GB", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                      })}
                     </span>
                   </span>
-                )}
-
-                <span className="flex items-center gap-1.5 text-muted">
-                  <CalendarDays size={15} />
-                  <span>
-                    {new Date().toLocaleDateString("en-GB", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}
-                  </span>
-                </span>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {!user?.relationship && (
           <section className="mb-8">
@@ -284,13 +309,43 @@ const Dashboard = () => {
                       />
                     </div>
 
-                    <Input
-                      label="Cover photo URL"
-                      value={coverPhotoInput}
-                      onChange={(e) => setCoverPhotoInput(e.target.value)}
-                      type="text"
-                      placeholder="https://..."
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={coverPhotoInputRef}
+                      onChange={(e) => setCoverPhotoInput(e.target.files[0])}
+                      className="hidden"
                     />
+                    <button
+                      type="button"
+                      onClick={() => coverPhotoInputRef.current.click()}
+                      className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                    >
+                      {coverPhotoInput
+                        ? coverPhotoInput.name
+                        : user?.relationship?.coverPhoto
+                          ? "Update cover photo"
+                          : "Choose cover photo"}
+                    </button>
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={couplePhotoInputRef}
+                      onChange={(e) => setCouplePhotoInput(e.target.files[0])}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => couplePhotoInputRef.current.click()}
+                      className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                    >
+                      {couplePhotoInput
+                        ? couplePhotoInput.name
+                        : user?.relationship?.couplePhoto
+                          ? "Update couple photo"
+                          : "Choose couple photo"}
+                    </button>
                   </div>
 
                   <div className="mt-6 flex justify-end gap-3">
