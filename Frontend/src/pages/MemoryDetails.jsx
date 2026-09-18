@@ -9,6 +9,7 @@ import {
 } from "../services/memories";
 import MemoryForm from "../components/MemoryForm";
 import { Pencil, Trash2, MapPin, CalendarDays } from "lucide-react";
+import Spinner from "../components/Spinner";
 
 const MemoryDetails = () => {
   const { id } = useParams();
@@ -18,6 +19,7 @@ const MemoryDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const { photoInputRef, photoInput, setPhotoInput, handleFileChange } =
     usePhotoInput();
 
@@ -59,6 +61,7 @@ const MemoryDetails = () => {
     getMemoryById(id)
       .then((response) => {
         setMemory(response.data.memory);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -67,6 +70,10 @@ const MemoryDetails = () => {
         );
       });
   }, [id]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   if (error) return <p className="p-6 text-danger">{error}</p>;
 
