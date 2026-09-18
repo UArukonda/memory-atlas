@@ -4,13 +4,16 @@ import { useJournalForm } from "../hooks/useJournalForm";
 import { createJournal, getJournals } from "../services/journal.js";
 import JournalCard from "../components/JournalCard.jsx";
 import { Link } from "react-router-dom";
-import { BookOpen, Plus } from "lucide-react";
+import { BookOpen, Plus, Search, ArrowUpDown } from "lucide-react";
+import Spinner from "../components/Spinner.jsx";
 
 const Journals = () => {
   const [isAddJournalOpen, setIsAddJournalOpen] = useState(false);
   const [formState, dispatch] = useJournalForm();
   const [journals, setJournals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   const fetchJournals = useCallback(async () => {
     try {
@@ -38,12 +41,21 @@ const Journals = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      </div>
+  const matchesSearch = (journal) =>
+    [journal.title, journal.description]
+      .filter(Boolean)
+      .some((field) => field.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const visibleJournals = journals
+    .filter(matchesSearch)
+    .sort((a, b) =>
+      sortOrder === "newest"
+        ? new Date(b.date) - new Date(a.date)
+        : new Date(a.date) - new Date(b.date),
     );
+
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
@@ -65,6 +77,37 @@ const Journals = () => {
             </p>
           </div>
         </div>
+
+        {journals.length > 0 && (
+          <div className="mb-6 flex items-center gap-3">
+            <div className="relative flex-1">
+              <Search
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search journals"
+                className="w-full rounded-lg border border-border py-2 pl-9 pr-3 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setSortOrder((prev) =>
+                  prev === "newest" ? "oldest" : "newest",
+                )
+              }
+              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm text-body transition hover:bg-primary/5"
+            >
+              <ArrowUpDown size={15} />
+              {sortOrder === "newest" ? "Newest first" : "Oldest first"}
+            </button>
+          </div>
+        )}
 
         {journals.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-14 text-center shadow-sm">
@@ -90,9 +133,15 @@ const Journals = () => {
               Add your first journal
             </button>
           </div>
+        ) : visibleJournals.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-14 text-center shadow-sm">
+            <p className="text-sm font-medium text-heading">
+              No journals match your search
+            </p>
+          </div>
         ) : (
           <div className="space-y-4">
-            {journals.map((journal) => (
+            {visibleJournals.map((journal) => (
               <Link
                 key={journal._id}
                 to={`/journals/${journal._id}`}
