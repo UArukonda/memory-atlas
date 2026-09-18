@@ -1,19 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { createLetter, getLetters } from "../services/letters";
 import { useLetterForm } from "../hooks/useLetterForm";
 import LetterForm from "../components/LetterForm";
 import LetterCard from "../components/LetterCard";
-import { Mail } from "lucide-react";
+import { Mail, MailOpen, Search } from "lucide-react";
+import Spinner from "../components/Spinner";
 
 const Letters = () => {
   const { user } = useAuth();
   const [isAddLetterOpen, setIsAddLetterOpen] = useState(false);
   const [letters, setLetters] = useState([]);
   const [formState, dispatch] = useLetterForm();
-  const [activeTab, setActiveTab] = useState("sent");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "sent";
+  const setActiveTab = (tab) => setSearchParams({ tab });
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [readFilter, setReadFilter] = useState("all");
 
   const fetchLetters = useCallback(async () => {
     try {
@@ -59,12 +64,24 @@ const Letters = () => {
     (letter) => letter.createdBy !== user?.id,
   );
 
+  const matchesSearch = (letter) =>
+    letter.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+  const visibleSentLetters = sentLetters.filter(matchesSearch);
+
+  const visibleReceivedLetters = receivedLetters
+    .filter(matchesSearch)
+    .filter((letter) => {
+      if (readFilter === "unread") return !letter.isRead;
+      if (readFilter === "read") return letter.isRead;
+      return true;
+    });
+
+  const toggleReadFilter = (value) =>
+    setReadFilter((prev) => (prev === value ? "all" : value));
+
   if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
@@ -105,9 +122,55 @@ const Letters = () => {
           </button>
         </div>
 
+        <div className="mt-4 flex items-center gap-3">
+          <div className="relative flex-1">
+            <Search
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by subject"
+              className="w-full rounded-lg border border-border py-2 pl-9 pr-3 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+
+          {activeTab === "received" && (
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => toggleReadFilter("unread")}
+                aria-label="Show unread letters"
+                className={`flex h-9 w-9 items-center justify-center rounded-lg border transition ${
+                  readFilter === "unread"
+                    ? "border-primary/30 bg-primary/10 text-primary"
+                    : "border-border text-muted hover:bg-primary/5"
+                }`}
+              >
+                <Mail size={16} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => toggleReadFilter("read")}
+                aria-label="Show read letters"
+                className={`flex h-9 w-9 items-center justify-center rounded-lg border transition ${
+                  readFilter === "read"
+                    ? "border-primary/30 bg-primary/10 text-primary"
+                    : "border-border text-muted hover:bg-primary/5"
+                }`}
+              >
+                <MailOpen size={16} />
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="mt-6">
           {activeTab === "sent" ? (
-            sentLetters.length === 0 ? (
+            visibleSentLetters.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Mail size={22} />
@@ -121,7 +184,7 @@ const Letters = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {sentLetters.map((letter) => (
+                {visibleSentLetters.map((letter) => (
                   <Link
                     key={letter._id}
                     to={`/letters/${letter._id}`}
@@ -132,7 +195,7 @@ const Letters = () => {
                 ))}
               </div>
             )
-          ) : receivedLetters.length === 0 ? (
+          ) : visibleReceivedLetters.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Mail size={22} />
@@ -146,13 +209,13 @@ const Letters = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {receivedLetters.map((letter) => (
+              {visibleReceivedLetters.map((letter) => (
                 <Link
                   key={letter._id}
                   to={`/letters/${letter._id}`}
                   className="block"
                 >
-                  <LetterCard letter={letter} />
+                  <LetterCard letter={letter} isReceived />
                 </Link>
               ))}
             </div>

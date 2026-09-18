@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
 import { getLetterById, deleteLetter } from "../services/letters";
 import { Mail, CalendarDays, Trash2 } from "lucide-react";
+import Spinner from "../components/Spinner";
 
 const LetterDetails = () => {
   const { id } = useParams();
@@ -37,11 +38,7 @@ const LetterDetails = () => {
   const isSent = letter?.createdBy === user?.id;
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (error) return <p>{error}</p>;
@@ -49,7 +46,7 @@ const LetterDetails = () => {
   return (
     <>
       <Link
-        to="/letters"
+        to={isSent ? "/letters?tab=sent" : "/letters?tab=received"}
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:text-primary-hover"
       >
         <span className="text-lg">←</span>

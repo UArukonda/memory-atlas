@@ -28,6 +28,12 @@ const fetchLetters = async (req, res, next) => {
 };
 const fetchLetterById = async (req, res, next) => {
   try {
+    const letter = req.resource;
+
+    if (!letter.isRead && !letter.createdBy.equals(req.user.id)) {
+      letter.isRead = true;
+      await letter.save();
+    }
     return res.status(200).send({ letter: req.resource });
   } catch (err) {
     next(err);

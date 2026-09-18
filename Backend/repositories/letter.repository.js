@@ -5,7 +5,7 @@ function createLetterDocument(letterData) {
 }
 
 function getLettersCollection(id) {
-  return Letter.find({ relationshipId: id });
+  return Letter.find({ relationshipId: id }).sort({ createdAt: -1 });
 }
 
 function getLetterDocumentById(id) {
