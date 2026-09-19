@@ -9,6 +9,7 @@ const memoryRoutes = require("./routes/memoryRoutes.js");
 const journalRoutes = require("./routes/journalRoutes.js");
 const letterRoutes = require("./routes/letterRoutes.js");
 const photoRoutes = require("./routes/photoRoutes.js");
+const messageRoutes = require("./routes/messageRoutes.js");
 const errorHandler = require("./middleware/errorHandler.js");
 const endpoints = require("./endpoints.json");
 const cors = require("cors");
@@ -47,6 +48,8 @@ app.use("/api", journalRoutes);
 app.use("/api", letterRoutes);
 
 app.use("/api", photoRoutes);
+
+app.use("/api", messageRoutes);
 
 app.use(errorHandler);
 
