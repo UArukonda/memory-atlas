@@ -9,6 +9,7 @@ import {
   Images,
   BookOpen,
   Mail,
+  MessageCircle,
 } from "lucide-react";
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -160,6 +161,20 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             <LayoutGrid size={19} strokeWidth={1.8} />
             <span>Gallery</span>
+          </NavLink>
+          <NavLink
+            to="/chat"
+            onClick={onClose}
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
+                isActive
+                  ? "bg-primary/10 font-medium text-primary"
+                  : "text-body hover:bg-primary/10 hover:text-primary"
+              }`
+            }
+          >
+            <MessageCircle size={19} strokeWidth={1.9} />
+            <span>Chat</span>
           </NavLink>
         </nav>
       </div>

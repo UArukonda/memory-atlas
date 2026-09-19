@@ -13,6 +13,7 @@ import JournalDetails from "./pages/JournalDetails";
 import Memories from "./pages/Memories";
 import Landing from "./pages/Landing";
 import Gallery from "./pages/Gallery";
+import Chat from "./pages/Chat";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/letters" element={<Letters />}></Route>
           <Route path="/letters/:id" element={<LetterDetails />}></Route>
           <Route path="/gallery" element={<Gallery />}></Route>
+          <Route path="/chat" element={<Chat />}></Route>
         </Route>
       </Route>
       <Route path="/reset-password" element={<ResetPassword />}></Route>
