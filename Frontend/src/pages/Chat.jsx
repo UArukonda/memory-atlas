@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import Spinner from "../components/Spinner";
 import { useSocket } from "../context/useSocket";
 import { useAuth } from "../context/useAuth";
-import { getMessages } from "../services/message";
+import { getMessages, markMessagesRead } from "../services/message";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [text, setText] = useState("");
-  const { socket } = useSocket();
+  const { socket, setUnreadCount } = useSocket();
   const { user } = useAuth();
   const bottomRef = useRef(null);
 
@@ -26,6 +26,12 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
+    markMessagesRead()
+      .then(() => setUnreadCount(0))
+      .catch((err) => console.log(err?.response?.data?.message));
+  }, []);
+
+  useEffect(() => {
     if (!socket) return;
 
     const handleNewMessage = (message) => {
@@ -33,6 +39,9 @@ const Chat = () => {
         if (prev.some((m) => m._id === message._id)) return prev;
         return [...prev, message];
       });
+      if (message.sender !== user?.id) {
+        markMessagesRead();
+      }
     };
 
     socket.on("message:new", handleNewMessage);
@@ -40,7 +49,7 @@ const Chat = () => {
     return () => {
       socket.off("message:new", handleNewMessage);
     };
-  }, [socket]);
+  }, [socket, user?.id]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -1,5 +1,7 @@
 const {
   getMessagesCollection,
+  getUnreadCount,
+  markMessagesRead,
 } = require("../repositories/message.repository.js");
 
 const fetchMessages = async (req, res, next) => {
@@ -11,4 +13,22 @@ const fetchMessages = async (req, res, next) => {
   }
 };
 
-module.exports = { fetchMessages };
+const fetchUnreadCount = async (req, res, next) => {
+  try {
+    const count = await getUnreadCount(req.relationship._id, req.user.id);
+    return res.status(200).send({ count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const readMessages = async (req, res, next) => {
+  try {
+    await markMessagesRead(req.relationship._id, req.user.id);
+    return res.status(200).send({ message: "Messages marked as read" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { fetchMessages, fetchUnreadCount, readMessages };

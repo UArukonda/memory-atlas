@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { useRelationshipModal } from "../context/useRelationshipModal";
+import { useSocket } from "../context/useSocket";
 import {
   CalendarDays,
   Heart,
@@ -14,6 +15,7 @@ import {
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { setIsOpen } = useRelationshipModal();
+  const { unreadCount } = useSocket();
   const { user } = useAuth();
 
   const handleConnect = () => {
@@ -175,6 +177,11 @@ const Sidebar = ({ isOpen, onClose }) => {
           >
             <MessageCircle size={19} strokeWidth={1.9} />
             <span>Chat</span>
+            {unreadCount > 0 && (
+              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-medium text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </NavLink>
         </nav>
       </div>
