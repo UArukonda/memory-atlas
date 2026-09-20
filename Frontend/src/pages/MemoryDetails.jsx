@@ -10,12 +10,13 @@ import {
 import MemoryForm from "../components/MemoryForm";
 import { Pencil, Trash2, MapPin, CalendarDays } from "lucide-react";
 import Spinner from "../components/Spinner";
+import PhotoViewer from "../components/PhotoViewer";
 
 const MemoryDetails = () => {
   const { id } = useParams();
   const [memory, setMemory] = useState(null);
   const [error, setError] = useState("");
-  const [selectedPhoto, setSelectedPhoto] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const navigate = useNavigate();
@@ -70,6 +71,23 @@ const MemoryDetails = () => {
         );
       });
   }, [id]);
+
+  const handlePhotoUpdated = (updated) => {
+    setMemory((prev) => ({
+      ...prev,
+      photos: prev.photos.map((photo) =>
+        photo._id === updated._id ? updated : photo,
+      ),
+    }));
+    setSelectedPhoto(updated);
+  };
+
+  const handlePhotoDeleted = (photoId) => {
+    setMemory((prev) => ({
+      ...prev,
+      photos: prev.photos.filter((photo) => photo._id !== photoId),
+    }));
+  };
 
   if (isLoading) {
     return <Spinner />;
@@ -183,7 +201,7 @@ const MemoryDetails = () => {
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {memory.photos.map((photo) => (
                   <button
-                    key={photo}
+                    key={photo._id}
                     type="button"
                     onClick={() => setSelectedPhoto(photo)}
                     className="group relative overflow-hidden rounded-sm bg-paper p-1.5 shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -229,28 +247,18 @@ const MemoryDetails = () => {
         </div>
       </article>
 
-      {/* Photo Lightbox */}
+      {/* Photo Viewer */}
       {selectedPhoto && (
-        <div
-          onClick={() => setSelectedPhoto(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
-        >
-          <button
-            type="button"
-            onClick={() => setSelectedPhoto(null)}
-            className="absolute right-5 top-5 text-2xl text-white/80 transition hover:text-white"
-            aria-label="Close photo"
-          >
-            ×
-          </button>
-
-          <img
-            src={selectedPhoto}
-            alt={memory?.title}
-            onClick={(e) => e.stopPropagation()}
-            className="max-h-[90vh] max-w-[95vw] rounded-sm border-8 border-paper object-contain shadow-2xl"
-          />
-        </div>
+        <PhotoViewer
+          key={selectedPhoto._id}
+          photos={memory.photos}
+          selectedPhoto={selectedPhoto}
+          onSelect={setSelectedPhoto}
+          onClose={() => setSelectedPhoto(null)}
+          onUpdate={handlePhotoUpdated}
+          onDelete={handlePhotoDeleted}
+          showMemoryLink={false}
+        />
       )}
 
       {/* Delete Confirmation */}
