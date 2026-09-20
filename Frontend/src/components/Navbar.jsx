@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/useAuth.js";
 import { logoutUser } from "../services/auth";
 import { ChevronDown, LogOut, Menu, User } from "lucide-react";
@@ -8,6 +8,29 @@ const Navbar = ({ onMenuClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
 
   const handleClick = async () => {
     await logoutUser();
@@ -25,7 +48,7 @@ const Navbar = ({ onMenuClick }) => {
         <Menu size={22} />
       </button>
 
-      <div className="relative ml-auto">
+      <div ref={dropdownRef} className="relative ml-auto">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center gap-2.5 rounded-lg border border-border bg-surface px-2.5 py-2 transition hover:border-primary/40 hover:bg-primary/10"
