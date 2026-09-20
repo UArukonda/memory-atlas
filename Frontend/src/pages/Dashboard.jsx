@@ -7,7 +7,7 @@ import { getLetters } from "../services/letters.js";
 import Spinner from "../components/Spinner.jsx";
 import DashboardHero from "../components/dashboard/DashboardHero.jsx";
 import RelationshipOverview from "../components/dashboard/RelationshipOverview.jsx";
-import ConnectPartnerPrompt from "../components/dashboard/connectPartnerPrompt.jsx";
+import ConnectPartnerPrompt from "../components/dashboard/ConnectPartnerPrompt.jsx";
 import RelationshipEditor from "../components/dashboard/RelationshipEditor.jsx";
 import LatestMemory from "../components/dashboard/LatestMemory.jsx";
 import RecentActivity from "../components/dashboard/RecentActivity.jsx";
