@@ -27,6 +27,8 @@ const photoSchema = new mongoose.Schema(
     },
     caption: {
       type: String,
+      trim: true,
+      maxlength: 300,
     },
   },
   { timestamps: true },

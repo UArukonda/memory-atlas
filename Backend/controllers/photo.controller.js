@@ -44,14 +44,11 @@ const fetchPhotoById = async (req, res, next) => {
 };
 
 const updatePhoto = async (req, res, next) => {
-  const { url, type, caption, memoryId } = req.body;
+  const { caption } = req.body;
   try {
     const photo = req.resource;
 
-    if (url !== undefined) photo.url = url;
-    if (type !== undefined) photo.type = type;
     if (caption !== undefined) photo.caption = caption;
-    if (memoryId !== undefined) photo.memoryId = memoryId;
 
     await photo.save();
     return res
