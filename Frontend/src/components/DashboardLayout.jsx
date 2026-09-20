@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-atlas">
       <RelationshipModalProvider>
         <Sidebar onClose={() => setIsOpen(false)} isOpen={isOpen} />
 

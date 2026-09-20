@@ -25,8 +25,8 @@ const RelationshipModal = () => {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-        <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+        <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
           <div className="mt-4 flex gap-2 border-b border-border">
             <button
               onClick={() => {
@@ -49,7 +49,7 @@ const RelationshipModal = () => {
             {activeTab === "enter" ? (
               <div>
                 {error && (
-                  <p className="mb-3 rounded-lg bg-danger/5 px-3 py-2 text-sm text-danger">
+                  <p className="mb-3 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
                     {error}
                   </p>
                 )}
@@ -60,7 +60,7 @@ const RelationshipModal = () => {
                   onChange={(e) => setCode(e.target.value)}
                 />
                 <button
-                  className="mt-4 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                  className="mt-4 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-ink transition hover:bg-primary-hover"
                   onClick={handleSubmit}
                 >
                   Connect
@@ -80,7 +80,7 @@ const RelationshipModal = () => {
             onClick={() => {
               setIsOpen(false);
             }}
-            className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body hover:bg-gray-50"
+            className="mt-6 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
           >
             Close
           </button>

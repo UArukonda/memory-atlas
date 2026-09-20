@@ -23,19 +23,21 @@ const Sidebar = ({ isOpen, onClose }) => {
   };
 
   const sidebarContent = (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-fit flex-col">
       <div>
         <div className="mb-9 px-2">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
+            <div className="flex h-10 w-10 -rotate-0 items-center justify-center rounded-lg bg-primary text-ink shadow-sm">
               <Heart size={19} fill="currentColor" />
             </div>
 
             <div>
-              <p className="text-lg font-semibold tracking-tight text-heading">
+              <p className="font-display text-xl font-medium tracking-tight text-heading">
                 Memory Atlas
               </p>
-              <p className="mt-0.5 text-xs text-muted">Your story, together</p>
+              <p className="mt-0.5 font-display text-xs italic text-muted">
+                Your story, together
+              </p>
             </div>
           </div>
         </div>
@@ -44,10 +46,10 @@ const Sidebar = ({ isOpen, onClose }) => {
           type="button"
           onClick={handleConnect}
           disabled={!!user?.relationship}
-          className="mb-8 w-full rounded-2xl border border-border bg-background p-4 text-left transition-all duration-200 hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm disabled:cursor-default disabled:hover:border-border disabled:hover:bg-background disabled:hover:shadow-none"
+          className="panel mb-8 w-full -rotate-0 rounded-lg p-3 text-left transition-transform duration-200 hover:rotate-0 disabled:cursor-default disabled:hover:-rotate-1"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-lg font-medium text-primary">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary/10 text-lg font-medium text-primary ring-2 ring-paper">
               {user?.relationship?.couplePhoto ? (
                 <img
                   src={user.relationship.couplePhoto}
@@ -64,7 +66,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-heading">
+              <p className="truncate font-display text-sm font-semibold text-heading">
                 {user?.partner
                   ? `${user.username} & ${user.partner.username}`
                   : "Connect with your partner"}
@@ -90,106 +92,56 @@ const Sidebar = ({ isOpen, onClose }) => {
         </button>
 
         <nav className="flex flex-col gap-1.5">
-          <NavLink
+          <SidebarLink
             to="/dashboard"
+            icon={Home}
+            label="Dashboard"
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
-          >
-            <Home size={19} strokeWidth={1.9} />
-            <span>Dashboard</span>
-          </NavLink>
-
-          <NavLink
+          />
+          <SidebarLink
             to="/memories"
+            icon={Images}
+            label="Memories"
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
-          >
-            <Images size={19} strokeWidth={1.9} />
-            <span>Memories</span>
-          </NavLink>
-
-          <NavLink
+          />
+          <SidebarLink
             to="/journals"
+            icon={BookOpen}
+            label="Journals"
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
-          >
-            <BookOpen size={19} strokeWidth={1.9} />
-            <span>Journals</span>
-          </NavLink>
-
-          <NavLink
+          />
+          <SidebarLink
             to="/letters"
+            icon={Mail}
+            label="Letters"
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
-          >
-            <Mail size={19} strokeWidth={1.9} />
-            <span>Letters</span>
-          </NavLink>
-
-          <NavLink
+          />
+          <SidebarLink
             to="/gallery"
+            icon={LayoutGrid}
+            label="Gallery"
+            strokeWidth={1.8}
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
-          >
-            <LayoutGrid size={19} strokeWidth={1.8} />
-            <span>Gallery</span>
-          </NavLink>
-          <NavLink
+          />
+          <SidebarLink
             to="/chat"
+            icon={MessageCircle}
+            label="Chat"
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-primary/10 font-medium text-primary"
-                  : "text-body hover:bg-primary/10 hover:text-primary"
-              }`
-            }
           >
-            <MessageCircle size={19} strokeWidth={1.9} />
-            <span>Chat</span>
             {unreadCount > 0 && (
-              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-medium text-white">
+              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-ink">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
-          </NavLink>
+          </SidebarLink>
         </nav>
       </div>
 
-      <div className="mt-1 px-2 pb-1">
-        <div className="rounded-2xl bg-primary/5 px-4 py-5">
-          <Heart size={17} className="mb-3 text-primary" fill="currentColor" />
-          <p className="text-sm leading-6 text-body">
+      <div className="mt-auto hidden px-2 pb-1 pt-6 [@media(min-height:820px)]:block">
+        <div className="rounded-md border border-dashed border-accent/30 bg-accent/5 px-4 py-5">
+          <Heart size={17} className="mb-3 text-accent" fill="currentColor" />
+          <p className="font-display text-sm italic leading-6 text-body">
             Every memory begins with a moment.
           </p>
         </div>
@@ -199,24 +151,51 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <aside className="hidden h-screen w-64 shrink-0 border-r border-border bg-surface px-5 py-7 md:flex">
+      <aside className="hidden h-screen w-72 shrink-0 overflow-y-auto border-r border-border bg-[#0e1420] px-5 py-7 md:flex">
         {sidebarContent}
       </aside>
 
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-50 bg-black/60 md:hidden"
         >
           <aside
             onClick={(e) => e.stopPropagation()}
-            className="flex h-full w-72 flex-col border-r border-border bg-surface px-5 py-7"
+            className="flex h-full w-72 flex-col overflow-y-auto border-r border-border bg-[#0e1420] px-5 py-7"
           >
             {sidebarContent}
           </aside>
         </div>
       )}
     </>
+  );
+};
+
+const SidebarLink = ({
+  to,
+  icon: Icon,
+  label,
+  onClick,
+  strokeWidth = 1.9,
+  children,
+}) => {
+  return (
+    <NavLink
+      to={to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `flex items-center gap-3 rounded-md border-l-2 px-4 py-3 text-sm transition-all duration-200 ${
+          isActive
+            ? "border-primary bg-primary/10 font-medium text-heading"
+            : "border-transparent text-body hover:border-border hover:bg-white/5 hover:text-heading"
+        }`
+      }
+    >
+      <Icon size={19} strokeWidth={strokeWidth} />
+      <span>{label}</span>
+      {children}
+    </NavLink>
   );
 };
 

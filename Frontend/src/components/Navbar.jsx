@@ -16,10 +16,10 @@ const Navbar = ({ onMenuClick }) => {
   };
 
   return (
-    <nav className="flex h-[72px] shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 lg:px-8">
+    <nav className="flex h-[72px] shrink-0 items-center justify-between border-b border-border bg-background/60 px-4 sm:px-6 lg:px-8">
       <button
         onClick={onMenuClick}
-        className="rounded-xl p-2 text-heading transition hover:bg-primary/5 hover:text-primary md:hidden"
+        className="rounded-xl p-2 text-heading transition hover:bg-white/5 hover:text-primary md:hidden"
         aria-label="Open menu"
       >
         <Menu size={22} />
@@ -28,10 +28,10 @@ const Navbar = ({ onMenuClick }) => {
       <div className="relative ml-auto">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2.5 rounded-xl border border-border bg-surface px-2.5 py-2 transition hover:border-primary/20 hover:bg-primary/5"
+          className="flex items-center gap-2.5 rounded-lg border border-border bg-surface px-2.5 py-2 transition hover:border-primary/40 hover:bg-primary/10"
           aria-label="Open user menu"
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15 font-display text-sm font-semibold text-primary">
             {user?.username?.[0]?.toUpperCase()}
           </span>
 
@@ -48,10 +48,10 @@ const Navbar = ({ onMenuClick }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-border bg-surface p-1.5 shadow-xl">
+          <div className="panel absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-border p-1.5">
             <Link
               to="/profile"
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-body transition hover:bg-primary/5 hover:text-primary"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-body transition hover:bg-primary/10 hover:text-primary"
               onClick={() => setIsOpen(false)}
             >
               <User size={17} />
@@ -60,7 +60,7 @@ const Navbar = ({ onMenuClick }) => {
 
             <button
               onClick={handleClick}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-body transition hover:bg-primary/5 hover:text-primary"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-body transition hover:bg-primary/10 hover:text-primary"
             >
               <LogOut size={17} />
               <span>Logout</span>
