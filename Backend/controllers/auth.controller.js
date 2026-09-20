@@ -9,6 +9,13 @@ const {
 const jwt = require("jsonwebtoken");
 const transporter = require("../services/emailService.js");
 
+const isProd = process.env.NODE_ENV === "production";
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+};
+
 async function registerUser(req, res, next) {
   try {
     const { username, email, password } = req.body;
@@ -75,7 +82,7 @@ async function loginUser(req, res, next) {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
+      ...cookieOptions,
       maxAge: 60 * 60 * 1000,
     });
 
@@ -90,7 +97,7 @@ async function loginUser(req, res, next) {
 }
 
 function logoutUser(req, res, next) {
-  res.clearCookie("token", { path: "/", httpOnly: true });
+  res.clearCookie("token", { ...cookieOptions, path: "/" });
   return res.status(200).send({ message: "Logout successful" });
 }
 
@@ -108,7 +115,7 @@ async function sendResetToken(req, res, next) {
       },
     );
 
-    const resetLink = `http://localhost:5173/reset-password?token=${passwordResetToken}`;
+    const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${passwordResetToken}`;
 
     const info = await transporter.sendMail({
       from: `${process.env.EMAIL_FROM} a@b.c`, //services like gmail and others override from address to your smtp_user

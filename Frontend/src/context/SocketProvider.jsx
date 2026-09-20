@@ -13,7 +13,10 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (user?.relationship) {
-      const newSocket = io("http://localhost:4000", { withCredentials: true });
+      const newSocket = io(
+        import.meta.env.VITE_SOCKET_URL ?? "http://localhost:4000",
+        { withCredentials: true },
+      );
       newSocket.on("connect_error", (err) => {
         console.log("[socket]", err.message);
       });

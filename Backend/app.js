@@ -17,17 +17,16 @@ const cookieParser = require("cookie-parser");
 
 // invoking express function so we can use its methods
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   }),
 );
 app.use(cookieParser());
-
-app.use("/uploads", express.static(process.env.UPLOAD_DIR));
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints });

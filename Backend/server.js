@@ -9,9 +9,9 @@ const server = http.createServer(app);
 initSocket(server);
 
 // door to our server
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 // address to our server
-const HOST = "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 
 const startServer = async () => {
   try {
