@@ -15,3 +15,7 @@ export function createPhoto(photos) {
     headers: { "Content-Type": undefined },
   });
 }
+
+export function updatePhoto(id, data) {
+  return api.patch(`/photo/${id}`, data);
+}
