@@ -73,14 +73,16 @@ const Profile = () => {
     <>
       <div className="mx-auto max-w-3xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-heading">Profile</h1>
-          <p className="mt-1 text-sm text-muted">
+          <h1 className="font-display text-4xl font-medium tracking-tight text-heading">
+            Profile
+          </h1>
+          <p className="mt-1 font-display italic text-muted">
             Manage your profile information
           </p>
         </div>
-        <div className="rounded-xl border border-border bg-surface p-6">
+        <div className="panel rounded-2xl border border-t-2 border-border border-t-accent/60 p-6">
           <div className="mb-8 flex items-center gap-5">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-gray-100">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-raised">
               <img
                 src={`${user?.profile?.avatar}`}
                 alt={user?.profile?.avatar}
@@ -103,7 +105,7 @@ const Profile = () => {
                 type="button"
                 disabled={!isEditing}
                 onClick={() => fileInputRef.current.click()}
-                className="mt-3 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                className="mt-3 rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:border-primary/40 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Upload photo
               </button>
@@ -146,7 +148,7 @@ const Profile = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="bio" className="font-medium">
+            <label htmlFor="bio" className="font-medium text-heading">
               Bio
             </label>
             <textarea
@@ -157,7 +159,7 @@ const Profile = () => {
                 setBio(e.target.value);
               }}
               disabled={!isEditing}
-              className="resize-none rounded-md border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-muted disabled:cursor-not-allowed"
+              className="resize-none rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-body outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-border/30 disabled:text-muted"
             />
           </div>
           <div className="mt-8 flex justify-end gap-3">
@@ -166,7 +168,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
                 >
                   Cancel
                 </button>
@@ -174,7 +176,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-ink transition hover:bg-primary-hover"
                 >
                   Save Changes
                 </button>
@@ -183,15 +185,17 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-ink transition hover:bg-primary-hover"
               >
                 Edit Profile
               </button>
             )}
           </div>
         </div>
-        <div className="mt-8 rounded-xl border border-danger/30 bg-surface p-6">
-          <h2 className="text-lg font-semibold text-danger">Danger Zone</h2>
+        <div className="mt-8 rounded-2xl border border-danger/30 bg-surface p-6">
+          <h2 className="font-display text-xl font-medium text-danger">
+            Danger Zone
+          </h2>
 
           <p className="mt-1 text-sm text-muted">
             Permanently delete your account and associated data. This action
@@ -201,7 +205,7 @@ const Profile = () => {
           <button
             type="button"
             onClick={() => setShowDeleteModal(true)}
-            className="mt-4 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+            className="mt-4 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
           >
             Delete Account
           </button>
@@ -209,16 +213,16 @@ const Profile = () => {
             <button
               type="button"
               onClick={() => setConfirmStep(1)}
-              className="mt-4 ml-3 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+              className="mt-4 ml-3 rounded-lg border border-danger px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
             >
               End Relationship
             </button>
           )}
         </div>
         {showDeleteModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
-              <h2 className="text-xl font-semibold text-heading">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+            <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+              <h2 className="font-display text-2xl font-medium text-heading">
                 Delete your account?
               </h2>
 
@@ -231,7 +235,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={() => setShowDeleteModal(false)}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
                 >
                   Cancel
                 </button>
@@ -248,9 +252,9 @@ const Profile = () => {
           </div>
         )}
         {confirmStep === 1 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
-              <h2 className="text-xl font-semibold text-heading">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+            <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+              <h2 className="font-display text-2xl font-medium text-heading">
                 End relationship with {user?.partner?.username}?
               </h2>
               <p className="mt-2 text-sm leading-6 text-muted">
@@ -262,7 +266,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={() => setConfirmStep(0)}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
                 >
                   Cancel
                 </button>
@@ -278,9 +282,9 @@ const Profile = () => {
           </div>
         )}
         {confirmStep === 2 && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
-              <h2 className="text-xl font-semibold text-heading">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+            <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+              <h2 className="font-display text-2xl font-medium text-heading">
                 This can't be undone
               </h2>
               <p className="mt-2 text-sm leading-6 text-muted">
@@ -294,7 +298,7 @@ const Profile = () => {
                 type="text"
                 value={confirmInput}
                 onChange={(e) => setConfirmInput(e.target.value)}
-                className="mt-3 w-full rounded-md border border-border px-3 py-2 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="mt-3 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <div className="mt-6 flex justify-end gap-3">
                 <button
@@ -303,7 +307,7 @@ const Profile = () => {
                     setConfirmStep(0);
                     setConfirmInput("");
                   }}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-gray-50"
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
                 >
                   Cancel
                 </button>
@@ -311,7 +315,7 @@ const Profile = () => {
                   type="button"
                   disabled={confirmInput !== user?.partner?.username}
                   onClick={handleEndRelationship}
-                  className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   End Relationship
                 </button>

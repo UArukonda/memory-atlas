@@ -35,36 +35,32 @@ const Signup = () => {
   }
 
   return (
-    <div className="flex w-full min-h-screen items-center  px-12 justify-center bg-primary/20">
+    <div className="flex min-h-screen w-full items-center justify-center bg-atlas px-6 sm:px-12">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm"
+        className="panel flex w-full max-w-md flex-col gap-2 rounded-2xl border border-t-2 border-border border-t-primary/60 p-8"
       >
         <div className="mb-1">
-          <p className="text-lg font-medium text-primary">Memory Atlas</p>
+          <p className="eyebrow">Memory Atlas</p>
 
-          <h1 className="mt-2 text-xl font-bold text-heading">
+          <h1 className="mt-2 font-display text-3xl font-medium text-heading">
             Create your account
           </h1>
         </div>
         {message && (
-          <div className="fixed top-5 right-5 z-50 w-96 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-xl">
+          <div className="fixed right-5 top-5 z-50 w-96 rounded-xl border border-border bg-raised p-4 shadow-xl">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-success)]/10">
-                <span className="text-lg text-[var(--color-success)]">✓</span>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-success/15">
+                <span className="text-lg text-success">✓</span>
               </div>
 
               <div className="flex-1">
-                <p className="font-semibold text-[var(--color-heading)]">
-                  Signup successful!
-                </p>
-                <p className="mt-1 text-sm text-[var(--color-muted)]">
-                  {message}
-                </p>
+                <p className="font-semibold text-heading">Signup successful!</p>
+                <p className="mt-1 text-sm text-muted">{message}</p>
               </div>
               <button
                 onClick={() => setMessage("")}
-                className="text-xl leading-none text-[var(--color-muted)] hover:text-[var(--color-heading)]"
+                className="text-xl leading-none text-muted hover:text-heading"
               >
                 ×
               </button>
@@ -121,7 +117,7 @@ const Signup = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="font-medium  text-primary hover:underline"
+            className="font-medium text-primary hover:underline"
           >
             Log In
           </Link>

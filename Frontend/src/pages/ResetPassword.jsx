@@ -25,11 +25,11 @@ const ResetPassword = () => {
   return (
     <div>
       {!isResetSuccessful ? (
-        <div className="flex w-full items-center min-h-screen px-12 justify-center bg-primary/20">
-          <div className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm">
+        <div className="flex min-h-screen w-full items-center justify-center bg-atlas px-6 sm:px-12">
+          <div className="panel flex w-full max-w-md flex-col gap-2 rounded-2xl border border-t-2 border-border border-t-primary/60 p-8">
             <div className="mb-1">
-              <p className="text-lg font-medium text-primary">Memory Atlas</p>
-              <h1 className="mt-2 text-xl font-bold text-heading">
+              <p className="eyebrow">Memory Atlas</p>
+              <h1 className="mt-2 font-display text-3xl font-medium text-heading">
                 Reset your password
               </h1>
             </div>
@@ -61,11 +61,11 @@ const ResetPassword = () => {
           </div>
         </div>
       ) : (
-        <div className="flex w-full items-center min-h-screen px-12 justify-center bg-primary/20">
-          <div className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm">
+        <div className="flex min-h-screen w-full items-center justify-center bg-atlas px-6 sm:px-12">
+          <div className="panel flex w-full max-w-md flex-col gap-2 rounded-2xl border border-t-2 border-border border-t-primary/60 p-8">
             <div className="mb-1">
-              <p className="text-lg font-medium text-primary">Memory Atlas</p>
-              <h1 className="mt-2 text-xl font-bold text-heading">
+              <p className="eyebrow">Memory Atlas</p>
+              <h1 className="mt-2 font-display text-3xl font-medium text-heading">
                 Password updated
               </h1>
             </div>
@@ -78,7 +78,7 @@ const ResetPassword = () => {
               onClick={() => {
                 setIsResetSuccessful(!isResetSuccessful);
               }}
-              className="mt-3 text-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+              className="mt-3 rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-ink transition hover:bg-primary-hover"
             >
               Back to login
             </Link>

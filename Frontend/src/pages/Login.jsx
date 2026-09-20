@@ -47,15 +47,17 @@ const Login = () => {
   };
 
   return (
-    <div className="flex w-full items-center min-h-screen  px-12 justify-center bg-primary/20">
+    <div className="flex min-h-screen w-full items-center justify-center bg-atlas px-6 sm:px-12">
       <form
         action=""
-        className="flex flex-col w-full max-w-md gap-2 rounded-2xl border border-border p-6 bg-surface shadow-sm"
+        className="panel flex w-full max-w-md flex-col gap-2 rounded-2xl border border-t-2 border-border border-t-primary/60 p-8"
         onSubmit={handleSubmit}
       >
         <div className="mb-3">
-          <p className="text-lg font-medium text-primary">Memory Atlas</p>
-          <h1 className="mt-2 text-xl font-bold text-heading">Login</h1>
+          <p className="eyebrow">Memory Atlas</p>
+          <h1 className="mt-2 font-display text-3xl font-medium text-heading">
+            Login
+          </h1>
         </div>
         <Input
           id="email"
@@ -94,18 +96,18 @@ const Login = () => {
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="font-medium  text-primary hover:underline"
+            className="font-medium text-primary hover:underline"
           >
             Sign Up
           </Link>
         </p>
       </form>
       {isForgotPasswordOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
             {isResetLinkSent ? (
               <>
-                <h2 className="text-xl font-semibold text-heading">
+                <h2 className="font-display text-2xl font-medium text-heading">
                   Check your email
                 </h2>
                 <p className="mt-2 text-sm text-muted">
@@ -119,7 +121,7 @@ const Login = () => {
                       setIsForgotPasswordOpen(false);
                       setIsResetLinkSent(false);
                     }}
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-ink transition hover:bg-primary-hover"
                   >
                     Close
                   </button>
@@ -127,7 +129,7 @@ const Login = () => {
               </>
             ) : (
               <>
-                <h2 className="text-xl font-semibold text-heading">
+                <h2 className="font-display text-2xl font-medium text-heading">
                   Reset your password
                 </h2>
                 <p className="mt-2 text-sm text-muted">
@@ -153,14 +155,14 @@ const Login = () => {
                     onClick={() => {
                       setIsForgotPasswordOpen(false);
                     }}
-                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-ink transition hover:bg-primary-hover"
                   >
                     Send reset link
                   </button>
