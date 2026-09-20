@@ -2,27 +2,33 @@ import { MapPin, CalendarDays } from "lucide-react";
 
 const MemoryCard = ({ memory }) => {
   return (
-    <div className="group overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-      {memory.photos?.length > 0 ? (
-        <img
-          src={memory?.photos?.[0]?.url}
-          alt={memory.title}
-          className="aspect-[2/2] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-        />
-      ) : (
-        <div className="flex h-48 w-full items-center justify-center bg-primary/5 text-sm text-muted">
-          <span>No photo yet</span>
+    <div className="panel rounded-xl border border-border transition-all duration-200 hover:-translate-y-1 hover:border-primary/40">
+      <div className="px-5 pt-7">
+        <div className="polaroid ">
+          {memory.photos?.length > 0 ? (
+            <img
+              src={memory?.photos?.[0]?.url}
+              alt={memory.title}
+              className="aspect-square w-full object-cover"
+            />
+          ) : (
+            <div className="flex aspect-square w-full items-center justify-center bg-ink/10 text-sm text-ink-soft">
+              <span>No photo yet</span>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      <div className="p-5">
+      <div className="px-5 pb-5 pt-5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-semibold text-heading">{memory.title}</h3>
+          <h3 className="font-display text-lg font-medium text-heading">
+            {memory.title}
+          </h3>
         </div>
 
         {memory.place && (
           <div className="mt-1 flex items-center gap-1.5 text-sm text-muted">
-            <MapPin size={14} strokeWidth={1.8} />
+            <MapPin size={14} strokeWidth={1.8} className="text-accent" />
             <span>{memory.place}</span>
           </div>
         )}

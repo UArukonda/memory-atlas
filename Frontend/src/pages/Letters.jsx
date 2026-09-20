@@ -87,8 +87,12 @@ const Letters = () => {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-heading">Letters</h1>
-        <p className="mt-1 text-sm text-muted">Words written for each other</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight text-heading">
+          Letters
+        </h1>
+        <p className="mt-1 font-display italic text-muted">
+          Words written for each other
+        </p>
       </div>
 
       <div className="mb-8">
@@ -133,7 +137,7 @@ const Letters = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by subject"
-              className="w-full rounded-lg border border-border py-2 pl-9 pr-3 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-full rounded-lg border border-border bg-raised py-2 pl-9 pr-3 text-sm text-body outline-none placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -145,8 +149,8 @@ const Letters = () => {
                 aria-label="Show unread letters"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg border transition ${
                   readFilter === "unread"
-                    ? "border-primary/30 bg-primary/10 text-primary"
-                    : "border-border text-muted hover:bg-primary/5"
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-border bg-raised text-muted hover:bg-white/5"
                 }`}
               >
                 <Mail size={16} />
@@ -158,8 +162,8 @@ const Letters = () => {
                 aria-label="Show read letters"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg border transition ${
                   readFilter === "read"
-                    ? "border-primary/30 bg-primary/10 text-primary"
-                    : "border-border text-muted hover:bg-primary/5"
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-border bg-raised text-muted hover:bg-white/5"
                 }`}
               >
                 <MailOpen size={16} />
@@ -171,7 +175,7 @@ const Letters = () => {
         <div className="mt-6">
           {activeTab === "sent" ? (
             visibleSentLetters.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
+              <div className="rounded-xl border border-dashed border-border bg-surface/50 px-6 py-10 text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Mail size={22} />
                 </div>
@@ -196,7 +200,7 @@ const Letters = () => {
               </div>
             )
           ) : visibleReceivedLetters.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
+            <div className="rounded-xl border border-dashed border-border bg-surface/50 px-6 py-10 text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Mail size={22} />
               </div>
@@ -226,7 +230,7 @@ const Letters = () => {
       <button
         type="button"
         onClick={handleOpenAddLetter}
-        className="fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl"
+        className="fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-ink shadow-lg transition-all duration-200 hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl"
         aria-label="Write a letter"
       >
         <Mail size={22} strokeWidth={2} />

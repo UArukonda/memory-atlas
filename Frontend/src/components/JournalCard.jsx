@@ -2,13 +2,15 @@ import { BookOpen, CalendarDays, User } from "lucide-react";
 
 const JournalCard = ({ journal }) => {
   return (
-    <div className="group flex items-start gap-4 rounded-2xl border border-border bg-surface px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-primary/10">
+    <div className="panel group flex items-start gap-4 rounded-xl border border-t-2 border-border border-t-accent/60 px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:border-t-accent">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition group-hover:bg-accent/15">
         <BookOpen size={20} />
       </div>
 
       <div className="min-w-0 flex-1">
-        <h3 className="truncate font-semibold text-heading">{journal.title}</h3>
+        <h3 className="truncate font-display text-lg font-medium text-heading">
+          {journal.title}
+        </h3>
 
         <p className="mt-1 line-clamp-3 text-sm leading-6 text-body">
           {journal.description}

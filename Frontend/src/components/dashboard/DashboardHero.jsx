@@ -3,20 +3,21 @@ import { CalendarDays, Heart } from "lucide-react";
 const DashboardHero = ({ user }) => {
   return (
     <>
-      <div className="relative mb-8 min-h-[320px] overflow-hidden rounded-2xl border border-border">
+      <div className="relative mb-10 min-h-[360px] overflow-hidden rounded-xl border border-border bg-surface shadow-2xl">
         {user?.relationship?.coverPhoto && (
           <img
             src={user.relationship.coverPhoto}
             alt="Cover"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover brightness-90 saturate-90"
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/5" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-transparent" />
 
-        <div className="relative flex min-h-[320px] items-end p-6 sm:p-8 lg:p-10">
-          <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/90 text-lg font-semibold text-primary shadow-sm backdrop-blur-sm">
+        <div className="relative flex min-h-[360px] items-end p-6 sm:p-8 lg:p-10">
+          <div className="flex items-center gap-5">
+            <div className="flex h-16 w-16 shrink-0 -rotate-0 items-center justify-center overflow-hidden rounded-sm border-4 border-paper bg-paper font-display text-xl font-semibold text-paper-primary shadow-xl sm:h-20 sm:w-20">
               {user?.relationship?.couplePhoto ? (
                 <img
                   src={user.relationship.couplePhoto}
@@ -33,18 +34,22 @@ const DashboardHero = ({ user }) => {
             </div>
 
             <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h1 className="text-3xl font-medium tracking-tight text-heading sm:text-5xl">
                 Good Morning, {user?.username}
               </h1>
 
-              <p className="mt-2 text-sm text-white/85 sm:text-base">
+              <p className="mt-2 font-display text-base italic text-body sm:text-lg">
                 Welcome back to your little corner of memories
               </p>
 
               <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
                 {user?.partner && (
-                  <span className="flex items-center gap-1.5 text-white">
-                    <Heart size={15} fill="currentColor" />
+                  <span className="flex items-center gap-1.5 text-heading">
+                    <Heart
+                      size={15}
+                      fill="currentColor"
+                      className="text-primary"
+                    />
                     <span>
                       Your story with{" "}
                       {user?.partner?.username?.[0]?.toUpperCase() +
@@ -53,7 +58,7 @@ const DashboardHero = ({ user }) => {
                   </span>
                 )}
 
-                <span className="flex items-center gap-1.5 text-white/80">
+                <span className="flex items-center gap-1.5 text-body/80">
                   <CalendarDays size={15} />
                   <span>
                     {new Date().toLocaleDateString("en-GB", {

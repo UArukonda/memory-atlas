@@ -5,18 +5,16 @@ const LetterCard = ({ letter, isReceived }) => {
 
   return (
     <div
-      className={`group flex items-center justify-between gap-5 rounded-2xl border px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+      className={`group flex items-center justify-between gap-5 rounded-xl border border-t-2 border-t-primary/50 px-5 py-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-t-primary ${
         isUnread
-          ? "border-primary/20 bg-primary/5 hover:border-primary/30"
-          : "border-border bg-surface hover:border-primary/10"
+          ? "border-primary/30 bg-raised shadow-lg hover:border-primary/50"
+          : "border-border bg-surface hover:border-border"
       }`}
     >
       <div className="flex min-w-0 items-center gap-4">
         <div
-          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${
-            isUnread
-              ? "bg-primary/10 text-primary"
-              : "bg-primary/5 text-primary/70"
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg transition ${
+            isUnread ? "bg-primary/15 text-primary" : "bg-white/5 text-muted"
           }`}
         >
           <Mail size={20} strokeWidth={1.8} />
@@ -29,10 +27,10 @@ const LetterCard = ({ letter, isReceived }) => {
             )}
 
             <h3
-              className={`truncate text-base ${
+              className={`truncate font-display text-lg ${
                 isUnread
                   ? "font-semibold text-heading"
-                  : "font-medium text-heading"
+                  : "font-medium text-muted"
               }`}
             >
               {letter.title}

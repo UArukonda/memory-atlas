@@ -15,19 +15,17 @@ const JournalForm = ({ title, formOpen, formState, dispatch, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl">
-        <div className="flex items-center justify-between border-b border-border bg-primary/5 px-6 py-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+      <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-2xl">
+        <div className="flex items-center justify-between border-b border-border bg-white/[0.03] px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
               <BookOpen size={20} />
             </div>
 
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-primary">
-                Your Journal
-              </p>
-              <h2 className="text-xl font-semibold text-heading">
+              <p className="eyebrow">Your Journal</p>
+              <h2 className="font-display text-2xl font-medium text-heading">
                 {title} Journal
               </h2>
             </div>
@@ -36,7 +34,7 @@ const JournalForm = ({ title, formOpen, formState, dispatch, onSave }) => {
           <button
             type="button"
             onClick={() => formOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition hover:bg-surface hover:text-heading"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition hover:bg-white/5 hover:text-heading"
             aria-label="Close"
           >
             <X size={20} />
@@ -102,11 +100,11 @@ const JournalForm = ({ title, formOpen, formState, dispatch, onSave }) => {
           />
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-border px-6 py-4">
+        <div className="flex justify-end gap-3 border-t border-border bg-background/60 px-6 py-4">
           <button
             type="button"
             onClick={() => formOpen(false)}
-            className="rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-body transition hover:bg-primary/5"
+            className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-body transition hover:bg-white/5"
           >
             Cancel
           </button>
@@ -114,7 +112,7 @@ const JournalForm = ({ title, formOpen, formState, dispatch, onSave }) => {
           <button
             type="button"
             onClick={handleSaveClick}
-            className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-primary-hover"
+            className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-primary-hover"
           >
             <Save size={17} />
             Save Journal

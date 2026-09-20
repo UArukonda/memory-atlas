@@ -67,20 +67,20 @@ const JournalDetails = () => {
         <span className="text-lg">←</span>
         Back to Journals
       </Link>
-      <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
-        <div className="border-b border-border bg-primary/5 px-6 py-6 sm:px-8">
+      <div className="panel mx-auto max-w-4xl overflow-hidden rounded-2xl border border-t-2 border-border border-t-accent/60">
+        <div className="border-b border-border bg-white/[0.03] px-6 py-6 sm:px-8">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
                 <BookOpen size={22} />
               </div>
 
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-primary">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                   Journal
                 </p>
 
-                <h1 className="mt-1 text-xl font-semibold text-heading">
+                <h1 className="mt-1 font-display text-3xl font-medium text-heading">
                   {journal?.title}
                 </h1>
 
@@ -103,7 +103,7 @@ const JournalDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-body transition hover:bg-primary/5 hover:text-primary"
+                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-body transition hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
                 aria-label="Edit journal entry"
               >
                 <Pencil size={15} />
@@ -113,7 +113,7 @@ const JournalDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-                className="flex items-center gap-1.5 rounded-lg border border-danger/30 px-3 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+                className="flex items-center gap-1.5 rounded-lg border border-danger/30 px-3 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
                 aria-label="Delete journal entry"
               >
                 <Trash2 size={15} />
@@ -128,7 +128,7 @@ const JournalDetails = () => {
             {journal?.description}
           </p>
           {journal?.createdBy?.username && (
-            <p className="mt-6 text-right text-xs text-muted">
+            <p className="mt-6 text-right font-display text-sm italic text-muted">
               Written by {journal.createdBy.username}
             </p>
           )}
@@ -136,9 +136,9 @@ const JournalDetails = () => {
       </div>
 
       {isDeleteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
-            <h2 className="text-xl font-semibold text-heading">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+            <h2 className="font-display text-2xl font-medium text-heading">
               Delete Journal Entry
             </h2>
 
@@ -151,7 +151,7 @@ const JournalDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
               >
                 Cancel
               </button>
@@ -159,7 +159,7 @@ const JournalDetails = () => {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:bg-danger/90"
+                className="rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
               >
                 Delete
               </button>

@@ -67,14 +67,16 @@ const Memories = () => {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-heading">Memories</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="font-display text-4xl font-medium tracking-tight text-heading">
+          Memories
+        </h1>
+        <p className="mt-1 font-display italic text-muted">
           Everything you've shared together
         </p>
       </div>
 
       {memories.length > 0 && (
-        <div className="mb-6 flex items-center gap-3">
+        <div className="mb-8 flex items-center gap-3">
           <div className="relative flex-1">
             <Search
               size={16}
@@ -85,7 +87,7 @@ const Memories = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search memories"
-              className="w-full rounded-lg border border-border py-2 pl-9 pr-3 text-sm text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-body outline-none placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -94,7 +96,7 @@ const Memories = () => {
             onClick={() =>
               setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"))
             }
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm text-body transition hover:bg-primary/5"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-body transition hover:border-primary/40 hover:bg-white/5"
           >
             <ArrowUpDown size={15} />
             {sortOrder === "newest" ? "Newest first" : "Oldest first"}
@@ -103,8 +105,8 @@ const Memories = () => {
       )}
 
       {memories.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
-          <h2 className="text-lg font-semibold text-heading">
+        <div className="rounded-lg border border-dashed border-border bg-surface/50 px-6 py-16 text-center">
+          <h2 className="font-display text-2xl font-medium text-heading">
             No memories yet
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted">
@@ -113,24 +115,24 @@ const Memories = () => {
           <button
             type="button"
             onClick={() => setIsAddMemoryOpen(true)}
-            className="mt-6 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-primary-hover"
+            className="mt-6 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-primary-hover"
           >
             Add your first memory
           </button>
         </div>
       ) : visibleMemories.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
+        <div className="rounded-lg border border-dashed border-border bg-surface/50 px-6 py-16 text-center">
           <p className="text-sm font-medium text-heading">
             No memories match your search
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-12 px-1 sm:grid-cols-2 lg:grid-cols-3">
           {visibleMemories.map((memory) => (
             <Link
               key={memory._id}
               to={`/memories/${memory._id}`}
-              className="group block"
+              className="group polaroid tape block"
             >
               <MemoryCard memory={memory} />
             </Link>
@@ -142,7 +144,7 @@ const Memories = () => {
         <button
           type="button"
           onClick={() => setIsAddMemoryOpen(true)}
-          className="fixed right-6 bottom-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl"
+          className="fixed right-6 bottom-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-ink shadow-lg transition-all duration-200 hover:-translate-y-1 hover:bg-primary-hover hover:shadow-xl"
           aria-label="Add memory"
         >
           <Plus size={24} strokeWidth={2.5} />

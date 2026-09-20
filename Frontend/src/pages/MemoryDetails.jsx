@@ -89,17 +89,17 @@ const MemoryDetails = () => {
       </Link>
 
       {/* Main Memory */}
-      <article className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+      <article className="panel mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border">
         {/* Header */}
         <div className="px-6 py-8 sm:px-10">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             {/* Memory information */}
             <div className="min-w-0">
-              <p className="mb-2 text-sm font-medium uppercase tracking-wider text-primary">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                 Memory
               </p>
 
-              <h1 className="text-4xl font-semibold tracking-tight text-heading sm:text-5xl">
+              <h1 className="font-display text-4xl font-medium tracking-tight text-heading sm:text-5xl">
                 {memory?.title}
               </h1>
 
@@ -136,7 +136,7 @@ const MemoryDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-body transition hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+                className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-body transition hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
                 aria-label="Edit memory"
               >
                 <Pencil size={17} strokeWidth={2} />
@@ -146,7 +146,7 @@ const MemoryDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-                className="flex items-center gap-2 rounded-lg border border-danger/20 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
+                className="flex items-center gap-2 rounded-lg border border-danger/30 bg-danger/5 px-4 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
                 aria-label="Delete memory"
               >
                 <Trash2 size={17} strokeWidth={2} />
@@ -173,20 +173,20 @@ const MemoryDetails = () => {
           {memory?.photos?.length > 0 ? (
             <section className="mt-10">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-heading">
+                <h2 className="font-display text-xl font-medium text-heading">
                   Photos
                   <span className="ml-2 text-sm font-normal text-muted">
                     {memory.photos.length}
                   </span>
                 </h2>
               </div>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {memory.photos.map((photo) => (
                   <button
                     key={photo}
                     type="button"
                     onClick={() => setSelectedPhoto(photo)}
-                    className="group relative overflow-hidden rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="group relative overflow-hidden rounded-sm bg-paper p-1.5 shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     <img
                       src={photo.url}
@@ -200,7 +200,7 @@ const MemoryDetails = () => {
               </div>
             </section>
           ) : (
-            <div className="mt-10 rounded-xl border border-dashed border-border bg-background px-6 py-8 text-center">
+            <div className="mt-10 rounded-lg border border-dashed border-border bg-white/5 px-6 py-8 text-center">
               <p className="text-sm text-muted">No photos yet.</p>
 
               <p className="mt-1 text-xs text-muted">
@@ -211,7 +211,7 @@ const MemoryDetails = () => {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-border bg-background px-6 py-5 sm:px-10">
+        <div className="border-t border-border bg-white/5 px-6 py-5 sm:px-10">
           <div className="flex items-center justify-between">
             <p className="text-xs text-muted">Part of your story ❤️</p>
 
@@ -248,16 +248,16 @@ const MemoryDetails = () => {
             src={selectedPhoto}
             alt={memory?.title}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[90vh] max-w-[95vw] rounded-xl object-contain shadow-2xl"
+            className="max-h-[90vh] max-w-[95vw] rounded-sm border-8 border-paper object-contain shadow-2xl"
           />
         </div>
       )}
 
       {/* Delete Confirmation */}
       {isDeleteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl">
-            <h2 className="text-xl font-semibold text-heading">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+            <h2 className="font-display text-2xl font-medium text-heading">
               Delete this memory?
             </h2>
 
@@ -270,7 +270,7 @@ const MemoryDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsDeleteOpen(false)}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-background"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
               >
                 Cancel
               </button>

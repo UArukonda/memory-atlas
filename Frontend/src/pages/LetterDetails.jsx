@@ -53,8 +53,8 @@ const LetterDetails = () => {
         Back to Letters
       </Link>
       <div className="mx-auto max-w-3xl">
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
-          <div className="border-b border-border bg-primary/5 px-6 py-6 sm:px-8">
+        <div className="panel overflow-hidden rounded-2xl border border-t-2 border-border border-t-primary/60">
+          <div className="border-b border-border bg-white/[0.03] px-6 py-6 sm:px-8">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -62,11 +62,11 @@ const LetterDetails = () => {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wide text-primary">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                     Love Letter
                   </p>
 
-                  <h1 className="mt-1 text-xl font-semibold text-heading">
+                  <h1 className="mt-1 font-display text-3xl font-medium text-heading">
                     {letter?.title}
                   </h1>
 
@@ -80,7 +80,7 @@ const LetterDetails = () => {
                 className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
                   isSent
                     ? "bg-primary/10 text-primary"
-                    : "bg-amber-100 text-amber-700"
+                    : "bg-accent/15 text-accent"
                 }`}
               >
                 {isSent ? "Sent" : "Received"}
@@ -102,13 +102,13 @@ const LetterDetails = () => {
           )}
 
           <div className="px-6 py-6 sm:px-8 sm:py-8">
-            <p className="whitespace-pre-line text-base leading-8 text-body">
+            <p className="whitespace-pre-line font-display text-lg leading-8 text-body">
               {letter?.message}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-border bg-surface px-5 py-4">
+        <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-surface px-5 py-4">
           <p className="flex items-center gap-2 text-xs text-muted">
             <CalendarDays size={14} />
             <span>
@@ -126,7 +126,7 @@ const LetterDetails = () => {
             <button
               type="button"
               onClick={() => setIsDeleteOpen(!isDeleteOpen)}
-              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-danger transition hover:bg-danger/5"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-danger transition hover:bg-danger/10"
             >
               <Trash2 size={16} />
               Delete
@@ -136,9 +136,9 @@ const LetterDetails = () => {
       </div>
 
       {isDeleteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
-            <h2 className="text-xl font-semibold text-heading">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+            <h2 className="font-display text-2xl font-medium text-heading">
               Delete Letter
             </h2>
 
@@ -146,7 +146,7 @@ const LetterDetails = () => {
               <button
                 type="button"
                 onClick={() => setIsDeleteOpen(false)}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-white/5"
               >
                 Cancel
               </button>
@@ -154,7 +154,7 @@ const LetterDetails = () => {
               <button
                 type="button"
                 onClick={handleDelete}
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-ink transition hover:bg-primary-hover"
               >
                 Delete
               </button>

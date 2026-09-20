@@ -37,9 +37,9 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
-        <h2 className="text-xl font-semibold text-heading">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+      <div className="w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-2xl">
+        <h2 className="font-display text-2xl font-medium text-heading">
           Edit relationship details
         </h2>
 
@@ -62,7 +62,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="relationship-description"
-              className="font-medium text-heading"
+              className="text-sm font-medium text-heading"
             >
               Description
             </label>
@@ -71,7 +71,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
               value={descriptionInput}
               onChange={(e) => setDescriptionInput(e.target.value)}
               id="relationship-description"
-              className="resize-none rounded-lg border border-border px-3 py-2 text-body outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="resize-none rounded-xl border border-border px-4 py-2.5 text-sm text-body outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -85,7 +85,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
           <button
             type="button"
             onClick={() => coverPhotoInputRef.current.click()}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+            className="rounded-lg border border-dashed border-border px-4 py-2.5 text-sm font-medium text-body transition hover:border-primary hover:bg-primary/5"
           >
             {coverPhotoInput
               ? coverPhotoInput.name
@@ -104,7 +104,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
           <button
             type="button"
             onClick={() => couplePhotoInputRef.current.click()}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+            className="rounded-lg border border-dashed border-border px-4 py-2.5 text-sm font-medium text-body transition hover:border-primary hover:bg-primary/5"
           >
             {couplePhotoInput
               ? couplePhotoInput.name
@@ -118,7 +118,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/5"
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-body transition hover:bg-primary/10"
           >
             Cancel
           </button>
@@ -126,7 +126,7 @@ const RelationshipEditor = ({ relationship, onClose, onSaved }) => {
           <button
             type="button"
             onClick={handleSaveRelationshipDetails}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-hover"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-ink transition hover:bg-primary-hover"
           >
             Save
           </button>

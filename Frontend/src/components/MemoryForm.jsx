@@ -24,14 +24,14 @@ const MemoryForm = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+      <div className="w-full max-w-2xl overflow-hidden rounded-lg border border-border bg-surface shadow-2xl">
         {/* Header */}
         <div className="flex items-start justify-between border-b border-border px-6 py-5 sm:px-8">
           <div>
-            <p className="text-sm font-medium text-primary">Memory Atlas</p>
+            <p className="eyebrow">Memory Atlas</p>
 
-            <h2 className="mt-1 text-2xl font-semibold tracking-tight text-heading">
+            <h2 className="mt-1 font-display text-2xl font-medium tracking-tight text-heading">
               {title} Memory
             </h2>
 
@@ -43,7 +43,7 @@ const MemoryForm = ({
           <button
             type="button"
             onClick={() => formOpen(false)}
-            className="rounded-lg p-2 text-muted transition hover:bg-background hover:text-heading"
+            className="rounded-lg p-2 text-muted transition hover:bg-white/5 hover:text-heading"
             aria-label="Close"
           >
             <X size={20} />
@@ -152,7 +152,7 @@ const MemoryForm = ({
               <button
                 type="button"
                 onClick={() => photoInputRef.current?.click()}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-background px-4 py-6 text-sm font-medium text-body transition hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-background px-4 py-6 text-sm font-medium text-body transition hover:border-primary/60 hover:bg-primary/5 hover:text-primary"
               >
                 <ImagePlus size={20} strokeWidth={1.8} />
                 Add photos
@@ -170,11 +170,11 @@ const MemoryForm = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 border-t border-border bg-background px-6 py-4 sm:px-8">
+        <div className="flex items-center justify-end gap-3 border-t border-border bg-background/60 px-6 py-4 sm:px-8">
           <button
             type="button"
             onClick={() => formOpen(false)}
-            className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-body transition hover:bg-surface"
+            className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-body transition hover:bg-white/5"
           >
             Cancel
           </button>
@@ -182,7 +182,7 @@ const MemoryForm = ({
           <button
             type="button"
             onClick={handleSaveClick}
-            className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-primary-hover"
+            className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-primary-hover"
           >
             <Save size={17} />
             Save Memory
